@@ -1,0 +1,60 @@
+name: lex
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'packages/lex_service/**'
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+  pull_request:
+    paths:
+      - 'packages/lex_service/**'
+    branches:
+      - main
+
+jobs:
+  format:
+      runs-on: ubuntu-latest
+      name: Check Lint and Prettier
+      defaults:
+        run:
+          working-directory: packages/lex_service
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v3
+
+        - name: Setup NodeJS
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18
+
+        - name: NPM Install
+          run: npm install
+          shell: bash
+
+        - name: Format
+          run: npm run format
+
+  build:
+      runs-on: ubuntu-latest
+      name: Build Code
+      defaults:
+        run:
+          working-directory: packages/lex_service
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v3
+
+        - name: Setup NodeJS
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18
+
+        - name: NPM Install
+          run: npm install
+          shell: bash
+
+        - name: Build
+          run: npm run build
