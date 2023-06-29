@@ -1,0 +1,16 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Represents an entier lexicon"""
+type Lexicon {
+  """Unique identifier for the lexicon"""
+  _id: ID!
+
+  """The name of the Lexicon"""
+  name: String!
+}
+
+type Query {
+  lexFindAll: [Lexicon!]!
+}

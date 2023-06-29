@@ -1,10 +1,20 @@
+import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {GraphQLModule} from '@nestjs/graphql';
+import { LexiconModule } from './lexicon/lexicon.module';
+import { LexiconEntryModule } from './lexicon-entry/lexicon-entry.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      autoSchemaFile: {
+        federation: 2,
+        path: 'schema.gql'
+      },
+      driver: ApolloFederationDriver
+    }),
+    LexiconModule,
+    LexiconEntryModule
+  ],
 })
 export class AppModule {}
