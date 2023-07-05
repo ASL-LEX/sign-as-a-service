@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  lex-service:
+    container_name: lex-service
+    image: hicsail/lex-service:main
+    restart: always
+    ports:
+      - 4008:3000
+    env_file:
+      - ../stack.env
+  lex-mongo:
+    container_name: lex-mongo
+    image: mongo
+    ports: ["27026:27017"]
+    restart: "always"
+    volumes:
+      - lex-mongo:/data/db
+
+volumes:
+  lex-mongo:
+    external: true
