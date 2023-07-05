@@ -10,7 +10,6 @@ export class LexiconCreatePipe implements PipeTransform<LexiconCreate, LexiconCr
       const ajv = new Ajv();
       ajv.compile(lexicon.schema);
     } catch(e: any) {
-      console.log(e);
       throw new BadRequestException(`Invalid JSON schema provided:\n${e}`);
     }
 
