@@ -9,10 +9,12 @@ import { LexiconEntryResolver } from './resolvers/lexicon-entry.resolver';
 import { LexiconEntryService } from './services/lexicon-entry.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([
-    { name: Lexicon.name, schema: LexiconSchema },
-    { name: LexiconEntry.name, schema: LexiconEntrySchema }
-  ])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Lexicon.name, schema: LexiconSchema },
+      { name: LexiconEntry.name, schema: LexiconEntrySchema }
+    ])
+  ],
   providers: [LexiconResolver, LexiconService, LexiconCreatePipe, LexiconEntryService, LexiconEntryResolver]
 })
 export class LexiconModule {}

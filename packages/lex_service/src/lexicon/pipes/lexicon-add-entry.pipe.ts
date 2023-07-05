@@ -17,7 +17,7 @@ export class LexiconAddEntryPipe implements PipeTransform<LexiconAddEntry, Promi
     // Validate the fields of the lexicon agains the provided schema
     const validate = new Ajv().compile(lexicon.schema);
     if (!validate(lexiconAddEntry.fields)) {
-      let message =  'Fields of entry are invalid';
+      let message = 'Fields of entry are invalid';
       if (validate.errors) {
         for (const error of validate.errors) {
           message += `\n${error.message}`;

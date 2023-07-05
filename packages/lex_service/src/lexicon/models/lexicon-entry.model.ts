@@ -4,7 +4,7 @@ import mongoose, { Document } from 'mongoose';
 import GraphQLJSON from 'graphql-type-json';
 
 @Schema()
-@ObjectType({ description: 'Single entry within a whole lexicon '})
+@ObjectType({ description: 'Single entry within a whole lexicon ' })
 export class LexiconEntry {
   @Prop()
   @Field()

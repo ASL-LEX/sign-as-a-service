@@ -6,7 +6,6 @@ import { LexiconEntryService } from '../services/lexicon-entry.service';
 
 @Resolver()
 export class LexiconEntryResolver {
-
   constructor(private readonly lexiconEntryService: LexiconEntryService) {}
 
   @Mutation(() => LexiconEntry)

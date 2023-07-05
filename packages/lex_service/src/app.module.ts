@@ -27,6 +27,6 @@ import { MongooseModule } from '@nestjs/mongoose';
       inject: [ConfigService]
     }),
     LexiconModule
-  ],
+  ]
 })
 export class AppModule {}
