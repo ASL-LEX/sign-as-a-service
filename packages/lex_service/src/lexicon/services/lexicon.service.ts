@@ -15,4 +15,8 @@ export class LexiconService {
   findAll(): Promise<Lexicon[]> {
     return this.lexiconModel.find({});
   }
+
+  findById(id: string): Promise<Lexicon | null> {
+    return this.lexiconModel.findById(id);
+  }
 }
