@@ -9,8 +9,28 @@ type Lexicon {
 
   """The name of the Lexicon"""
   name: String!
+
+  """Format each entry in the Lexicon is expected to follow"""
+  schema: JSON!
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type Query {
   lexFindAll: [Lexicon!]!
+}
+
+type Mutation {
+  lexiconCreate(lexicon: LexiconCreate!): Lexicon!
+}
+
+input LexiconCreate {
+  """The name of the Lexicon"""
+  name: String!
+
+  """Format each entry in the Lexicon is expected to follow"""
+  schema: JSON!
 }
