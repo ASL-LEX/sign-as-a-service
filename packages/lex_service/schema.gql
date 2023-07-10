@@ -1,0 +1,58 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Represents an entier lexicon"""
+type Lexicon {
+  """Unique identifier for the lexicon"""
+  _id: ID!
+
+  """The name of the Lexicon"""
+  name: String!
+
+  """Format each entry in the Lexicon is expected to follow"""
+  schema: JSON!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""Single entry within a whole lexicon """
+type LexiconEntry {
+  lexicon: String!
+
+  """Link to the video that represents the entry"""
+  video: String!
+
+  """Fields stored on the entry"""
+  fields: JSON!
+}
+
+type Query {
+  lexFindAll: [Lexicon!]!
+}
+
+type Mutation {
+  lexiconCreate(lexicon: LexiconCreate!): Lexicon!
+  lexiconAddEntry(entry: LexiconAddEntry!): LexiconEntry!
+}
+
+input LexiconCreate {
+  """The name of the Lexicon"""
+  name: String!
+
+  """Format each entry in the Lexicon is expected to follow"""
+  schema: JSON!
+}
+
+input LexiconAddEntry {
+  lexicon: String!
+
+  """Link to the video that represents the entry"""
+  video: String!
+
+  """Fields stored on the entry"""
+  fields: JSON!
+}
