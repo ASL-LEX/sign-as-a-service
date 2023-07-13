@@ -14,7 +14,7 @@ export class LexiconEntryService {
   }
 
   searchByPrimary(lexicon: Lexicon, primary: string): Promise<LexiconEntry[]> {
-    return this.getModel(lexicon).find({ primary });
+    return this.getModel(lexicon).find({ primary: { $regex: primary, $options: 'i' } });
   }
 
   searchByKey(lexicon: Lexicon, key: string): Promise<LexiconEntry | null> {
