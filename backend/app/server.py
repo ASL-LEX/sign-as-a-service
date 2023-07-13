@@ -6,7 +6,7 @@ import strawberry
 from strawberry.asgi import GraphQL
 from strawberry.file_uploads import Upload
 from strawberry.types import Info
-from inference import load_frames_from_video, transform
+from inference import transform
 
 
 class Context:
