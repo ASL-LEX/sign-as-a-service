@@ -1,8 +1,12 @@
+import os
 import torch
 from model import Model
 import uvicorn
 import strawberry
 from strawberry.asgi import GraphQL
+from strawberry.file_uploads import Upload
+from strawberry.types import Info
+from inference import load_frames_from_video, transform
 
 
 class Context:
@@ -13,10 +17,10 @@ class Context:
 @strawberry.type
 class Query:
     @strawberry.field
-    def classify(self, info) -> str:
-        # TODO: tranform video data
-        # TODO: feed vectorized video to model
-        return "Sign code"
+    def classify(self, info: Info, video_file: Upload) -> str:
+        video_path = os.path.join('path_to_upload', video_file.filename)
+        frames_tensor = transform(video_path)
+        return info.context.model.classify(frames_tensor)
 
 
 def create_app():
