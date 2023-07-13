@@ -18,7 +18,7 @@ class Context:
 class Query:
     @strawberry.field
     def classify(self, info: Info, video_file: Upload) -> str:
-        video_path = os.path.join('path_to_upload', video_file.filename)
+        video_path = os.path.join("path_to_upload", video_file.filename)
         frames_tensor = transform(video_path)
         return info.context.model.classify(frames_tensor)
 
