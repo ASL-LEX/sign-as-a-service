@@ -2,7 +2,7 @@ import cv2
 import torch
 import torchvision
 import numpy as np
-from transformations import NumpyToTensor, RandomTemporalSubsample, TCHW2CTHW
+from .transformations import NumpyToTensor, RandomTemporalSubsample, TCHW2CTHW
 
 
 def load_frames_from_video(video_path, start_frame=None, end_frame=None):

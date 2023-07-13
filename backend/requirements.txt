@@ -1,5 +1,7 @@
 opencv-python>=4.8.0.74
 pytorchvideo>=0.1.5
+starlette>=0.30.0
 strawberry-graphql>=0.194.4
 torch>=2.0.1
+torchvision>=0.15.2
 uvicorn>=0.22.0
