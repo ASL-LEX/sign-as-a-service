@@ -1,5 +1,5 @@
 import { Args, Command, Flags } from '@oclif/core';
-import { GraphQLClient, request } from 'graphql-request';
+import { GraphQLClient } from 'graphql-request';
 import { readFileSync } from 'fs';
 import { getSdk } from '../../graphql/graphql';
 
@@ -28,11 +28,11 @@ export default class CreateLexicon extends Command {
   async run(): Promise<void> {
     const { flags, args } = await this.parse(CreateLexicon);
 
-    console.log(args);
-
+    // Make the GraphQL client
     const client = new GraphQLClient(flags.backend);
     const sdk = getSdk(client);
 
+    // Make request for new Lexicon
     const response = await sdk.lexiconCreate({ lexicon: JSON.parse(args.lexicon) });
     console.log(response);
   }
