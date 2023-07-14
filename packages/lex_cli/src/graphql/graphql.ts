@@ -1,5 +1,8 @@
 /* Generated File DO NOT EDIT. */
 /* tslint:disable */
+import { GraphQLClient } from 'graphql-request';
+import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
+import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -103,3 +106,28 @@ export type LexiconCreateMutationVariables = Exact<{
 
 
 export type LexiconCreateMutation = { __typename?: 'Mutation', lexiconCreate: { __typename?: 'Lexicon', _id: string, name: string, schema: any } };
+
+
+export const LexiconCreateDocument = gql`
+    mutation lexiconCreate($lexicon: LexiconCreate!) {
+  lexiconCreate(lexicon: $lexicon) {
+    _id
+    name
+    schema
+  }
+}
+    `;
+
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
+
+
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
+
+export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+  return {
+    lexiconCreate(variables: LexiconCreateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconCreateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LexiconCreateMutation>(LexiconCreateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconCreate', 'mutation');
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;
