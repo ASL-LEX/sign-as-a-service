@@ -16,6 +16,13 @@ import { LexiconPipe } from './pipes/lexicon.pipe';
       { name: LexiconEntry.name, schema: LexiconEntrySchema }
     ])
   ],
-  providers: [LexiconResolver, LexiconService, LexiconCreatePipe, LexiconEntryService, LexiconEntryResolver, LexiconPipe]
+  providers: [
+    LexiconResolver,
+    LexiconService,
+    LexiconCreatePipe,
+    LexiconEntryService,
+    LexiconEntryResolver,
+    LexiconPipe
+  ]
 })
 export class LexiconModule {}

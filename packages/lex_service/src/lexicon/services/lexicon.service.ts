@@ -7,8 +7,10 @@ import { LexiconEntryService } from './lexicon-entry.service';
 
 @Injectable()
 export class LexiconService {
-  constructor(@InjectModel(Lexicon.name) private readonly lexiconModel: Model<LexiconDocument>,
-              private readonly lexiconEntryService: LexiconEntryService) {}
+  constructor(
+    @InjectModel(Lexicon.name) private readonly lexiconModel: Model<LexiconDocument>,
+    private readonly lexiconEntryService: LexiconEntryService
+  ) {}
 
   async create(lexiconInput: LexiconCreate): Promise<Lexicon> {
     const lexicon = await this.lexiconModel.create(lexiconInput);

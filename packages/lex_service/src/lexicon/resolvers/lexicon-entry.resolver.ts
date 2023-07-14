@@ -16,12 +16,18 @@ export class LexiconEntryResolver {
   }
 
   @Query(() => [LexiconEntry])
-  async lexiconSearch(@Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon, @Args('primary') primary: string): Promise<LexiconEntry[]> {
+  async lexiconSearch(
+    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon,
+    @Args('primary') primary: string
+  ): Promise<LexiconEntry[]> {
     return this.lexiconEntryService.searchByPrimary(lexicon, primary);
   }
 
   @Query(() => LexiconEntry)
-  async lexiconByKey(@Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon, @Args('key') key: string): Promise<LexiconEntry | null> {
+  async lexiconByKey(
+    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon,
+    @Args('key') key: string
+  ): Promise<LexiconEntry | null> {
     return this.lexiconEntryService.searchByKey(lexicon, key);
   }
 }
