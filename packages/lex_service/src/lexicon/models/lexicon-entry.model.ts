@@ -29,3 +29,4 @@ export class LexiconEntry {
 
 export type LexiconEntryDocument = LexiconEntry & Document;
 export const LexiconEntrySchema = SchemaFactory.createForClass(LexiconEntry);
+LexiconEntrySchema.index({ primary: 'text' });
