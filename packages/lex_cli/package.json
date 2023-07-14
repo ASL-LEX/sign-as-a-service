@@ -22,6 +22,9 @@
     "@oclif/plugin-plugins": "^2.4.7"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
     "@oclif/test": "^2.3.26",
     "@types/chai": "^4",
     "@types/node": "^16.18.38",
@@ -56,7 +59,8 @@
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postpack": "shx rm -f oclif.manifest.json",
     "prepack": "npm run build && oclif manifest && oclif readme",
-    "version": "oclif readme && git add README.md"
+    "version": "oclif readme && git add README.md",
+    "introspection": "graphql-codegen --config graphql-codegen.yml"
   },
   "engines": {
     "node": ">=12.0.0"

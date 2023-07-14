@@ -1,0 +1,7 @@
+mutation lexiconCreate($lexicon: LexiconCreate!) {
+  lexiconCreate(lexicon: $lexicon) {
+    _id,
+    name,
+    schema
+  }
+}
