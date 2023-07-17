@@ -15,3 +15,7 @@ mutation lexiconAddEntry($entry: LexiconAddEntry!) {
     fields
   }
 }
+
+mutation lexiconClearEntries($lexicon: String!) {
+  lexiconClearEntries(lexicon: $lexicon)
+}

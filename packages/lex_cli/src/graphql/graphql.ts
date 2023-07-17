@@ -68,12 +68,19 @@ export type LexiconEntry = {
 export type Mutation = {
   __typename?: 'Mutation';
   lexiconAddEntry: LexiconEntry;
+  /** Remove all entries from a given lexicon */
+  lexiconClearEntries: Scalars['Boolean']['output'];
   lexiconCreate: Lexicon;
 };
 
 
 export type MutationLexiconAddEntryArgs = {
   entry: LexiconAddEntry;
+};
+
+
+export type MutationLexiconClearEntriesArgs = {
+  lexicon: Scalars['String']['input'];
 };
 
 
@@ -114,6 +121,13 @@ export type LexiconAddEntryMutationVariables = Exact<{
 
 export type LexiconAddEntryMutation = { __typename?: 'Mutation', lexiconAddEntry: { __typename?: 'LexiconEntry', key: string, primary: string, lexicon: string, video: string, fields: any } };
 
+export type LexiconClearEntriesMutationVariables = Exact<{
+  lexicon: Scalars['String']['input'];
+}>;
+
+
+export type LexiconClearEntriesMutation = { __typename?: 'Mutation', lexiconClearEntries: boolean };
+
 
 export const LexiconCreateDocument = gql`
     mutation lexiconCreate($lexicon: LexiconCreate!) {
@@ -135,6 +149,11 @@ export const LexiconAddEntryDocument = gql`
   }
 }
     `;
+export const LexiconClearEntriesDocument = gql`
+    mutation lexiconClearEntries($lexicon: String!) {
+  lexiconClearEntries(lexicon: $lexicon)
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -148,6 +167,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     lexiconAddEntry(variables: LexiconAddEntryMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconAddEntryMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LexiconAddEntryMutation>(LexiconAddEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconAddEntry', 'mutation');
+    },
+    lexiconClearEntries(variables: LexiconClearEntriesMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconClearEntriesMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LexiconClearEntriesMutation>(LexiconClearEntriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconClearEntries', 'mutation');
     }
   };
 }
