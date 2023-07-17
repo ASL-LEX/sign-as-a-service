@@ -1,7 +1,8 @@
-import { Args, Command, Flags } from '@oclif/core';
+import { Args, Command } from '@oclif/core';
 import { GraphQLClient } from 'graphql-request';
 import { AslLexTranslator } from '../../entry_translator/asllex';
 import { getSdk } from '../../graphql/graphql';
+import { sharedFlags } from '../../shared';
 
 export default class UploadLexiconEntries extends Command {
   static LEXICON_TYPES = {
@@ -11,12 +12,7 @@ export default class UploadLexiconEntries extends Command {
   static description = 'Upload list of Lexicon entries from a file';
 
   static flags = {
-    backend: Flags.string({
-      char: 'b',
-      description: 'URL to the GraphQL endpoint to call against',
-      required: false,
-      default: 'http://localhost:3000/graphql'
-    }),
+    ...sharedFlags
   };
 
   static args = {

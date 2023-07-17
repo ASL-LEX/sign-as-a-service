@@ -1,17 +1,13 @@
-import { Args, Command, Flags } from '@oclif/core';
+import { Args, Command } from '@oclif/core';
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from '../../graphql/graphql';
+import { sharedFlags } from '../../shared';
 
 export default class ClearLexiconEntries extends Command {
   static description = 'Remove all entries from a given lexicon';
 
   static flags = {
-   backend: Flags.string({
-      char: 'b',
-      description: 'URL to the GraphQL endpoint to call against',
-      required: false,
-      default: 'http://localhost:3000/graphql'
-    })
+    ...sharedFlags
   };
 
   static args = {
