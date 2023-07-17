@@ -38,7 +38,8 @@ export default class UploadLexiconEntries extends Command {
     const { flags, args } = await this.parse(UploadLexiconEntries);
 
     // Determine the correct translator and parse the provided file
-    const Translator = UploadLexiconEntries.LEXICON_TYPES[args.lexiconType as keyof typeof UploadLexiconEntries.LEXICON_TYPES];
+    const Translator =
+      UploadLexiconEntries.LEXICON_TYPES[args.lexiconType as keyof typeof UploadLexiconEntries.LEXICON_TYPES];
     const entries = await new Translator().translate(args.entryFile, args.lexicon);
 
     // Make GraphQL client

@@ -1,8 +1,7 @@
 import { LexiconAddEntry } from '../graphql/graphql';
 import { LexEntryTranslator } from './translator';
-import { createReadStream } from 'fs'
+import { createReadStream } from 'fs';
 import * as csv from 'csv-parser';
-
 
 /**
  * Translate ASL-LEX data downloaded as a CSV from Knack into a series
@@ -10,7 +9,7 @@ import * as csv from 'csv-parser';
  */
 export class AslLexTranslator extends LexEntryTranslator {
   async translate(filePath: string, lexicon: string): Promise<LexiconAddEntry[]> {
-    const stream = createReadStream(filePath)
+    const stream = createReadStream(filePath);
 
     const lexAddEntries: LexiconAddEntry[] = [];
 
