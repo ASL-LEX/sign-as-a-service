@@ -5,3 +5,13 @@ mutation lexiconCreate($lexicon: LexiconCreate!) {
     schema
   }
 }
+
+mutation lexiconAddEntry($entry: LexiconAddEntry!) {
+  lexiconAddEntry(entry: $entry) {
+    key,
+    primary,
+    lexicon,
+    video,
+    fields
+  }
+}

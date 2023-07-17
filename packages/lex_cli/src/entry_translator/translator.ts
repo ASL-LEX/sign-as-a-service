@@ -5,5 +5,5 @@ import { LexiconAddEntry } from '../graphql/graphql';
  * of new LexiconEntry objects
  */
 export abstract class LexEntryTranslator {
-  abstract translate(filePath: string): Promise<LexiconAddEntry[]>;
+  abstract translate(filePath: string, lexicon: string): Promise<LexiconAddEntry[]>;
 }

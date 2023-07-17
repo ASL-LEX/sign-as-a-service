@@ -107,6 +107,13 @@ export type LexiconCreateMutationVariables = Exact<{
 
 export type LexiconCreateMutation = { __typename?: 'Mutation', lexiconCreate: { __typename?: 'Lexicon', _id: string, name: string, schema: any } };
 
+export type LexiconAddEntryMutationVariables = Exact<{
+  entry: LexiconAddEntry;
+}>;
+
+
+export type LexiconAddEntryMutation = { __typename?: 'Mutation', lexiconAddEntry: { __typename?: 'LexiconEntry', key: string, primary: string, lexicon: string, video: string, fields: any } };
+
 
 export const LexiconCreateDocument = gql`
     mutation lexiconCreate($lexicon: LexiconCreate!) {
@@ -114,6 +121,17 @@ export const LexiconCreateDocument = gql`
     _id
     name
     schema
+  }
+}
+    `;
+export const LexiconAddEntryDocument = gql`
+    mutation lexiconAddEntry($entry: LexiconAddEntry!) {
+  lexiconAddEntry(entry: $entry) {
+    key
+    primary
+    lexicon
+    video
+    fields
   }
 }
     `;
@@ -127,6 +145,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     lexiconCreate(variables: LexiconCreateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconCreateMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LexiconCreateMutation>(LexiconCreateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconCreate', 'mutation');
+    },
+    lexiconAddEntry(variables: LexiconAddEntryMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconAddEntryMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LexiconAddEntryMutation>(LexiconAddEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconAddEntry', 'mutation');
     }
   };
 }
