@@ -30,4 +30,10 @@ export class LexiconEntryResolver {
   ): Promise<LexiconEntry | null> {
     return this.lexiconEntryService.searchByKey(lexicon, key);
   }
+
+  @Mutation(() => Boolean, { description: 'Remove all entries from a given lexicon' })
+  async lexiconClearEntries(@Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon): Promise<boolean> {
+    await this.lexiconEntryService.clearEntries(lexicon);
+    return true;
+  }
 }

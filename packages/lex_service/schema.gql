@@ -44,6 +44,9 @@ type Query {
 type Mutation {
   lexiconCreate(lexicon: LexiconCreate!): Lexicon!
   lexiconAddEntry(entry: LexiconAddEntry!): LexiconEntry!
+
+  """Remove all entries from a given lexicon"""
+  lexiconClearEntries(lexicon: String!): Boolean!
 }
 
 input LexiconCreate {

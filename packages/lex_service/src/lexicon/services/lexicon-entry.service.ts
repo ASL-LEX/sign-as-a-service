@@ -26,6 +26,10 @@ export class LexiconEntryService {
     await model.createCollection();
   }
 
+  async clearEntries(lexicon: Lexicon): Promise<void> {
+    await this.getModel(lexicon).deleteMany({});
+  }
+
   private getModel(lexicon: Lexicon | string): Model<LexiconEntry> {
     const lexiconID = typeof lexicon == 'string' ? lexicon : lexicon._id;
     return this.connection.model(LexiconEntry.name, LexiconEntrySchema, `lexiconentry_${lexiconID}`);
