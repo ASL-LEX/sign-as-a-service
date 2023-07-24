@@ -8,7 +8,7 @@ from pathlib import Path
 
 from functools import partial
 from ..datasets.ssl.dpc_dataset import *
-from ..models.ssl.dpc_rnn import DPC_RNN_Pretrainer,load_weights_from_pretrained
+from ..models.ssl.dpc_rnn import DPC_RNN_Pretrainer, load_weights_from_pretrained
 
 
 def calc_topk_accuracy(output, target, topk=(1,)):
@@ -41,7 +41,7 @@ def process_output(mask):
 
 def collate_without_none(batch, dataset):
     """
-    Utility to collate the batch removing ``None`` values if any. 
+    Utility to collate the batch removing ``None`` values if any.
     ``None`` values will be replaced by choosing random item from the dataset.
     """
     len_batch = len(batch)  # original batch length
@@ -58,6 +58,7 @@ def collate_without_none(batch, dataset):
 
     return torch.utils.data.dataloader.default_collate(batch)
 
+
 class PretrainingModelDPC(pl.LightningModule):
     """
     Model for pretraining the SL-DPC architecture.
@@ -67,30 +68,31 @@ class PretrainingModelDPC(pl.LightningModule):
         cfg (dict): configuration set.
         create_model_only(bool): If ``True`` only the model object will be initialized and can't be used for running the trainer.
     """
+
     def __init__(self, cfg, create_model_only=False):
         super().__init__()
         self.cfg = cfg
         self.model = DPC_RNN_Pretrainer(**cfg.model)
-        
+
         if "pretrained" in self.cfg:
             self.model = load_weights_from_pretrained(self.model, self.cfg.pretrained)
-        
+
         if create_model_only:
             return None
 
         # Train dataset
-        if cfg.data.train_dataset.file_format == 'h5':
+        if cfg.data.train_dataset.file_format == "h5":
             self.train_dataset = WindowedDatasetHDF5(**cfg.data.train_dataset)
         else:
             self.train_dataset = WindowedDatasetPickle(**cfg.data.train_dataset)
-        
+
         weights = self.train_dataset.get_weights_for_balanced_sampling()
         self.weighted_sampler = torch.utils.data.sampler.WeightedRandomSampler(
             weights, len(weights)
         )
 
         # Val dataset
-        if cfg.data.val_dataset.file_format == 'h5':
+        if cfg.data.val_dataset.file_format == "h5":
             self.valid_dataset = WindowedDatasetHDF5(**cfg.data.val_dataset)
         else:
             self.valid_dataset = WindowedDatasetPickle(**cfg.data.val_dataset)
@@ -107,9 +109,13 @@ class PretrainingModelDPC(pl.LightningModule):
         self.loss_fn = nn.CrossEntropyLoss()
 
         self.checkpoint_callback = pl.callbacks.ModelCheckpoint(
-            dirpath=self.output_path, every_n_epochs=1,save_last=True,save_top_k=5,monitor="valid_loss",
+            dirpath=self.output_path,
+            every_n_epochs=1,
+            save_last=True,
+            save_top_k=5,
+            monitor="valid_loss",
         )
-        self.resume_from_checkpoint = params.get("resume_from_checkpoint",None)
+        self.resume_from_checkpoint = params.get("resume_from_checkpoint", None)
 
     def training_step(self, batch, batch_idx):
         """
@@ -206,7 +212,7 @@ class PretrainingModelDPC(pl.LightningModule):
         """
         self.trainer = pl.Trainer(
             gpus=1,
-            #precision=16,
+            # precision=16,
             max_epochs=self.max_epochs,
             default_root_dir=self.output_path,
             logger=pl.loggers.WandbLogger(),

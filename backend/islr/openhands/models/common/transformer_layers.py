@@ -170,7 +170,7 @@ class RMSNorm(nn.Module):
 
     def forward(self, x):
         norm = torch.norm(x, dim=-1, keepdim=True)
-        x_normed = x / (norm * self.d_model ** -0.5 + self.eps)
+        x_normed = x / (norm * self.d_model**-0.5 + self.eps)
         x_scaled = x_normed * self.scale
 
         if self.bias:
@@ -268,7 +268,6 @@ class TransformerEncoderBlock(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, mask=None, pos_bias=None, sinusoidal_pos=None):
-
         # TODO: make norm position as param???
         # pre-norm
         x = self.norm1(x)

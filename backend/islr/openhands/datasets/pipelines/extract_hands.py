@@ -2,6 +2,7 @@ import torchvision
 import numpy as np
 from PIL import Image
 
+
 def crop_hand(frame, keypoints, wrist_idx, elbow_idx, shoulder_dist, wrist_delta):
     missing_wrist = False
     cropped_frame = None
@@ -41,6 +42,7 @@ def get_replace_idx(hand_crops_len, missing_wrists, clip_index):
                 min_distance = dist
                 replace_idx = ci
     return replace_idx
+
 
 class ExtractHandCrops:
     """

@@ -10,6 +10,7 @@ import numpy as np
 
 from ...core.data import create_pose_transforms
 
+
 class WindowedDatasetHDF5(torch.utils.data.DataLoader):
     """
     Windowed dataset loader from HDF5 for SL-DPC model.
@@ -18,22 +19,22 @@ class WindowedDatasetHDF5(torch.utils.data.DataLoader):
         root_dir (str): Directory which contains the data.
         file_format (str): File type. Default: ``h5``.
         transforms (obj | None): Compose object with transforms or None. Default: ``None``.
-        seq_len (int): Sequence length for each window. Default: 10. 
+        seq_len (int): Sequence length for each window. Default: 10.
         num_seq (int): Total number of windows. Default: 7.
         downsample (int): Number of frames to skip per timestep when sampling. Default: 3.
         num_channels (int): Number of input channels. Default: 2.
     """
+
     def __init__(
         self,
         root_dir,
-        file_format='h5',
+        file_format="h5",
         transforms=None,
         seq_len=10,
         num_seq=7,
         downsample=3,
         num_channels=2,
     ):
-
         self.seq_len = seq_len
         self.num_seq = num_seq
         self.downsample = downsample
@@ -43,7 +44,9 @@ class WindowedDatasetHDF5(torch.utils.data.DataLoader):
         self.hdf5_files = []
         self.data_list = []
 
-        h5_files = glob.glob(os.path.join(root_dir, "**", f"*.{file_format}"), recursive=True)
+        h5_files = glob.glob(
+            os.path.join(root_dir, "**", f"*.{file_format}"), recursive=True
+        )
 
         for h5_index, h5_file in enumerate(h5_files):
             hf = h5py.File(h5_file, "r")
@@ -105,7 +108,7 @@ class WindowedDatasetHDF5(torch.utils.data.DataLoader):
         return t_seq
 
     def get_weights_for_balanced_sampling(self):
-        max_frames = 1*60*60*25 # Assuming 1hr at 25fps
+        max_frames = 1 * 60 * 60 * 25  # Assuming 1hr at 25fps
         weights = [0] * len(self.data_list)
         for i in range(len(self.data_list)):
             num_frames = self.load_pose_from_h5(i).shape[0]
@@ -115,36 +118,38 @@ class WindowedDatasetHDF5(torch.utils.data.DataLoader):
 
 class WindowedDatasetPickle(torch.utils.data.DataLoader):
     """
-    Windowed dataset loader from HDF5 for SL-DPC model. 
+    Windowed dataset loader from HDF5 for SL-DPC model.
     This module is for loading finetuning datasets.
 
     Args:
         root_dir (str): Directory which contains the data.
         file_format (str): File type. Default: ``pkl``.
         transforms (obj | None): Compose object with transforms or None. Default: ``None``.
-        seq_len (int): Sequence length for each window. Default: 10. 
+        seq_len (int): Sequence length for each window. Default: 10.
         num_seq (int): Total number of windows. Default: 10.
         downsample (int): Number of frames to skip per timestep when sampling. Default: 1.
         num_channels (int): Number of input channels. Default: 2.
     """
+
     def __init__(
         self,
         root_dir,
-        file_format='pkl',
+        file_format="pkl",
         transforms=None,
         seq_len=10,
         num_seq=10,
         downsample=1,
         num_channels=2,
     ):
-
         self.seq_len = seq_len
         self.num_seq = num_seq
         self.downsample = downsample
 
         self.transforms = create_pose_transforms(transforms)
 
-        files_list = glob.glob(os.path.join(root_dir, "**", f"*.{file_format}"), recursive=True)
+        files_list = glob.glob(
+            os.path.join(root_dir, "**", f"*.{file_format}"), recursive=True
+        )
 
         self.data_list = []
         for file in files_list:

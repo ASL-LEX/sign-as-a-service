@@ -8,6 +8,7 @@ from .graph_utils import SpatialGraph
 
 # https://github.com/jackyjsy/CVPR21Chal-SLR
 
+
 def conv_init(conv):
     nn.init.kaiming_normal_(conv.weight, mode="fan_out")
     nn.init.constant_(conv.bias, 0)
@@ -222,6 +223,7 @@ class DecoupledGCN_TCN_unit(nn.Module):
         residual (bool): To use residual connections or not. Default: ``True``
         use_attention (bool): To use self attention layer or not. Default: ``True``
     """
+
     def __init__(
         self,
         in_channels,
@@ -230,8 +232,8 @@ class DecoupledGCN_TCN_unit(nn.Module):
         groups,
         num_points,
         block_size,
-        adapter_source, 
-        learn_adapter, 
+        adapter_source,
+        learn_adapter,
         name=None,
         drop_size=0,
         stride=1,
@@ -304,9 +306,9 @@ class DecoupledGCN_TCN_unit(nn.Module):
         self.adapter_source = adapter_source
         if self.learn_adapter:
             self.adapter_module = nn.Sequential(
-                nn.Linear(out_channels, int(out_channels/16)),
+                nn.Linear(out_channels, int(out_channels / 16)),
                 nn.Sigmoid(),
-                nn.Linear(int(out_channels/16), out_channels)
+                nn.Linear(int(out_channels / 16), out_channels),
             )
 
             n = len(self.adapter_source)
@@ -315,13 +317,18 @@ class DecoupledGCN_TCN_unit(nn.Module):
 
                 for path in self.adapter_source:
                     adapter_name = path.split("/")[-1][:-5]
-                    print(f"[Adapters] Loading adapter {adapter_name}.{name} from {path}...")
-                    
-                    self.pretrained_adapters[adapter_name] = self.get_adapter_params(path, \
-                        name, out_channels)
-                
+                    print(
+                        f"[Adapters] Loading adapter {adapter_name}.{name} from {path}..."
+                    )
+
+                    self.pretrained_adapters[adapter_name] = self.get_adapter_params(
+                        path, name, out_channels
+                    )
+
                 self.pretrained_adapters = nn.ModuleDict(self.pretrained_adapters)
-                unscaled_weights_initialized= torch.normal(mean=0.0, std=0.02, size=(n,))
+                unscaled_weights_initialized = torch.normal(
+                    mean=0.0, std=0.02, size=(n,)
+                )
                 self.adapter_weights = nn.Parameter(unscaled_weights_initialized)
 
     def forward(self, x, keep_prob):
@@ -346,21 +353,22 @@ class DecoupledGCN_TCN_unit(nn.Module):
         y = self.tcn1(y, keep_prob, self.A)
 
         if self.learn_adapter:
-
             se = torch.permute(y, (0, 2, 3, 1))
 
             if len(self.adapter_source) > 1:
-                weights = nn.Softmax(dim=0)(self.adapter_weights)      # shape (K,)
+                weights = nn.Softmax(dim=0)(self.adapter_weights)  # shape (K,)
                 adapter_outputs = []
                 for adapter in self.pretrained_adapters.values():
                     adapter_outputs.append(adapter(se).unsqueeze(-1))
                 adapter_outputs = torch.cat(adapter_outputs, dim=-1)
-                weighted_adapter_output = torch.einsum('bijhk,k->bijh', adapter_outputs, weights)    # shape (B, h)
-                
+                weighted_adapter_output = torch.einsum(
+                    "bijhk,k->bijh", adapter_outputs, weights
+                )  # shape (B, h)
+
                 se += weighted_adapter_output
 
             se = self.adapter_module(se)
-            
+
             y = y + torch.permute(se, (0, 3, 1, 2))
 
         x_skip = self.residual(x)
@@ -371,43 +379,45 @@ class DecoupledGCN_TCN_unit(nn.Module):
     def get_adapter_params(self, path, name, out_channels):
         model = torch.load(path)
 
-        linear_a = nn.Linear(out_channels, int(out_channels/16))
-        linear_b = nn.Linear(int(out_channels/16), out_channels)
-        for component_name in model['state_dict'].keys():
-                if "adapter" not in component_name or \
-                    name not in component_name: continue
+        linear_a = nn.Linear(out_channels, int(out_channels / 16))
+        linear_b = nn.Linear(int(out_channels / 16), out_channels)
+        for component_name in model["state_dict"].keys():
+            if "adapter" not in component_name or name not in component_name:
+                continue
 
-                if ".0." in component_name:
-                    if 'weight' in component_name:
-                        linear_a.weight = nn.Parameter(model['state_dict'][component_name])
-                        linear_a.weight.requires_grad = False
-                    else:
-                        linear_a.bias = nn.Parameter(model['state_dict'][component_name])
-                        linear_a.bias.requires_grad = False
+            if ".0." in component_name:
+                if "weight" in component_name:
+                    linear_a.weight = nn.Parameter(model["state_dict"][component_name])
+                    linear_a.weight.requires_grad = False
                 else:
-                    if 'weight' in component_name:
-                        linear_b.weight = nn.Parameter(model['state_dict'][component_name])
-                        linear_b.weight.requires_grad = False
-                    else:
-                        linear_b.bias = nn.Parameter(model['state_dict'][component_name])
-                        linear_b.bias.requires_grad = False
+                    linear_a.bias = nn.Parameter(model["state_dict"][component_name])
+                    linear_a.bias.requires_grad = False
+            else:
+                if "weight" in component_name:
+                    linear_b.weight = nn.Parameter(model["state_dict"][component_name])
+                    linear_b.weight.requires_grad = False
+                else:
+                    linear_b.bias = nn.Parameter(model["state_dict"][component_name])
+                    linear_b.bias.requires_grad = False
 
         return nn.Sequential(linear_a, nn.Sigmoid(), linear_b)
+
 
 class DecoupledGCN(nn.Module):
     """
     ST-GCN backbone with Decoupled GCN layers, Self Attention and DropGraph proposed in the paper:
     `Skeleton Aware Multi-modal Sign Language Recognition
     <https://arxiv.org/pdf/2103.08833.pdf>`_
-    
+
     Args:
         in_channels (int): Number of channels in the input data.
         graph_cfg (dict): The arguments for building the graph.
         groups (int): Number of Decouple groups to use. Default: 8.
         block_size (int): Block size used for Temporal masking in Dropgraph. Default: 41.
         n_out_features (int): Output Embedding dimension. Default: 256.
-            
+
     """
+
     def __init__(
         self,
         in_channels,
@@ -416,9 +426,8 @@ class DecoupledGCN(nn.Module):
         graph_args,
         groups=8,
         block_size=41,
-        n_out_features = 256
+        n_out_features=256,
     ):
-        
         super(DecoupledGCN, self).__init__()
         graph_args = OmegaConf.to_container(graph_args)
 
@@ -442,35 +451,113 @@ class DecoupledGCN(nn.Module):
             False,
             drop_size=drop_size,
             residual=False,
-
         )
         self.l2 = DecoupledGCN_TCN_unit(
-            64, 64, A, groups, num_points, block_size, adapters, False, drop_size=drop_size
+            64,
+            64,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            False,
+            drop_size=drop_size,
         )
         self.l3 = DecoupledGCN_TCN_unit(
-            64, 64, A, groups, num_points, block_size, adapters, False, drop_size=drop_size
+            64,
+            64,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            False,
+            drop_size=drop_size,
         )
         self.l4 = DecoupledGCN_TCN_unit(
-            64, 64, A, groups, num_points, block_size, adapters, False, drop_size=drop_size
+            64,
+            64,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            False,
+            drop_size=drop_size,
         )
         self.l5 = DecoupledGCN_TCN_unit(
-            64, 128, A, groups, num_points, block_size, adapters, False, drop_size=drop_size, stride=2
+            64,
+            128,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            False,
+            drop_size=drop_size,
+            stride=2,
         )
         self.l6 = DecoupledGCN_TCN_unit(
-            128, 128, A, groups, num_points, block_size, adapters, learn_adapter, name="l6", drop_size=drop_size
+            128,
+            128,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            learn_adapter,
+            name="l6",
+            drop_size=drop_size,
         )
         self.l7 = DecoupledGCN_TCN_unit(
-            128, 128, A, groups, num_points, block_size, adapters, learn_adapter, name="l7", drop_size=drop_size
+            128,
+            128,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            learn_adapter,
+            name="l7",
+            drop_size=drop_size,
         )
         self.l8 = DecoupledGCN_TCN_unit(
-            128, 256, A, groups, num_points, block_size, adapters, learn_adapter, name="l8", drop_size=drop_size, stride=2
+            128,
+            256,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            learn_adapter,
+            name="l8",
+            drop_size=drop_size,
+            stride=2,
         )
         self.l9 = DecoupledGCN_TCN_unit(
-            256, 256, A, groups, num_points, block_size, adapters, learn_adapter, name="l9", drop_size=drop_size
+            256,
+            256,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            learn_adapter,
+            name="l9",
+            drop_size=drop_size,
         )
         self.n_out_features = n_out_features
         self.l10 = DecoupledGCN_TCN_unit(
-            256, 256, A, groups, num_points, block_size, adapters, learn_adapter, name="l10", drop_size=drop_size,
+            256,
+            256,
+            A,
+            groups,
+            num_points,
+            block_size,
+            adapters,
+            learn_adapter,
+            name="l10",
+            drop_size=drop_size,
         )
 
         bn_init(self.data_bn, 1)
@@ -480,7 +567,7 @@ class DecoupledGCN(nn.Module):
         Args:
             x (torch.Tensor): Input graph sequence of shape :math:`(N, in\_channels, T_{in}, V_{in})`
             keep_prob (float): The probability to keep the node. Default: 0.9.
-        
+
         Returns:
             torch.Tensor: Output embedding of shape :math:`(N, n\_out\_features)`
 
@@ -493,11 +580,7 @@ class DecoupledGCN(nn.Module):
         N, C, T, V = x.size()
         x = x.permute(0, 3, 1, 2).contiguous().view(N, V * C, T)
         x = self.data_bn(x)
-        x = (
-            x.view(N, V, C, T)
-            .permute(0, 2, 3, 1) # NVCT -> NCTV
-            .contiguous()
-        )
+        x = x.view(N, V, C, T).permute(0, 2, 3, 1).contiguous()  # NVCT -> NCTV
         x = self.l1(x, 1.0)
         x = self.l2(x, 1.0)
         x = self.l3(x, 1.0)

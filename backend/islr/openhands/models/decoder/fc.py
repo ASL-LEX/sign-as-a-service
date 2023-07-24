@@ -11,6 +11,7 @@ class FC(nn.Module):
         dropout_ratio (float): Dropout ratio to use Default: 0.2.
         batch_norm (bool): Whether to use batch norm or not. Default: ``False``.
     """
+
     def __init__(self, n_features, num_class, dropout_ratio=0.2, batch_norm=False):
         super().__init__()
         self.dropout = nn.Dropout(p=dropout_ratio)
@@ -26,7 +27,7 @@ class FC(nn.Module):
         """
         Args:
             x (torch.Tensor): Input tensor of shape: (batch_size, n_features)
-        
+
         returns:
             torch.Tensor: logits for classification.
         """
@@ -37,8 +38,11 @@ class FC(nn.Module):
         x = self.classifier(x)
         return x
 
+
 class NParamFC(nn.Module):
-    def __init__(self, n_features, num_class, params, dropout_ratio=0.2, batch_norm=False):
+    def __init__(
+        self, n_features, num_class, params, dropout_ratio=0.2, batch_norm=False
+    ):
         super().__init__()
         self.dropout = nn.Dropout(p=dropout_ratio)
         self.bn = batch_norm
@@ -60,7 +64,7 @@ class NParamFC(nn.Module):
         """
         Args:
             x (torch.Tensor): Input tensor of shape: (batch_size, n_features)
-        
+
         returns:
             torch.Tensor: logits for the gloss classification.
             dict { param : torch.Tensor } phoneme type logits
@@ -71,6 +75,6 @@ class NParamFC(nn.Module):
             x = self.bn(x)
 
         x_sign = self.classifier(x)
-        x_params = { param : clf(x) for param, clf in self.param_clfs.items() }
+        x_params = {param: clf(x) for param, clf in self.param_clfs.items()}
 
         return x_sign, x_params

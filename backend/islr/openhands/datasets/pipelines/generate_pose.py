@@ -12,11 +12,15 @@ N_FACE_LANDMARKS = 468
 N_BODY_LANDMARKS = 33
 N_HAND_LANDMARKS = 21
 
+
 class MediaPipePoseGenerator:
     def __init__(self, model_complexity=2):
         import mediapipe as mp
-        self.holistic=mp.solutions.holistic.Holistic(static_image_mode=False, model_complexity=model_complexity)
-    
+
+        self.holistic = mp.solutions.holistic.Holistic(
+            static_image_mode=False, model_complexity=model_complexity
+        )
+
     def __del__(self):
         self.holistic.close()
         # del self.holistic
@@ -30,7 +34,7 @@ class MediaPipePoseGenerator:
             kps = np.array([[p.x, p.y, p.z] for p in landmarks])
             conf = np.array([p.visibility for p in landmarks])
         return kps, conf
-    
+
     def process_other_landmarks(self, component, n_points):
         kps = np.zeros((n_points, 3))
         conf = np.zeros(n_points)
@@ -39,7 +43,7 @@ class MediaPipePoseGenerator:
             kps = np.array([[p.x, p.y, p.z] for p in landmarks])
             conf = np.ones(n_points)
         return kps, conf
-    
+
     def get_holistic_keypoints(self, frames):
         keypoints = []
         confs = []
@@ -81,4 +85,3 @@ class MediaPipePoseGenerator:
 
         with open(save_as, "wb") as f:
             pickle.dump(d, f, protocol=4)
-

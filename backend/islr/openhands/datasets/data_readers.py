@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 from natsort import natsorted
 
+
 def load_frames_from_folder(frames_folder, pattern="*.jpg"):
     """
     Reads images files in a directory in sorted order
@@ -22,6 +23,7 @@ def load_frames_from_folder(frames_folder, pattern="*.jpg"):
         frames.append(img)
 
     return np.asarray(frames, dtype=np.float32)
+
 
 def load_frames_from_video(video_path, start_frame=None, end_frame=None):
     """
@@ -41,30 +43,30 @@ def load_frames_from_video(video_path, start_frame=None, end_frame=None):
     if total_frames < start_frame:
         start_frame = 0
     vidcap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
-    
-    for _ in range(
-        min(int(end_frame - start_frame), int(total_frames - start_frame))
-    ):
+
+    for _ in range(min(int(end_frame - start_frame), int(total_frames - start_frame))):
         success, img = vidcap.read()
         if not success:
             break
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         frames.append(img)
 
-    return np.asarray(frames)#, dtype=np.float32)
+    return np.asarray(frames)  # , dtype=np.float32)
+
 
 def list_all_files(dir, extensions=[]):
     """
     List all the files of the given extension type in the given path
     """
     if not extensions:
-        files = glob(os.path.join(dir, '*'))
+        files = glob(os.path.join(dir, "*"))
         return [f for f in files if os.path.isfile(f)]
-    
+
     files = []
     for extension in extensions:
-        files.extend(glob(os.path.join(dir, '*'+extension)))
+        files.extend(glob(os.path.join(dir, "*" + extension)))
     return files
+
 
 def list_all_videos(dir):
     """

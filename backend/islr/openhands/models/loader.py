@@ -7,18 +7,16 @@ def load_encoder(encoder_cfg, in_channels, learn_adapter, adapter_source):
         from .encoder.cnn3d import CNN3D
 
         return CNN3D(in_channels=in_channels, **encoder_cfg.params)
-    
+
     elif encoder_cfg.type == "cnn2d":
         from .encoder.cnn2d import CNN2D
 
         return CNN2D(in_channels=in_channels, **encoder_cfg.params)
-    
+
     elif encoder_cfg.type == "i3d":
         from .encoder.i3d import LayersPoseLocalI3d
-        return LayersPoseLocalI3d(
-            in_channels=in_channels,
-            **encoder_cfg.params
-            )
+
+        return LayersPoseLocalI3d(in_channels=in_channels, **encoder_cfg.params)
 
     #### GRAPH MODELS FOR POSE ####
     elif encoder_cfg.type == "pose-flattener":
@@ -28,12 +26,16 @@ def load_encoder(encoder_cfg, in_channels, learn_adapter, adapter_source):
     elif encoder_cfg.type == "decoupled-gcn":
         from .encoder.graph.decoupled_gcn import DecoupledGCN
 
-        return DecoupledGCN(in_channels=in_channels, learn_adapter=learn_adapter, adapters=adapter_source, **encoder_cfg.params)
+        return DecoupledGCN(
+            in_channels=in_channels,
+            learn_adapter=learn_adapter,
+            adapters=adapter_source,
+            **encoder_cfg.params,
+        )
     elif encoder_cfg.type == "st-gcn":
         from .encoder.graph.st_gcn import STGCN
 
         return STGCN(in_channels=in_channels, **encoder_cfg.params)
-
 
     elif encoder_cfg.type == "sgn":
         from .encoder.graph.sgn import SGN
@@ -53,7 +55,8 @@ def load_encoder(encoder_cfg, in_channels, learn_adapter, adapter_source):
     else:
         raise ValueError(f"Encoder Type '{encoder_cfg.type}' not supported.")
 
-def load_decoder(decoder_cfg, num_class, encoder, params = None):
+
+def load_decoder(decoder_cfg, num_class, encoder, params=None):
     # # TODO: better way
     # if isinstance(encoder, nn.Sequential):
     #     n_out_features = encoder[-1].n_out_features
@@ -65,16 +68,16 @@ def load_decoder(decoder_cfg, num_class, encoder, params = None):
     if decoder_cfg.type == "fc":
         from .decoder.fc import FC
 
-        return FC(
-            n_features=n_out_features, num_class=num_class, **decoder_cfg.params
-        )
+        return FC(n_features=n_out_features, num_class=num_class, **decoder_cfg.params)
 
     if decoder_cfg.type == "param_fc":
         from .decoder.fc import NParamFC
 
         return NParamFC(
-            n_features=n_out_features, num_class=num_class, params=params, 
-            **decoder_cfg.params
+            n_features=n_out_features,
+            num_class=num_class,
+            params=params,
+            **decoder_cfg.params,
         )
 
     elif decoder_cfg.type == "rnn":
@@ -100,9 +103,11 @@ def load_decoder(decoder_cfg, num_class, encoder, params = None):
     else:
         raise ValueError(f"Decoder Type '{decoder_cfg.type}' not supported.")
 
+
 def load_ssl_backbone(cfg, in_channels, num_class):
-    if cfg.type == 'dpc':
+    if cfg.type == "dpc":
         from .ssl.dpc_rnn import DPC_RNN_Finetuner, load_weights_from_pretrained
+
         # Load pretraining config
         pretraining_cfg = omegaconf.OmegaConf.load(cfg.load_from.cfg_file)
         pretraining_cfg.in_channels = in_channels
@@ -114,19 +119,24 @@ def load_ssl_backbone(cfg, in_channels, num_class):
     else:
         raise ValueError(f"SSL Type '{cfg.type}' not supported.")
 
-def get_model(config, in_channels, num_class, params = None):
+
+def get_model(config, in_channels, num_class, params=None):
     if "pretrained" in config:
         # Load self-supervised backbone
         return load_ssl_backbone(config.pretrained, in_channels, num_class)
 
-    encoder = load_encoder(config.encoder, in_channels, config.learn_adapter, config.adapter_source)
+    encoder = load_encoder(
+        config.encoder, in_channels, config.learn_adapter, config.adapter_source
+    )
     decoder = load_decoder(config.decoder, num_class, encoder, params)
 
-    #print(f"[Adapters] Creating a model with {len(params)} clf heads: {', '.join(params.keys())}.")
+    # print(f"[Adapters] Creating a model with {len(params)} clf heads: {', '.join(params.keys())}.")
 
     if not params:
         from .network import Network
+
         return Network(encoder, decoder)
     else:
         from .network import NNetwork
+
         return NNetwork(encoder, decoder)

@@ -5,10 +5,17 @@ from pytorch_lightning.loggers.base import LoggerCollection
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
+
 def get_trainer(cfg):
     trainer = pl.Trainer(**cfg.trainer)
-    experiment_manager(trainer, cfg.get("exp_manager", None), cfg.model.learn_adapter, cfg.model.adapter_source)
+    experiment_manager(
+        trainer,
+        cfg.get("exp_manager", None),
+        cfg.model.learn_adapter,
+        cfg.model.adapter_source,
+    )
     return trainer
+
 
 def experiment_manager(trainer, cfg=None, learn_adapter=False, sources=[]):
     """
@@ -27,7 +34,9 @@ def experiment_manager(trainer, cfg=None, learn_adapter=False, sources=[]):
             cfg.wandb_logger_kwargs,
         )
     if cfg.create_checkpoint_callback:
-        configure_checkpointing(trainer, cfg.checkpoint_callback_params, learn_adapter, len(sources))
+        configure_checkpointing(
+            trainer, cfg.checkpoint_callback_params, learn_adapter, len(sources)
+        )
 
     if "early_stopping_callback" in cfg.keys() and cfg.early_stopping_callback:
         configure_early_stopping(trainer, cfg.early_stopping_params)
@@ -67,22 +76,25 @@ def configure_loggers(
     trainer.logger_connector.configure_logger(logger_list)
 
 
-def configure_checkpointing(trainer, cfg, learn_adapter = False, n_adapter_sources = 0):
+def configure_checkpointing(trainer, cfg, learn_adapter=False, n_adapter_sources=0):
     """
     Creates ModelCheckpoint callback and and attach it to the trainer.
     """
 
     # Remove existing callback if any
-    trainer.callbacks = [callback for callback in trainer.callbacks if type(callback) is not ModelCheckpoint]
-    
-    checkpoint_callback = ModelCheckpoint(**cfg)#, dirpath=trainer._default_root_dir)
+    trainer.callbacks = [
+        callback
+        for callback in trainer.callbacks
+        if type(callback) is not ModelCheckpoint
+    ]
+
+    checkpoint_callback = ModelCheckpoint(**cfg)  # , dirpath=trainer._default_root_dir)
 
     if learn_adapter:
         if n_adapter_sources > 1:
             checkpoint_callback.FILE_EXTENSION = ".adpt"
         else:
             checkpoint_callback.FILE_EXTENSION = ".tchr"
-
 
     trainer.callbacks.append(checkpoint_callback)
 
@@ -93,7 +105,11 @@ def configure_early_stopping(trainer, cfg):
     """
 
     # Remove existing callback if any
-    trainer.callbacks = [callback for callback in trainer.callbacks if type(callback) is not EarlyStopping]
+    trainer.callbacks = [
+        callback
+        for callback in trainer.callbacks
+        if type(callback) is not EarlyStopping
+    ]
 
     early_stopping_callback = EarlyStopping(**cfg)
     trainer.callbacks.append(early_stopping_callback)

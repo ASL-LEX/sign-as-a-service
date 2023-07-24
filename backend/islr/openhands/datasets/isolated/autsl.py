@@ -3,10 +3,11 @@ import pandas as pd
 from .base import BaseIsolatedDataset
 from ..data_readers import load_frames_from_video
 
+
 class AUTSLDataset(BaseIsolatedDataset):
     """
     Turkish Isolated Sign language dataset from the paper:
-    
+
     `AUTSL: A Large Scale Multi-modal Turkish Sign Language Dataset and Baseline Methods <https://arxiv.org/abs/2008.00932>`_
     """
 
@@ -18,7 +19,7 @@ class AUTSLDataset(BaseIsolatedDataset):
             zip(class_mappings_df["ClassId"], class_mappings_df["TR"])
         )
         self.glosses = sorted(self.id_to_glosses.values())
-    
+
     def read_original_dataset(self):
         df = pd.read_csv(self.split_file, header=None)
 

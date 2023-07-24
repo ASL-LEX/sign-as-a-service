@@ -6,6 +6,7 @@ from ..encoder.graph.decoupled_gcn import DecoupledGCN
 
 # Adopted from: https://github.com/TengdaHan/DPC
 
+
 def load_weights_from_pretrained(model, pretrained_model_path):
     ckpt = torch.load(pretrained_model_path)
     ckpt_dict = ckpt.items()
@@ -47,8 +48,9 @@ class DPC_RNN_Pretrainer(nn.Module):
         graph_args (dict): Parameters for Spatio-temporal graph construction.
         edge_importance_weighting (bool): If ``True``, adds a learnable importance weighting to the edges of the graph. Default: True.
         kwargs (dict): Other parameters for graph convolution units.
-        
+
     """
+
     def __init__(
         self,
         pred_steps=3,
@@ -57,24 +59,20 @@ class DPC_RNN_Pretrainer(nn.Module):
         encoder=None,
     ):
         super().__init__()
-        
+
         self.pred_steps = pred_steps
 
         if encoder.type == "st-gcn":
             self.conv_encoder = STModel(
-                in_channels=in_channels,
-                hidden_dim=hidden_dim,
-                **encoder.params
+                in_channels=in_channels, hidden_dim=hidden_dim, **encoder.params
             )
         elif encoder.type == "decoupled-gcn":
             self.conv_encoder = DecoupledGCN(
-                in_channels=in_channels,
-                n_out_features=hidden_dim,
-                **encoder.params
+                in_channels=in_channels, n_out_features=hidden_dim, **encoder.params
             )
         else:
-            raise NotImplementedError("Unknown encoder: "+ encoder.type)
-        
+            raise NotImplementedError("Unknown encoder: " + encoder.type)
+
         self.feature_size = hidden_dim
         self.agg = nn.GRU(hidden_dim, self.feature_size, batch_first=True)
         self.network_pred = nn.Sequential(
@@ -98,7 +96,7 @@ class DPC_RNN_Pretrainer(nn.Module):
             - :math:`T` is a length of input sequence,
             - :math:`V` is the number of graph nodes,
             - :math:`in\_channels` is the number of channels.
-                
+
         """
         block = block.permute(0, 1, 4, 2, 3)  # B, N, T, V, C -> B, N, C, T, V
         B, N, C, T, V = block.shape
@@ -174,7 +172,7 @@ class DPC_RNN_Finetuner(nn.Module):
     This module is proposed in
     `OpenHands: Making Sign Language Recognition Accessible with Pose-based Pretrained Models across Languages
     <https://arxiv.org/abs/2110.05877>`_
-    
+
     Args:
         num_class (int): Number of classes to classify.
         pred_steps (int): Number of future prediction steps. Default: 3.
@@ -185,8 +183,9 @@ class DPC_RNN_Finetuner(nn.Module):
         graph_args (dict): Parameters for Spatio-temporal graph construction.
         edge_importance_weighting (bool): If ``True``, adds a learnable importance weighting to the edges of the graph. Default: True.
         kwargs (dict): Other parameters for graph convolution units.
-        
+
     """
+
     def __init__(
         self,
         num_class=60,
@@ -205,18 +204,14 @@ class DPC_RNN_Finetuner(nn.Module):
 
         if encoder.type == "st-gcn":
             self.conv_encoder = STModel(
-                in_channels=in_channels,
-                hidden_dim=hidden_dim,
-                **encoder.params
+                in_channels=in_channels, hidden_dim=hidden_dim, **encoder.params
             )
         elif encoder.type == "decoupled-gcn":
             self.conv_encoder = DecoupledGCN(
-                in_channels=in_channels,
-                n_out_features=hidden_dim,
-                **encoder.params
+                in_channels=in_channels, n_out_features=hidden_dim, **encoder.params
             )
         else:
-            raise NotImplementedError("Unknown encoder: "+ encoder.type)
+            raise NotImplementedError("Unknown encoder: " + encoder.type)
 
         self.feature_size = hidden_dim
         self.agg = nn.GRU(hidden_dim, self.feature_size, batch_first=True)
@@ -241,7 +236,7 @@ class DPC_RNN_Finetuner(nn.Module):
             - :math:`T` is a length of input sequence,
             - :math:`V` is the number of graph nodes,
             - :math:`in\_channels` is the number of channels.
-                
+
         returns:
             torch.Tensor: logits for classification.
         """

@@ -3,7 +3,8 @@ from torch import nn
 
 import math
 
-#Adopted from: https://github.com/microsoft/SGN
+# Adopted from: https://github.com/microsoft/SGN
+
 
 class norm_data(nn.Module):
     def __init__(self, n_joints, dim=3):
@@ -96,7 +97,6 @@ class compute_g_spa(nn.Module):
         self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, x1):
-
         g1 = self.g1(x1).permute(0, 3, 2, 1).contiguous()
         g2 = self.g2(x1).permute(0, 3, 1, 2).contiguous()
         g3 = g1.matmul(g2)
@@ -106,7 +106,7 @@ class compute_g_spa(nn.Module):
 
 class SGN(nn.Module):
     """
-    SGN model proposed in 
+    SGN model proposed in
     `Semantics-Guided Neural Networks for Efficient Skeleton-Based Human Action Recognition
     <https://arxiv.org/pdf/1904.01189.pdf>`_
 
@@ -162,9 +162,9 @@ class SGN(nn.Module):
 
     def forward(self, input):
         """
-        Args: 
+        Args:
             input (torch.Tensor): Input tensor of shape :math:`(N, in\_channels, T_{in}, V_{in})`
-        
+
         Returns:
             torch.Tensor: Output embedding of shape :math:`(N, n\_out\_features)`
 

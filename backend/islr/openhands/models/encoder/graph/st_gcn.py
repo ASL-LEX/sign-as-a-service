@@ -34,6 +34,7 @@ class ConvTemporalGraphical(nn.Module):
             :math:`T_{in}/T_{out}` is a length of input/output sequence,
             :math:`V` is the number of graph nodes.
     """
+
     def __init__(
         self,
         in_channels,
@@ -96,6 +97,7 @@ class STGCN_BLOCK(nn.Module):
             :math:`T_{in}/T_{out}` is a length of input/output sequence,
             :math:`V` is the number of graph nodes.
     """
+
     def __init__(
         self, in_channels, out_channels, kernel_size, stride=1, dropout=0, residual=True
     ):
@@ -145,7 +147,7 @@ class STGCN_BLOCK(nn.Module):
 
 class STGCN(nn.Module):
     """Spatial temporal graph convolutional network backbone
-    
+
     This module is proposed in
     `Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition
     <https://arxiv.org/pdf/1801.07455.pdf>`_
@@ -154,10 +156,18 @@ class STGCN(nn.Module):
         in_channels (int): Number of channels in the input data.
         graph_args (dict): The arguments for building the graph.
         edge_importance_weighting (bool): If ``True``, adds a learnable importance weighting to the edges of the graph. Default: True.
-        n_out_features (int): Output Embedding dimension. Default: 256. 
+        n_out_features (int): Output Embedding dimension. Default: 256.
         kwargs (dict): Other parameters for graph convolution units.
     """
-    def __init__(self, in_channels, graph_args, edge_importance_weighting, n_out_features = 256, **kwargs):
+
+    def __init__(
+        self,
+        in_channels,
+        graph_args,
+        edge_importance_weighting,
+        n_out_features=256,
+        **kwargs
+    ):
         super().__init__()
 
         graph_args = OmegaConf.to_container(graph_args)
@@ -195,9 +205,9 @@ class STGCN(nn.Module):
 
     def forward(self, x):
         """
-        Args: 
+        Args:
             x (torch.Tensor): Input tensor of shape :math:`(N, in\_channels, T_{in}, V_{in})`
-        
+
         Returns:
             torch.Tensor: Output embedding of shape :math:`(N, n\_out\_features)`
 
@@ -209,11 +219,11 @@ class STGCN(nn.Module):
 
         """
         N, C, T, V = x.size()
-        x = x.permute(0, 3, 1, 2).contiguous() # NCTV -> NVCT
+        x = x.permute(0, 3, 1, 2).contiguous()  # NCTV -> NVCT
         x = x.view(N, V * C, T)
         x = self.data_bn(x)
         x = x.view(N, V, C, T)
-        x = x.permute(0, 2, 3, 1).contiguous() # NVCT -> NCTV
+        x = x.permute(0, 2, 3, 1).contiguous()  # NVCT -> NCTV
 
         for gcn, importance in zip(self.st_gcn_networks, self.edge_importance):
             x, _ = gcn(x, self.A * importance)

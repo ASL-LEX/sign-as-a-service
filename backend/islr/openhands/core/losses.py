@@ -5,6 +5,7 @@ import torch.nn.functional as F
 
 CrossEntropyLoss = nn.CrossEntropyLoss
 
+
 class SmoothedCrossEntropyLoss(nn.Module):
     """
     Calculates Cross-entropy loss with label smoothing.
@@ -12,6 +13,7 @@ class SmoothedCrossEntropyLoss(nn.Module):
     Args:
         smooth_factor (float): label smoothing regularization coefficient
     """
+
     def __init__(self, smooth_factor=0.01):
         super(SmoothedCrossEntropyLoss, self).__init__()
         self.smooth_factor = smooth_factor
@@ -21,14 +23,14 @@ class SmoothedCrossEntropyLoss(nn.Module):
         Calculate label smoothed cross entropy loss
 
         Args:
-            input (torch.Tensor):  :math:`(N, C)` 
-            target (torch.Tensor): :math:`(N)` 
+            input (torch.Tensor):  :math:`(N, C)`
+            target (torch.Tensor): :math:`(N)`
 
-            where 
+            where
             :math:`N` = Batch Size,
             :math:`C` = number of classes.
-            
-            
+
+
         Returns:
             torch.Tensor: Calulated cross entropy loss with label smoothing.
         """

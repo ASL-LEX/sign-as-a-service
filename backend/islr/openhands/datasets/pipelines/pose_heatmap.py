@@ -17,6 +17,7 @@ def resize_keypoints(data, shape=(64, 64)):
     data["keypoint"] = data["keypoint"] * scale_factor
     return data
 
+
 class GeneratePoseHeatMap:
     """Generate pseudo heatmaps based on joint coordinates and confidence.
     Required keys are "keypoint", "img_shape", "keypoint_score" (optional),
@@ -54,7 +55,6 @@ class GeneratePoseHeatMap:
         left_kp=None,
         right_kp=None,
     ):
-
         self.sigma = sigma
         self.use_score = use_score
         self.with_kp = with_kp
@@ -105,7 +105,7 @@ class GeneratePoseHeatMap:
                 continue
             y = y[:, None]
 
-            patch = np.exp(-((x - mu_x) ** 2 + (y - mu_y) ** 2) / 2 / sigma ** 2)
+            patch = np.exp(-((x - mu_x) ** 2 + (y - mu_y) ** 2) / 2 / sigma**2)
             patch = patch * max_value
             heatmap[st_y:ed_y, st_x:ed_x] = np.maximum(
                 heatmap[st_y:ed_y, st_x:ed_x], patch
@@ -190,7 +190,7 @@ class GeneratePoseHeatMap:
                 a_dominate * d2_start + b_dominate * d2_end + seg_dominate * d2_line
             )
 
-            patch = np.exp(-d2_seg / 2.0 / sigma ** 2)
+            patch = np.exp(-d2_seg / 2.0 / sigma**2)
             patch = patch * value_coeff
 
             heatmap[min_y:max_y, min_x:max_x] = np.maximum(

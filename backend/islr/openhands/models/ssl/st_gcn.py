@@ -165,7 +165,6 @@ import torch.nn as nn
 
 
 class ConvTemporalGraphical(nn.Module):
-
     r"""The basic module for applying a graph convolution.
     Args:
         in_channels (int): Number of channels in the input sequence data
@@ -288,7 +287,6 @@ class st_gcn(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x, A):
-
         res = self.residual(x)
         x, A = self.gcn(x, A)
         x = self.tcn(x) + res

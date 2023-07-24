@@ -4,6 +4,7 @@ import strawberry
 from strawberry.asgi import GraphQL
 from openhands.apis.inference import InferenceModel
 
+
 @strawberry.type
 class Query:
     @strawberry.field

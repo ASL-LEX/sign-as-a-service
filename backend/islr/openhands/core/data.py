@@ -5,6 +5,7 @@ import albumentations as A
 import hydra
 from ..datasets import pose_transforms, video_transforms
 
+
 def create_pose_transforms(transforms_cfg):
     all_transforms = []
     for transform in transforms_cfg:
@@ -14,6 +15,7 @@ def create_pose_transforms(transforms_cfg):
             new_trans = getattr(pose_transforms, transform_name)(**transform_args)
             all_transforms.append(new_trans)
     return pose_transforms.Compose(all_transforms)
+
 
 class DataModule(pl.LightningDataModule):
     def __init__(self, data_cfg):
@@ -41,9 +43,11 @@ class DataModule(pl.LightningDataModule):
             self.num_param = {}
             # for param in self.train_dataset_labeled.params.keys():
             for param in self.train_dataset.params.keys():
-                    # assert self.train_dataset_labeled.num_param(param) == self.valid_dataset.num_param(param)
-                    assert self.train_dataset.num_param(param) == self.valid_dataset.num_param(param)
-                    self.num_param[param] = self.valid_dataset.num_param(param)
+                # assert self.train_dataset_labeled.num_param(param) == self.valid_dataset.num_param(param)
+                assert self.train_dataset.num_param(
+                    param
+                ) == self.valid_dataset.num_param(param)
+                self.num_param[param] = self.valid_dataset.num_param(param)
 
         elif stage == "test":
             self.test_dataset = self._instantiate_dataset(self.data_cfg.test_pipeline)
@@ -52,7 +56,7 @@ class DataModule(pl.LightningDataModule):
             self.num_class = self.test_dataset.num_class
             self.num_param = {}
             for param in self.test_dataset.params.keys():
-                    self.num_param[param] = self.test_dataset.num_param(param)
+                self.num_param[param] = self.test_dataset.num_param(param)
         else:
             raise ValueError("Unknown `stage` value when calling `data_module.setup()`")
 
@@ -86,7 +90,7 @@ class DataModule(pl.LightningDataModule):
             collate_fn=self.valid_dataset.collate_fn,
         )
         return dataloader
-    
+
     def test_dataloader(self):
         dataloader = hydra.utils.instantiate(
             self.data_cfg.test_pipeline.dataloader,
@@ -149,7 +153,7 @@ class DataModule(pl.LightningDataModule):
         if not albu_config:
             return transforms
         albu_config = OmegaConf.to_container(albu_config, resolve=True)
-        
+
         for transform in albu_config:
             for transform_name, transform_args in transform.items():
                 transform = A.from_dict(
@@ -181,5 +185,7 @@ class DataModule(pl.LightningDataModule):
         if dataset_cfg is None:
             raise ValueError(f"`dataset` section missing in pipeline")
 
-        dataset = hydra.utils.instantiate(dataset_cfg, transforms=transforms, selected_ptypes=params)
+        dataset = hydra.utils.instantiate(
+            dataset_cfg, transforms=transforms, selected_ptypes=params
+        )
         return dataset

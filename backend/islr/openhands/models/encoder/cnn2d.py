@@ -5,13 +5,14 @@ import timm
 
 class CNN2D(nn.Module):
     """
-    Creates a 2D Convolution backbone from `timm` library 
-    
+    Creates a 2D Convolution backbone from `timm` library
+
     Args:
         in_channels (int): Number of input channels
         backbone (string): Backbone to use
         pretrained (bool, optional): Whether to use pretrained Backbone. Default: ``True``
     """
+
     def __init__(self, in_channels=3, backbone="resnet18", pretrained=True):
         super().__init__()
         assert in_channels == 3
@@ -30,4 +31,4 @@ class CNN2D(nn.Module):
             out = out.view(out.shape[0], -1)
             cnn_embeds.append(out)
 
-        return torch.stack(cnn_embeds, dim=0).transpose(0, 1) # Batch-first
+        return torch.stack(cnn_embeds, dim=0).transpose(0, 1)  # Batch-first

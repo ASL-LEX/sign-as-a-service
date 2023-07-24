@@ -7,7 +7,7 @@ from .utils import AttentionBlock
 class RNNClassifier(nn.Module):
     """
     RNN head for classification.
-    
+
     Args:
         n_features (int): Number of features in the input.
         num_class (int): Number of class for classification.
@@ -18,6 +18,7 @@ class RNNClassifier(nn.Module):
         use_attention (bool): Whether to use attenion for pooling or not. Default: ``False``.
 
     """
+
     def __init__(
         self,
         n_features,
@@ -47,7 +48,7 @@ class RNNClassifier(nn.Module):
         """
         Args:
             x (torch.Tensor): Input tensor of shape: (batch_size, T, n_features)
-        
+
         returns:
             torch.Tensor: logits for classification.
         """

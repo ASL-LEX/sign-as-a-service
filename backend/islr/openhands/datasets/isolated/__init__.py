@@ -25,7 +25,6 @@ __all__ = [
     "Bosphorus22kDataset",
     "ASLLVDDataset",
     "RWTH_Phoenix_Signer03_Dataset",
-    
     "ConcatDataset",
-    "FingerSpellingDataset"
+    "FingerSpellingDataset",
 ]

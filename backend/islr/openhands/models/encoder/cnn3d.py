@@ -20,10 +20,10 @@ AVAILABLE_3D_BACKBONES = [
 
 class CNN3D(nn.Module):
     """
-    Initializes the 3D Convolution backbone. 
-    
+    Initializes the 3D Convolution backbone.
+
     **Supported Backbones**
-    
+
     - `i3d_r50`
     - `c2d_r50`
     - `csn_r101`
@@ -36,14 +36,15 @@ class CNN3D(nn.Module):
     - `x3d_s`
     - `x3d_m`
     - `x3d_l`
-    
+
     Args:
-        in_channels (int): Number of input channels 
+        in_channels (int): Number of input channels
         backbone (string): Backbone to use
         pretrained (bool, optional): Whether to use pretrained Backbone.  Default: ``True``
         **kwargs (optional): Will be passed to pytorchvideo.models.hub models;
-    
+
     """
+
     def __init__(self, in_channels, backbone, pretrained=True, **kwargs):
         super().__init__()
         self.backbone = self.get_3d_backbone(
@@ -56,7 +57,7 @@ class CNN3D(nn.Module):
         forward step
         """
         x = self.backbone(x.type(torch.cuda.FloatTensor))
-        return x.transpose(0, 1) # Batch-first
+        return x.transpose(0, 1)  # Batch-first
 
     def get_3d_backbone(
         self,

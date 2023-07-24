@@ -17,7 +17,6 @@ class FineTuner(nn.Module):
         nn.init.normal_(self.classifier.weight, 0, math.sqrt(2.0 / num_class))
 
     def forward(self, x):
-
         if self.pooling_type == "cls":
             x = x[:, 0]
         elif self.pooling_type == "max":

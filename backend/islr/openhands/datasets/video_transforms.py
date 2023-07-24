@@ -14,6 +14,7 @@ class Compose:
             video = transform(video)
         return video
 
+
 class THWC2TCHW(torch.nn.Module):
     def forward(self, x):
         return x.permute(0, 3, 1, 2)

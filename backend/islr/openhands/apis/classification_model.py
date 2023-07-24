@@ -7,6 +7,7 @@ from ..core.data import DataModule
 from .inference import InferenceModel
 import json
 
+
 class ClassificationModel(InferenceModel):
     """
     Classification Model initializer
@@ -16,12 +17,12 @@ class ClassificationModel(InferenceModel):
         trainer (object): trainer object from Pytorch Lightning.
 
     """
+
     def __init__(self, cfg, trainer):
         super().__init__(cfg, stage="fit")
         self.trainer = trainer
         self.setup_metrics()
         self.loss = self.setup_loss(self.cfg.optim)
-
 
     def training_step(self, batch, batch_idx):
         """
@@ -38,10 +39,14 @@ class ClassificationModel(InferenceModel):
         for p in params:
             if p == "gloss":
                 total_loss += self.loss(y_hat, batch["labels"])
-                total_acc += self.accuracy_metric(F.softmax(y_hat, dim=-1), batch["labels"]) 
+                total_acc += self.accuracy_metric(
+                    F.softmax(y_hat, dim=-1), batch["labels"]
+                )
             else:
                 total_loss += self.loss(y_hat_params[p], batch["params"][p])
-                total_acc += self.accuracy_metric(F.softmax(y_hat_params[p], dim=-1), batch["params"][p])
+                total_acc += self.accuracy_metric(
+                    F.softmax(y_hat_params[p], dim=-1), batch["params"][p]
+                )
         total_acc /= len(params)
 
         self.log("train_loss", total_loss)
@@ -64,10 +69,12 @@ class ClassificationModel(InferenceModel):
         for p in params:
             if p == "gloss":
                 total_loss += self.loss(y_hat, batch["labels"])
-                acc = self.accuracy_metric(F.softmax(y_hat, dim=-1), batch["labels"]) 
+                acc = self.accuracy_metric(F.softmax(y_hat, dim=-1), batch["labels"])
             else:
                 total_loss += self.loss(y_hat_params[p], batch["params"][p])
-                acc = self.accuracy_metric(F.softmax(y_hat_params[p], dim=-1), batch["params"][p])
+                acc = self.accuracy_metric(
+                    F.softmax(y_hat_params[p], dim=-1), batch["params"][p]
+                )
             total_acc += acc
             self.log(p + "_acc", acc, on_step=False, on_epoch=True, prog_bar=True)
         total_acc /= len(params)

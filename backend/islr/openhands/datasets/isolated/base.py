@@ -11,12 +11,25 @@ from ..video_transforms import *
 from ..data_readers import *
 
 PARAMS = [
-    "Handshape","Selected Fingers", "Flexion", "Spread", "Spread Change",
-    "Thumb Position", "Thumb Contact", "Sign Type", "Path Movement",
-    "Repeated Movement", "Major Location", "Minor Location",
-    "Second Minor Location", "Contact", "Nondominant Handshape", 
-    "Wrist Twist", "Handshape Morpheme 2"
+    "Handshape",
+    "Selected Fingers",
+    "Flexion",
+    "Spread",
+    "Spread Change",
+    "Thumb Position",
+    "Thumb Contact",
+    "Sign Type",
+    "Path Movement",
+    "Repeated Movement",
+    "Major Location",
+    "Minor Location",
+    "Second Minor Location",
+    "Contact",
+    "Nondominant Handshape",
+    "Wrist Twist",
+    "Handshape Morpheme 2",
 ]
+
 
 class BaseIsolatedDataset(torch.utils.data.Dataset):
     """
@@ -44,15 +57,14 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         pose_use_confidence_scores=False,
         pose_use_z_axis=False,
         inference_mode=False,
-        only_metadata=False, # Does not load data files if `True`
+        only_metadata=False,  # Does not load data files if `True`
         multilingual=False,
         languages=None,
         language_set=None,
         results=None,
-        
         # Windowing
-        seq_len=1, # No. of frames per window
-        num_seq=1, # No. of windows
+        seq_len=1,  # No. of frames per window
+        num_seq=1,  # No. of windows
     ):
         super().__init__()
 
@@ -64,15 +76,19 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         self.multilingual = multilingual
         self.seq_len = seq_len
         self.num_seq = num_seq
-        self.languages=languages
-        self.language_set=language_set
+        self.languages = languages
+        self.language_set = language_set
 
         self.normalized_class_mappings_file = normalized_class_mappings_file
         if normalized_class_mappings_file:
-            df = pd.read_csv(normalized_class_mappings_file, na_filter=False) # In German, "null" means "zero"
-            self.normalized_class_mappings = {df["actual_gloss"][i]: df["normalized_gloss"][i] for i in range(len(df))}
+            df = pd.read_csv(
+                normalized_class_mappings_file, na_filter=False
+            )  # In German, "null" means "zero"
+            self.normalized_class_mappings = {
+                df["actual_gloss"][i]: df["normalized_gloss"][i] for i in range(len(df))
+            }
             # TODO: Also store reverse mapping for inference in original lang
-        
+
         self.glosses = []
         self.read_glosses()
         if not self.glosses:
@@ -96,25 +112,27 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         # conversion of human-readable label to number
         # (-1 for phoneme types not meant to be classified)
         self.param_to_id = {
-            param: { 
-                val : (i if param in selected_ptypes else -1) \
-            for i, val in enumerate(vals) } for param, vals in self.params.items() }
+            param: {
+                val: (i if param in selected_ptypes else -1)
+                for i, val in enumerate(vals)
+            }
+            for param, vals in self.params.items()
+        }
 
         # just flipped version of param_to_id
         # note that ignored phoneme types are present but not complete
-        # all their values (e.g. "ily", "flat-o") are collapsed into one with key -1 
+        # all their values (e.g. "ily", "flat-o") are collapsed into one with key -1
         self.id_to_param = {
-            param: { 
-                i : val for i, val in enumerate(self.param_to_id[param]) }
-            for param in self.params.keys() 
+            param: {i: val for i, val in enumerate(self.param_to_id[param])}
+            for param in self.params.keys()
         }
-        
+
         self.inference_mode = inference_mode
         self.only_metadata = only_metadata
 
         if not only_metadata:
             self.data = []
-            
+
             if inference_mode:
                 # Will have null labels
                 self.enumerate_data_files(self.root_dir)
@@ -208,14 +226,14 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         Implement this method to construct `self.glosses[]`
         """
         raise NotImplementedError
-    
+
     def read_original_dataset(self):
         """
         Implement this method to read (video_name/video_folder, classification_label)
         into self.data[]
         """
         raise NotImplementedError
-    
+
     def enumerate_data_files(self, dir):
         """
         Lists the video files from given directory.
@@ -235,20 +253,21 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
                     if not holistic:
                         # Create MediaPipe instance
                         from ..pipelines.generate_pose import MediaPipePoseGenerator
+
                         holistic = MediaPipePoseGenerator()
                     # Dump keypoints
                     frames = load_frames_from_video(video_file)
                     holistic.generate_keypoints_for_frames(frames, pose_file)
                 pose_files.append(pose_file)
-            
+
             if not pose_files:
                 pose_files = list_all_files(dir, extensions=[".pkl"])
-            
+
             files = pose_files
-        
+
         if not files:
             raise RuntimeError(f"No files found in {dir}")
-        
+
         self.data = [(f, -1) for f in files]
         # -1 means invalid label_id
 
@@ -296,15 +315,16 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
             "frames": imgs,
             "label": torch.tensor(label, dtype=torch.long),
             "file": video_id,
-            "dataset_name": data["dataset_name"] if self.multilingual else None, # Required to calc dataset-wise accuracy
+            "dataset_name": data["dataset_name"]
+            if self.multilingual
+            else None,  # Required to calc dataset-wise accuracy
         }
 
-        for p,val in params.items():
+        for p, val in params.items():
             data[p] = torch.tensor(val, dtype=torch.long)
 
         # print(f"\tVideo: {video_id}, gloss: {label}")
         return data
-
 
     @staticmethod
     def collate_fn(batch_list):
@@ -323,11 +343,12 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         # import pdb; pdb.set_trace()
         max_frames = max([x["frames"].shape[1] for x in batch_list])
         # Pad the temporal dimension to `max_frames` for all videos
-        # Assumes each instance of shape: (C, T, V) 
+        # Assumes each instance of shape: (C, T, V)
         # TODO: Handle videos (C,T,H,W)
         frames = [
             F.pad(x["frames"], (0, 0, 0, max_frames - x["frames"].shape[1], 0, 0))
-            for i, x in enumerate(batch_list) if x
+            for i, x in enumerate(batch_list)
+            if x
         ]
         frames = torch.stack(frames, dim=0)
         # print(frames.size())
@@ -341,12 +362,18 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         labels = [x["label"] for i, x in enumerate(batch_list)]
         labels = torch.stack(labels, dim=0)
         # print(labels)
-        if 'Handshape' in batch_list[0].keys():
-            params = { p : torch.stack([x[p] for x in batch_list], dim=0) for p in PARAMS }
+        if "Handshape" in batch_list[0].keys():
+            params = {p: torch.stack([x[p] for x in batch_list], dim=0) for p in PARAMS}
         else:
             params = {}
 
-        return dict(frames=frames, labels=labels, params=params, files=[x["file"] for x in batch_list if x], dataset_names=[x["dataset_name"] for x in batch_list if x])
+        return dict(
+            frames=frames,
+            labels=labels,
+            params=params,
+            files=[x["file"] for x in batch_list if x],
+            dataset_names=[x["dataset_name"] for x in batch_list if x],
+        )
 
     def read_pose_data(self, index):
         label = self.data[index][1]
@@ -357,21 +384,23 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
             pose_path = self.data[index][0]
         else:
             video_name = self.data[index][0]
-            
+
             video_path = os.path.join(self.root_dir, video_name)
             # print("--------------279",self.root_dir)
             # print("---------280",video_name)
             # If `video_path` is folder of frames from which pose was dumped, keep it as it is.
             # Otherwise, just remove the video extension
             pose_path = (
-                video_path if os.path.isdir(video_path) else os.path.splitext(video_path)[0]
+                video_path
+                if os.path.isdir(video_path)
+                else os.path.splitext(video_path)[0]
             )
-            pose_path = pose_path.replace("videos","poses") + ".pkl"
-        #print(pose_path)
+            pose_path = pose_path.replace("videos", "poses") + ".pkl"
+        # print(pose_path)
         pose_data = self.load_pose_from_path(pose_path)
 
         pose_data["label"] = torch.tensor(label, dtype=torch.long)
-        
+
         if not self.inference_mode:
             for p in self.params.keys():
                 pose_data[p] = torch.tensor(params[p], dtype=torch.long)
@@ -405,10 +434,14 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
             "frames": torch.tensor(kps).permute(2, 0, 1),  # (C, T, V)
             "label": data["label"],
             "file": path,
-            "lang_code": data["lang_code"] if self.multilingual else None, # Required for lang_token prepend
-            "dataset_name": data["dataset_name"] if self.multilingual else None, # Required to calc dataset-wise accuracy
+            "lang_code": data["lang_code"]
+            if self.multilingual
+            else None,  # Required for lang_token prepend
+            "dataset_name": data["dataset_name"]
+            if self.multilingual
+            else None,  # Required to calc dataset-wise accuracy
         }
-        
+
         if not self.inference_mode:
             for p in self.params.keys():
                 formatted_data[p] = data[p]
@@ -417,10 +450,10 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
         # temporarily remove this bc transforms is currently defined to be for videos
         if self.transforms is not None:
             data = self.transforms(data)
-        
+
         if self.seq_len > 1 and self.num_seq > 1:
             data["num_windows"] = self.num_seq
-            kps = data["frames"].permute(1, 2, 0).numpy() # CTV->TVC
+            kps = data["frames"].permute(1, 2, 0).numpy()  # CTV->TVC
             if kps.shape[0] < self.seq_len * self.num_seq:
                 pad_kps = np.zeros(
                     ((self.seq_len * self.num_seq) - kps.shape[0], *kps.shape[1:])
@@ -434,11 +467,13 @@ class BaseIsolatedDataset(torch.utils.data.Dataset):
             clips = []
             i = 0
             while i + self.seq_len <= SL:
-                clips.append(torch.tensor(kps[i : i + self.seq_len, ...], dtype=torch.float32))
+                clips.append(
+                    torch.tensor(kps[i : i + self.seq_len, ...], dtype=torch.float32)
+                )
                 i += self.seq_len
 
             t_seq = torch.stack(clips, 0)
-            data["frames"] = t_seq.permute(0, 3, 1, 2) # WTVC->WCTV
+            data["frames"] = t_seq.permute(0, 3, 1, 2)  # WTVC->WCTV
 
         label = data["label"]
         vid = path.split("/")[-1]

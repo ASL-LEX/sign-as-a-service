@@ -5,10 +5,11 @@ from sklearn.preprocessing import LabelEncoder
 from .base import BaseIsolatedDataset
 from ..data_readers import load_frames_from_video
 
+
 class DeviSignDataset(BaseIsolatedDataset):
     """
     Chinese Isolated Sign language dataset from the paper:
-    
+
     `The devisign large vocabulary of chinese sign language database and baseline evaluations`
     """
 
@@ -16,10 +17,11 @@ class DeviSignDataset(BaseIsolatedDataset):
 
     def read_glosses(self):
         self.glosses = []
-        df = pd.read_csv(self.class_mappings_file_path, delimiter="\t", encoding="utf-8")
+        df = pd.read_csv(
+            self.class_mappings_file_path, delimiter="\t", encoding="utf-8"
+        )
         for i in range(len(df)):
             self.glosses.append(df["Meaning (Chinese)"][i].strip())
-
 
     def read_original_dataset(self):
         """
@@ -36,7 +38,7 @@ class DeviSignDataset(BaseIsolatedDataset):
             common_filename = "pose.pkl"
         else:
             raise NotImplementedError
-        
+
         if self.split_file:
             df = pd.read_csv(self.split_file)
             for i in range(len(df)):
@@ -46,7 +48,9 @@ class DeviSignDataset(BaseIsolatedDataset):
                 if not os.path.isfile(video_file):
                     raise FileNotFoundError(video_file)
 
-                gloss_id = int(video_file.replace("\\", "/").split("/")[-2].split("_")[1])
+                gloss_id = int(
+                    video_file.replace("\\", "/").split("/")[-2].split("_")[1]
+                )
 
                 instance_entry = video_file, gloss_id
                 self.data.append(instance_entry)

@@ -4,10 +4,11 @@ import pandas as pd
 from .base import BaseIsolatedDataset
 from ..data_readers import load_frames_from_video
 
+
 class CSLDataset(BaseIsolatedDataset):
     """
     Chinese Isolated Sign language dataset from the paper:
-    
+
     `Attention-Based 3D-CNNs for Large-Vocabulary Sign Language Recognition <https://ieeexplore.ieee.org/document/8466903>`_
     """
 
@@ -65,7 +66,9 @@ class CSLDataset(BaseIsolatedDataset):
 
             for video_file in video_files:
                 gloss_id = int(video_file.replace("\\", "/").split("/")[-2])
-                signer_id = int(os.path.basename(video_file).split("_")[0].replace("P", ""))
+                signer_id = int(
+                    os.path.basename(video_file).split("_")[0].replace("P", "")
+                )
 
                 if (signer_id <= 35 and "train" in self.splits) or (
                     signer_id > 35 and ("test" in self.splits or "val" in self.splits)

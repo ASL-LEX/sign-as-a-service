@@ -31,7 +31,7 @@ class PositionEmbedding(nn.Module):
 
         position_embeddings = self.position_embeddings(position_ids)
 
-        embeddings = x[:,:self.max_position_embeddings,:] + position_embeddings
+        embeddings = x[:, : self.max_position_embeddings, :] + position_embeddings
         embeddings = self.LayerNorm(embeddings)
         embeddings = self.dropout(embeddings)
         return embeddings
@@ -39,14 +39,15 @@ class PositionEmbedding(nn.Module):
 
 class BERT(nn.Module):
     """
-    BERT decoder module. 
+    BERT decoder module.
 
     Args:
         n_features (int): Number of features in the input.
         num_class (int): Number of class for classification.
         config (dict): Configuration set for BERT layer.
-    
+
     """
+
     def __init__(self, n_features, num_class, config):
         """
         pooling_type -> ["max","avg","att","cls"]
@@ -85,7 +86,7 @@ class BERT(nn.Module):
         """
         Args:
             x (torch.Tensor): Input tensor of shape: (batch_size, T, n_features)
-        
+
         returns:
             torch.Tensor: logits for classification.
         """
@@ -112,16 +113,18 @@ class BERT(nn.Module):
 
         x = self.dropout(x)
 
+
 class NParamBERT(nn.Module):
     """
-    BERT decoder module. 
+    BERT decoder module.
 
     Args:
         n_features (int): Number of features in the input.
         num_class (int): Number of class for classification.
         config (dict): Configuration set for BERT layer.
-    
+
     """
+
     def __init__(self, n_features, num_class, params, config):
         """
         pooling_type -> ["max","avg","att","cls"]
@@ -158,16 +161,17 @@ class NParamBERT(nn.Module):
 
         self.param_clfs = {}
         for param, n in params.items():
-            self.param_clfs[param] = nn.Linear(in_features=config.hidden_size, out_features=n)
+            self.param_clfs[param] = nn.Linear(
+                in_features=config.hidden_size, out_features=n
+            )
             # nn.init.normal_(self.param_clfs[param].weight, 0, math.sqrt(2.0 / n))
         self.param_clfs = nn.ModuleDict(self.param_clfs)
-
 
     def forward(self, x):
         """
         Args:
             x (torch.Tensor): Input tensor of shape: (batch_size, T, n_features)
-        
+
         returns:
             torch.Tensor: logits for classification.
         """
@@ -190,7 +194,7 @@ class NParamBERT(nn.Module):
 
         x = F.dropout(x, p=0.2)
         x_sign = self.l2(x)
-        x_params = { param : clf(x) for param, clf in self.param_clfs.items() }
+        x_params = {param: clf(x) for param, clf in self.param_clfs.items()}
 
         return x_sign, x_params
 
