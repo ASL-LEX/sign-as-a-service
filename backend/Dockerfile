@@ -6,15 +6,15 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set work directory in the container
-WORKDIR /app
+WORKDIR /sign
 
 # Install dependencies
-COPY requirements.txt /app/
+COPY requirements.txt /sign/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the current directory contents into the container
-COPY . /app/
+COPY . /sign/
 
 # Run the command to start Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
