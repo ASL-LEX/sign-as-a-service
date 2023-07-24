@@ -2,17 +2,26 @@ import uvicorn
 import omegaconf
 import strawberry
 from strawberry.asgi import GraphQL
-from openhands.apis.inference import InferenceModel
+from typing import List, Dict, Any
+from .islr.openhands.apis.inference import InferenceModel
+
+
+@strawberry.type
+class PredictionResult:
+    id: str
+    true: str
+    preds: List[str]  # Assuming the predictions are strings, adjust as needed
 
 
 @strawberry.type
 class Query:
     @strawberry.field
-    def classify(self, info) -> dict:
+    def classify(self, info) -> List[PredictionResult]:
         cfg = omegaconf.OmegaConf.load("./config.yaml")
         model = InferenceModel(cfg=cfg)
         model.init_from_checkpoint_if_available()
-        model.test_inference()
+        res = model.predict()
+        return res
 
 
 schema = strawberry.Schema(query=Query)
