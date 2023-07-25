@@ -96,66 +96,6 @@ class InferenceModel(pl.LightningModule):
         self.load_state_dict(ckpt["state_dict"], strict=False)
         del ckpt
 
-    def test_inference(self):
-        """
-        Calculates the time taken for inference for all the batches in the test dataloader.
-        """
-        # TODO: Write output to a csv
-        results = []
-        splits = json.load(open(self.cfg.data.test_pipeline.dataset.split_file))
-        path2gloss = {
-            instance["video_id"]: sign["gloss"]
-            for sign in splits
-            for instance in sign["instances"]
-        }
-        path2split = {
-            instance["video_id"]: instance["split"]
-            for sign in splits
-            for instance in sign["instances"]
-        }
-        path2islex = {
-            instance["video_id"]: instance["Handshape"] != -1
-            for sign in splits
-            for instance in sign["instances"]
-        }
-        id2gloss = self.datamodule.test_dataset.id_to_gloss
-        gloss2id = self.datamodule.test_dataset.gloss_to_id
-        dataloader = self.datamodule.test_dataloader()
-
-        # import pdb; pdb.set_trace()
-
-        for batch in dataloader:
-            y_hat = self.model(batch["frames"].to(self._device))
-            y_true = [
-                path2gloss[path.split("/")[-1].replace(".pkl", "")]
-                if path.split("/")[-1].replace(".pkl", "") in path2gloss.keys()
-                else None
-                for path in batch["files"]
-            ]
-
-            y_hat_gloss = y_hat[0].cpu()
-            y_true_gloss = [gt for gt in y_true]
-
-            for sample_idx, gloss_probs in enumerate(y_hat_gloss):
-                if not y_true[sample_idx]:
-                    continue
-                sample_preds = {id2gloss[i]: prob for i, prob in enumerate(gloss_probs)}
-                rankings, probs = zip(
-                    *sorted(sample_preds.items(), key=lambda x: x[1], reverse=True)
-                )
-                if y_true[sample_idx] not in rankings:
-                    continue
-                row = {
-                    "id": batch["files"][sample_idx].split("/")[-1].replace(".pkl", ""),
-                    "true": y_true[sample_idx],
-                    # "enc": [n.item() for n in y_hat[2].cpu()[sample_idx].detach().numpy()],
-                    "preds": rankings[:10],
-                }
-                results.append(row)
-                print(f'row: {row}')
-
-        json.dump(results, open(self.cfg.data.test_pipeline.results, "w+"), indent=4)
-
     def predict(self):
         results = []
         splits = json.load(open(self.cfg.data.test_pipeline.dataset.split_file))
