@@ -12,13 +12,13 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  JSON: { input: any; output: any; }
+  JSON: { input: any; output: any };
 };
 
 /** Represents an entier lexicon */
@@ -77,16 +77,13 @@ export type Mutation = {
   lexiconCreate: Lexicon;
 };
 
-
 export type MutationLexiconAddEntryArgs = {
   entry: LexiconAddEntry;
 };
 
-
 export type MutationLexiconClearEntriesArgs = {
   lexicon: Scalars['String']['input'];
 };
-
 
 export type MutationLexiconCreateArgs = {
   lexicon: LexiconCreate;
@@ -99,12 +96,10 @@ export type Query = {
   lexiconSearch: Array<LexiconEntry>;
 };
 
-
 export type QueryLexiconByKeyArgs = {
   key: Scalars['String']['input'];
   lexicon: Scalars['String']['input'];
 };
-
 
 export type QueryLexiconSearchArgs = {
   lexicon: Scalars['String']['input'];
@@ -115,65 +110,110 @@ export type LexiconCreateMutationVariables = Exact<{
   lexicon: LexiconCreate;
 }>;
 
-
-export type LexiconCreateMutation = { __typename?: 'Mutation', lexiconCreate: { __typename?: 'Lexicon', _id: string, name: string, schema: any } };
+export type LexiconCreateMutation = {
+  __typename?: 'Mutation';
+  lexiconCreate: { __typename?: 'Lexicon'; _id: string; name: string; schema: any };
+};
 
 export type LexiconAddEntryMutationVariables = Exact<{
   entry: LexiconAddEntry;
 }>;
 
-
-export type LexiconAddEntryMutation = { __typename?: 'Mutation', lexiconAddEntry: { __typename?: 'LexiconEntry', key: string, primary: string, lexicon: string, video: string, fields: any } };
+export type LexiconAddEntryMutation = {
+  __typename?: 'Mutation';
+  lexiconAddEntry: {
+    __typename?: 'LexiconEntry';
+    key: string;
+    primary: string;
+    lexicon: string;
+    video: string;
+    fields: any;
+  };
+};
 
 export type LexiconClearEntriesMutationVariables = Exact<{
   lexicon: Scalars['String']['input'];
 }>;
 
-
-export type LexiconClearEntriesMutation = { __typename?: 'Mutation', lexiconClearEntries: boolean };
-
+export type LexiconClearEntriesMutation = { __typename?: 'Mutation'; lexiconClearEntries: boolean };
 
 export const LexiconCreateDocument = gql`
-    mutation lexiconCreate($lexicon: LexiconCreate!) {
-  lexiconCreate(lexicon: $lexicon) {
-    _id
-    name
-    schema
+  mutation lexiconCreate($lexicon: LexiconCreate!) {
+    lexiconCreate(lexicon: $lexicon) {
+      _id
+      name
+      schema
+    }
   }
-}
-    `;
+`;
 export const LexiconAddEntryDocument = gql`
-    mutation lexiconAddEntry($entry: LexiconAddEntry!) {
-  lexiconAddEntry(entry: $entry) {
-    key
-    primary
-    lexicon
-    video
-    fields
+  mutation lexiconAddEntry($entry: LexiconAddEntry!) {
+    lexiconAddEntry(entry: $entry) {
+      key
+      primary
+      lexicon
+      video
+      fields
+    }
   }
-}
-    `;
+`;
 export const LexiconClearEntriesDocument = gql`
-    mutation lexiconClearEntries($lexicon: String!) {
-  lexiconClearEntries(lexicon: $lexicon)
-}
-    `;
+  mutation lexiconClearEntries($lexicon: String!) {
+    lexiconClearEntries(lexicon: $lexicon)
+  }
+`;
 
-export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
-
+export type SdkFunctionWrapper = <T>(
+  action: (requestHeaders?: Record<string, string>) => Promise<T>,
+  operationName: string,
+  operationType?: string
+) => Promise<T>;
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    lexiconCreate(variables: LexiconCreateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconCreateMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LexiconCreateMutation>(LexiconCreateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconCreate', 'mutation');
+    lexiconCreate(
+      variables: LexiconCreateMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<LexiconCreateMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<LexiconCreateMutation>(LexiconCreateDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders
+          }),
+        'lexiconCreate',
+        'mutation'
+      );
     },
-    lexiconAddEntry(variables: LexiconAddEntryMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconAddEntryMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LexiconAddEntryMutation>(LexiconAddEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconAddEntry', 'mutation');
+    lexiconAddEntry(
+      variables: LexiconAddEntryMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<LexiconAddEntryMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<LexiconAddEntryMutation>(LexiconAddEntryDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders
+          }),
+        'lexiconAddEntry',
+        'mutation'
+      );
     },
-    lexiconClearEntries(variables: LexiconClearEntriesMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<LexiconClearEntriesMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LexiconClearEntriesMutation>(LexiconClearEntriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'lexiconClearEntries', 'mutation');
+    lexiconClearEntries(
+      variables: LexiconClearEntriesMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<LexiconClearEntriesMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<LexiconClearEntriesMutation>(LexiconClearEntriesDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders
+          }),
+        'lexiconClearEntries',
+        'mutation'
+      );
     }
   };
 }
