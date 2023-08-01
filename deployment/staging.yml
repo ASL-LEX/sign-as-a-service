@@ -15,6 +15,14 @@ services:
     restart: "always"
     volumes:
       - lex-mongo:/data/db
+  gateway:
+    container_name: lex-gateway
+    image: hicsail/lex-gateway:main
+    restart: always
+    port:
+      - 4009:3001
+    env_file:
+      - ../stack.env
 
 volumes:
   lex-mongo:
