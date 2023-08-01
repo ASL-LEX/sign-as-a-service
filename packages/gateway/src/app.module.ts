@@ -31,12 +31,12 @@ import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
               }
             });
           },
-        },
-        supergraphSdl: new IntrospectAndCompose({
-          subgraphs: [
-            { name: 'lex', url: configService.getOrThrow('lex.uri') }
-          ]
-        })
+          supergraphSdl: new IntrospectAndCompose({
+            subgraphs: [
+              { name: 'lex', url: configService.getOrThrow('lex.uri') },
+            ]
+          })
+        }
       })
     })
   ],

@@ -6,7 +6,7 @@ import GraphQLJSON from 'graphql-type-json';
 @Schema()
 @ObjectType({ description: 'Single entry within a whole lexicon ' })
 export class LexiconEntry {
-  @Prop({ index: true })
+  @Prop({ index: true, unique: true })
   @Field({ description: 'Unique user assigned identifier for the entry within the lexicon' })
   key: string;
 
