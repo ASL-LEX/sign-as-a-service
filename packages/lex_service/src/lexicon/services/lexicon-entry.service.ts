@@ -30,6 +30,42 @@ export class LexiconEntryService {
     await this.getModel(lexicon).deleteMany({});
   }
 
+  async searchByAssociated(lexicon: Lexicon, search: string): Promise<LexiconEntry[]> {
+    const regexPattern = new RegExp(`^${search}$`, 'i');
+
+    return this.getModel(lexicon).find({
+      associates: {
+        $elemMatch: {
+          $regex: regexPattern,
+        }
+      }
+    });
+  }
+
+  /**
+   * Perform a search that will search first on the primary search term providing
+   * those values first. Then search on associated terms which are alphabetized
+   * based on the primary key.
+   */
+  async lexiconSearch(lexicon: Lexicon, search: string): Promise<LexiconEntry[]> {
+    // Search by the primary search term
+    const primarySearchResults = await this.searchByPrimary(lexicon, search);
+
+    // Search on associate terms
+    let associatesResults = await this.searchByAssociated(lexicon, search);
+    associatesResults = associatesResults
+      // Remove potential duplicates based on the unique keys
+      .filter((entry) => !primarySearchResults.find((primaryEntry) => primaryEntry.key == entry.key))
+      // Now filter the results based on the primary search term
+      .sort((entryA, entryB) => {
+        if (entryA.primary < entryB.primary) { return -1; }
+        if (entryA.primary > entryA.primary) { return 1; }
+        return 0;
+      });
+
+    return [...primarySearchResults, ...associatesResults];
+  }
+
   private getModel(lexicon: Lexicon | string): Model<LexiconEntry> {
     const lexiconID = typeof lexicon == 'string' ? lexicon : lexicon._id;
     return this.connection.model(LexiconEntry.name, LexiconEntrySchema, `lexiconentry_${lexiconID}`);

@@ -18,9 +18,9 @@ export class LexiconEntryResolver {
   @Query(() => [LexiconEntry])
   async lexiconSearch(
     @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon,
-    @Args('primary') primary: string
+    @Args('search') search: string
   ): Promise<LexiconEntry[]> {
-    return this.lexiconEntryService.searchByPrimary(lexicon, primary);
+    return this.lexiconEntryService.lexiconSearch(lexicon, search);
   }
 
   @Query(() => LexiconEntry)
