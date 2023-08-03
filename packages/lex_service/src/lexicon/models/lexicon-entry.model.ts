@@ -22,6 +22,10 @@ export class LexiconEntry {
   @Field(() => String, { description: 'Link to the video that represents the entry' })
   video: string;
 
+  @Prop({ index: true })
+  @Field(() => [String], { description: 'Keywords that are similar to search accross' })
+  associates: string[];
+
   @Prop({ type: mongoose.Schema.Types.Mixed })
   @Field(() => GraphQLJSON, { description: 'Fields stored on the entry' })
   fields: any;

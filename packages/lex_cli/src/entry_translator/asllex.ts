@@ -15,11 +15,18 @@ export class AslLexTranslator extends LexEntryTranslator {
 
     const parser = stream.pipe(csv());
     for await (const row of parser) {
+      // Primary cannot contain underscores
+      const primary = row['EntryID'].replace('_', ' ');
+
+      // Associated words are based on the SignBank English translations
+      const translations = row['SignBankEnglishTranslations'].split(',').map((raw: string) => raw.trim());
+
       const lexAddEntry: LexiconAddEntry = {
         key: row['Code'],
         lexicon: lexicon,
-        primary: row['EntryID'],
+        primary: primary,
         video: 'placeholder',
+        associates: translations,
         fields: {
           english: row['NondominantTranslation']
         }

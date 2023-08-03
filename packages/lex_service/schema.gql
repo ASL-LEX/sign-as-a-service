@@ -31,13 +31,16 @@ type LexiconEntry {
   """Link to the video that represents the entry"""
   video: String!
 
+  """Keywords that are similar to search accross"""
+  associates: [String!]!
+
   """Fields stored on the entry"""
   fields: JSON!
 }
 
 type Query {
   lexFindAll: [Lexicon!]!
-  lexiconSearch(lexicon: String!, primary: String!): [LexiconEntry!]!
+  lexiconSearch(lexicon: String!, search: String!): [LexiconEntry!]!
   lexiconByKey(lexicon: String!, key: String!): LexiconEntry!
 }
 
@@ -67,6 +70,9 @@ input LexiconAddEntry {
 
   """Link to the video that represents the entry"""
   video: String!
+
+  """Keywords that are similar to search accross"""
+  associates: [String!]!
 
   """Fields stored on the entry"""
   fields: JSON!

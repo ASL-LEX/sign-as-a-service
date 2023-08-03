@@ -33,6 +33,8 @@ export type Lexicon = {
 };
 
 export type LexiconAddEntry = {
+  /** Keywords that are similar to search accross */
+  associates: Array<Scalars['String']['input']>;
   /** Fields stored on the entry */
   fields: Scalars['JSON']['input'];
   /** Unique user assigned identifier for the entry within the lexicon */
@@ -54,6 +56,8 @@ export type LexiconCreate = {
 /** Single entry within a whole lexicon  */
 export type LexiconEntry = {
   __typename?: 'LexiconEntry';
+  /** Keywords that are similar to search accross */
+  associates: Array<Scalars['String']['output']>;
   /** Fields stored on the entry */
   fields: Scalars['JSON']['output'];
   /** Unique user assigned identifier for the entry within the lexicon */
