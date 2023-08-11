@@ -25,7 +25,7 @@ export class AslLexTranslator extends LexEntryTranslator {
         key: row['Code'],
         lexicon: lexicon,
         primary: primary,
-        video: 'placeholder',
+        video: `https://signlab2.s3.amazonaws.com/videos/${row['Code']}.webm`,
         associates: translations,
         fields: {
           english: row['NondominantTranslation']
