@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 /**
  * Temporary auth guard that validates against a fixed "key"
@@ -14,15 +15,15 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    const req = context.switchToHttp().getRequest();
+    const req = GqlExecutionContext.create(context).getContext().req;
 
-    const authHeader = req.header['Authorization'];
+    const authHeader = req.headers['authorization'];
     if (!authHeader) {
       return false;
     }
 
-    const token = authHeader.split(' ');
-    if (token.length < 2) {
+    const token = authHeader.split(' ')[1];
+    if (!token) {
       return false;
     }
 
