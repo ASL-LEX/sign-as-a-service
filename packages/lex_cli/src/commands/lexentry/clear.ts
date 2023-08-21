@@ -22,7 +22,11 @@ export default class ClearLexiconEntries extends Command {
     const { flags, args } = await this.parse(ClearLexiconEntries);
 
     // Make the GraphQL client
-    const client = new GraphQLClient(flags.backend);
+    const client = new GraphQLClient(flags.backend, {
+      headers: {
+        authorization: `Bearer: ${flags.auth}`
+      }
+    });
     const sdk = getSdk(client);
 
     // Make request to remove all lexicon entries
