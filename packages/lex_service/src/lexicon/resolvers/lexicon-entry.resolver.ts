@@ -5,13 +5,15 @@ import { LexiconAddEntryPipe } from '../pipes/lexicon-add-entry.pipe';
 import { LexiconPipe } from '../pipes/lexicon.pipe';
 import { LexiconEntryService } from '../services/lexicon-entry.service';
 import { Lexicon } from '../models/lexicon.model';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../../auth/auth.guard';
 
 @Resolver(() => LexiconEntry)
 export class LexiconEntryResolver {
   constructor(private readonly lexiconEntryService: LexiconEntryService, private readonly lexiconPipe: LexiconPipe) {}
 
   @Mutation(() => LexiconEntry)
+  @UseGuards(AuthGuard)
   lexiconAddEntry(@Args('entry', LexiconAddEntryPipe) entry: LexiconAddEntry): Promise<LexiconEntry> {
     return this.lexiconEntryService.create(entry);
   }
@@ -33,6 +35,7 @@ export class LexiconEntryResolver {
   }
 
   @Mutation(() => Boolean, { description: 'Remove all entries from a given lexicon' })
+  @UseGuards(AuthGuard)
   async lexiconClearEntries(@Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon): Promise<boolean> {
     await this.lexiconEntryService.clearEntries(lexicon);
     return true;

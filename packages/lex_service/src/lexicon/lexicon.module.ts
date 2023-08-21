@@ -8,13 +8,15 @@ import { LexiconCreatePipe } from './pipes/lexicon-create.pipe';
 import { LexiconEntryResolver } from './resolvers/lexicon-entry.resolver';
 import { LexiconEntryService } from './services/lexicon-entry.service';
 import { LexiconPipe } from './pipes/lexicon.pipe';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Lexicon.name, schema: LexiconSchema },
       { name: LexiconEntry.name, schema: LexiconEntrySchema }
-    ])
+    ]),
+    AuthModule
   ],
   providers: [
     LexiconResolver,
