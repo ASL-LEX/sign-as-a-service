@@ -18,8 +18,8 @@ services:
     container_name: lex-gateway
     image: hicsail/lex-gateway:main
     restart: always
-    port:
-      - 4009:3001
+    ports:
+      - 4009:3002
     env_file:
       - ../stack.env
 
