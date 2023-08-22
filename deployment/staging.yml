@@ -5,13 +5,12 @@ services:
     image: hicsail/lex-service:main
     restart: always
     ports:
-      - 4008:3000
+      - 4008:3001
     env_file:
       - ../stack.env
   lex-mongo:
     container_name: lex-mongo
     image: mongo
-    ports: ["27026:27017"]
     restart: "always"
     volumes:
       - lex-mongo:/data/db

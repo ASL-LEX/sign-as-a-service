@@ -43,7 +43,11 @@ export default class UploadLexiconEntries extends Command {
     const entries = await new Translator().translate(args.entryFile, args.lexicon);
 
     // Make GraphQL client
-    const client = new GraphQLClient(flags.backend);
+    const client = new GraphQLClient(flags.backend, {
+      headers: {
+        authorization: `Bearer: ${flags.auth}`
+      }
+    });
     const sdk = getSdk(client);
 
     // Make request to upload each entry

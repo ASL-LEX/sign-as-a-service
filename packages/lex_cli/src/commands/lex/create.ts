@@ -25,7 +25,11 @@ export default class CreateLexicon extends Command {
     const { flags, args } = await this.parse(CreateLexicon);
 
     // Make the GraphQL client
-    const client = new GraphQLClient(flags.backend);
+    const client = new GraphQLClient(flags.backend, {
+      headers: {
+        authorization: `Bearer: ${flags.auth}`
+      }
+    });
     const sdk = getSdk(client);
 
     // Make request for new Lexicon

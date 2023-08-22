@@ -5,6 +5,11 @@ export const sharedFlags = {
     char: 'b',
     description: 'URL to the GraphQL endpoint to call against',
     required: false,
-    default: 'http://localhost:3000/graphql'
+    default: 'http://localhost:3001/graphql'
+  }),
+  auth: Flags.string({
+    char: 'a',
+    description: 'Authentication token',
+    required: true
   })
 };
