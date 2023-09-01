@@ -5,3 +5,13 @@ query lexFindAll {
     schema
   }
 }
+
+query lexiconSearch($lexicon: String!, $search: String!) {
+  lexiconSearch(lexicon: $lexicon, search: $search) {
+    key,
+    primary,
+    video,
+    associates,
+    fields
+  }
+}
