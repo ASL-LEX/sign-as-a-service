@@ -1,5 +1,5 @@
-import { Banner } from './components/banner.component';
-import { ThemeProvider } from './theme/theme.provider';
+import { Banner } from './components/Banner.component';
+import { ThemeProvider } from './theme/Theme.provider';
 import './App.css';
 
 function App() {
