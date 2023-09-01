@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { LexiconEntry } from '../../graphql/graphql';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Paper, List } from '@mui/material';
 import { SxProps } from '@mui/material';
 
 interface SearchResultsProps {
@@ -11,9 +11,13 @@ interface SearchResultsProps {
 
 export const SearchResults: FC<SearchResultsProps> = ({ options, value, setValue }) => {
   return (
-    <Box sx={{ maxWidth: 600 }}>
-      {options.map((lexiconEntry) => <SearchRow lexiconEntry={lexiconEntry} key={lexiconEntry.key} currentValue={value} setValue={setValue} />)}
-    </Box>
+    <Paper sx={{ maxWidth: 600 }} elevation={3}>
+      <List sx={{ overflow: 'auto' }}>
+        {options.map((lexiconEntry) => {
+          return <SearchRow lexiconEntry={lexiconEntry} key={lexiconEntry.key} currentValue={value} setValue={setValue} />
+        })}
+      </List>
+    </Paper>
   );
 };
 
