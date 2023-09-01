@@ -40,7 +40,7 @@ interface TabPanelProps {
 const TabPanel: FC<TabPanelProps> = ({ children, currentMode, mode }) => {
   return (
     <Box hidden={currentMode != mode}>
-      {children}
+      {currentMode == mode && children}
     </Box>
   );
 };
