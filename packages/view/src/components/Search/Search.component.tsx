@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
-import { Stack } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { DropDown } from '../DropDown/DropDown.component';
 import { Lexicon, LexiconEntry } from '../../graphql/graphql';
 import { useLexFindAllQuery } from '../../graphql/lexicon/lexicon';
@@ -31,10 +31,12 @@ export const Search: FC<SearchProps> = ({ value, setValue, width }) => {
   // Handle search selection
 
   return (
-    <Stack>
-      <DropDown setValue={setLexicon} options={lexicons} width={width} />
-      {lexicon && <ModeSelector lexicon={lexicon} setSearchResults={setSearchResults} width={width} />}
-      {lexicon && searchResults.length > 0 && <SearchResults options={searchResults} value={value} setValue={setValue} width={width} />}
-    </Stack>
+    <Paper elevation={3} sx={{ width, padding: 1 }}>
+      <Stack>
+        <DropDown setValue={setLexicon} options={lexicons} width={width} />
+        {lexicon && <ModeSelector lexicon={lexicon} setSearchResults={setSearchResults} width={width} />}
+        {lexicon && searchResults.length > 0 && <SearchResults options={searchResults} value={value} setValue={setValue} width={width} />}
+      </Stack>
+    </Paper>
   );
 };
