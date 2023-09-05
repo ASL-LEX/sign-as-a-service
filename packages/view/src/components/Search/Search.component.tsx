@@ -29,7 +29,7 @@ export const Search: FC<SearchProps> = ({ value, setValue, width }) => {
   }, [data]);
 
   return (
-    <Paper elevation={3} sx={{ width, padding: 1 }}>
+    <Paper elevation={3} sx={{ width: width + 10, padding: 1 }}>
       <Stack>
         <DropDown setValue={setLexicon} options={lexicons} width={width} />
         {lexicon && <ModeSelector lexicon={lexicon} setSearchResults={setSearchResults} width={width} />}
