@@ -14,6 +14,7 @@ export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults }) =
 
   const updateSearchResults = async (query: string) => {
     if (query.length == 0) {
+      setSearchResults([]);
       return;
     }
 
