@@ -28,8 +28,6 @@ export const Search: FC<SearchProps> = ({ value, setValue, width }) => {
     }
   }, [data]);
 
-  // Handle search selection
-
   return (
     <Paper elevation={3} sx={{ width, padding: 1 }}>
       <Stack>
