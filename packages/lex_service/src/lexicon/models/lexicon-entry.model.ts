@@ -16,10 +16,6 @@ export class LexiconEntry {
   primary: string;
 
   @Prop()
-  @Field()
-  lexicon: string;
-
-  @Prop()
   @Field(() => String, { description: 'Link to the video that represents the entry' })
   video: string;
 
