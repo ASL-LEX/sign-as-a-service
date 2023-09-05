@@ -1,5 +1,6 @@
 import { Box, Tabs, Tab } from '@mui/material';
 import { FC, ReactNode, useState } from 'react';
+import {TextSearch} from '../TextSearch/TextSearch.component';
 
 interface ModeSelectorProps {
 
@@ -19,7 +20,7 @@ export const ModeSelector: FC<ModeSelectorProps> = ({ }) => {
       </Box>
 
       <TabPanel currentMode={mode} mode={0}>
-        <p>Text Search</p>
+        <TextSearch />
       </TabPanel>
       <TabPanel currentMode={mode} mode={1}>
         <p>Live Video Search</p>
@@ -39,7 +40,7 @@ interface TabPanelProps {
 
 const TabPanel: FC<TabPanelProps> = ({ children, currentMode, mode }) => {
   return (
-    <Box hidden={currentMode != mode}>
+    <Box hidden={currentMode != mode} sx={{ paddingTop: 1 }}>
       {currentMode == mode && children}
     </Box>
   );
