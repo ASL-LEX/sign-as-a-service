@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TextSearch } from './TextSearch.component';
+import { TextSearch, TextSearchProps } from './TextSearch.component';
 import { useState } from 'react';
-import { Lexicon } from '../../graphql/graphql';
+import { LexiconEntry } from '../../graphql/graphql';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const meta: Meta<typeof TextSearch> = {
   title: 'TextSearch View',
@@ -11,16 +12,18 @@ const meta: Meta<typeof TextSearch> = {
 export default meta;
 type Story = StoryObj<typeof TextSearch>;
 
-export const Primary: Story = (args: any) => {
-  const [value, setValue] = useState<Lexicon | null>(null);
+export const Primary: Story = (_args: any) => {
+  const [_searchResults, setSearchResults] = useState<LexiconEntry[]>([]);
 
-  const options: Lexicon[] = [
-    { _id: '1', name: 'ASL-LEX', schema: {}},
-    { _id: '2', name: 'LSE-LEX', schema: {}}
-  ];
+  const options: TextSearchProps = {
+    lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {}},
+    setSearchResults
+  };
 
   return (
-    <TextSearch value={value} setValue={setValue} options={options} {...args} />
+    <ApolloProvider client={new ApolloClient({ uri: 'https://lex-gateway.sail.codes/graphql', cache: new InMemoryCache() })}>
+      <TextSearch {...options} />
+    </ApolloProvider>
   );
 };
 

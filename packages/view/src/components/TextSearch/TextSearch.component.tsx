@@ -13,6 +13,10 @@ export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults }) =
   const [lexiconEntryQuery] = useLexiconSearchLazyQuery();
 
   const updateSearchResults = async (query: string) => {
+    if (query.length == 0) {
+      return;
+    }
+
     const results = await lexiconEntryQuery({ variables: { lexicon: lexicon._id, search: query }});
 
     // TODO: Error handling

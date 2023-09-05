@@ -16,7 +16,7 @@ export type LexiconSearchQueryVariables = Types.Exact<{
 }>;
 
 
-export type LexiconSearchQuery = { __typename?: 'Query', lexiconSearch: Array<{ __typename?: 'LexiconEntry', key: string, primary: string, video: string, associates: Array<string>, fields: any }> };
+export type LexiconSearchQuery = { __typename?: 'Query', lexiconSearch: Array<{ __typename?: 'LexiconEntry', key: string, primary: string, video: string, associates: Array<string>, fields: any, lexicon: string }> };
 
 
 export const LexFindAllDocument = gql`
@@ -63,6 +63,7 @@ export const LexiconSearchDocument = gql`
     video
     associates
     fields
+    lexicon
   }
 }
     `;

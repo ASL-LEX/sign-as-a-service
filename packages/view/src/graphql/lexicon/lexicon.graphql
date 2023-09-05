@@ -12,6 +12,7 @@ query lexiconSearch($lexicon: String!, $search: String!) {
     primary,
     video,
     associates,
-    fields
+    fields,
+    lexicon
   }
 }
