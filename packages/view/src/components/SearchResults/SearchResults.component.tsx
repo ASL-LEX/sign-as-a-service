@@ -12,7 +12,7 @@ interface SearchResultsProps {
 export const SearchResults: FC<SearchResultsProps> = ({ options, value, setValue }) => {
   return (
     <Paper sx={{ maxWidth: 600 }} elevation={3}>
-      <List sx={{ overflow: 'auto' }}>
+      <List sx={{ overflow: 'auto', maxHeight: '500px' }}>
         {options.map((lexiconEntry) => {
           return <SearchRow lexiconEntry={lexiconEntry} key={lexiconEntry.key} currentValue={value} setValue={setValue} />
         })}
