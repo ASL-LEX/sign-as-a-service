@@ -1,12 +1,14 @@
-import { Box, Tabs, Tab } from '@mui/material';
-import { FC, ReactNode, useState } from 'react';
-import {TextSearch} from '../TextSearch/TextSearch.component';
+import { Box, Tabs, Tab, Typography } from '@mui/material';
+import { Dispatch, FC, ReactNode, useState, SetStateAction } from 'react';
+import { TextSearch } from '../TextSearch/TextSearch.component';
+import { Lexicon, LexiconEntry } from '../../graphql/graphql';
 
-interface ModeSelectorProps {
-
+export interface ModeSelectorProps {
+  lexicon: Lexicon;
+  setSearchResults: Dispatch<SetStateAction<LexiconEntry[]>>;
 }
 
-export const ModeSelector: FC<ModeSelectorProps> = ({ }) => {
+export const ModeSelector: FC<ModeSelectorProps> = ({ lexicon, setSearchResults }) => {
   const [mode, setMode] = useState<number>(0);
 
   return (
@@ -20,13 +22,13 @@ export const ModeSelector: FC<ModeSelectorProps> = ({ }) => {
       </Box>
 
       <TabPanel currentMode={mode} mode={0}>
-        <TextSearch />
+        <TextSearch lexicon={lexicon} setSearchResults={setSearchResults} />
       </TabPanel>
       <TabPanel currentMode={mode} mode={1}>
-        <p>Live Video Search</p>
+        <Typography variant='body1'>Coming Soon!</Typography>
       </TabPanel>
       <TabPanel currentMode={mode} mode={2}>
-        <p>Upload Video Search</p>
+        <Typography variant='body1'>Coming Soon!</Typography>
       </TabPanel>
     </Box>
   );

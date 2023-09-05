@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ModeSelector } from './ModeSelector.component';
+import { ModeSelector, ModeSelectorProps } from './ModeSelector.component';
 import { useState } from 'react';
-import { Lexicon } from '../../graphql/graphql';
+import { LexiconEntry } from '../../graphql/graphql';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const meta: Meta<typeof ModeSelector> = {
   title: 'ModeSelector View',
@@ -12,15 +13,17 @@ export default meta;
 type Story = StoryObj<typeof ModeSelector>;
 
 export const Primary: Story = (args: any) => {
-  const [value, setValue] = useState<Lexicon | null>(null);
+  const [_searchResults, setSearchResults] = useState<LexiconEntry[]>([]);
 
-  const options: Lexicon[] = [
-    { _id: '1', name: 'ASL-LEX', schema: {}},
-    { _id: '2', name: 'LSE-LEX', schema: {}}
-  ];
+  const options: ModeSelectorProps = {
+    lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {}},
+    setSearchResults: setSearchResults
+  };
 
   return (
-    <ModeSelector value={value} setValue={setValue} options={options} {...args} />
+    <ApolloProvider client={new ApolloClient({ uri: 'https://lex-gateway.sail.codes/graphql', cache: new InMemoryCache() })}>
+      <ModeSelector {...options} {...args} />
+    </ApolloProvider>
   );
 };
 
