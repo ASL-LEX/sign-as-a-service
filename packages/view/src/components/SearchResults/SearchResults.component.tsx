@@ -7,11 +7,12 @@ interface SearchResultsProps {
   options: LexiconEntry[];
   value: LexiconEntry | null;
   setValue: Dispatch<SetStateAction<LexiconEntry | null>>;
+  width: number;
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({ options, value, setValue }) => {
+export const SearchResults: FC<SearchResultsProps> = ({ options, value, setValue, width }) => {
   return (
-    <Paper sx={{ maxWidth: 600 }} elevation={3}>
+    <Paper sx={{ width }} elevation={3}>
       <List sx={{ overflow: 'auto', maxHeight: '500px' }}>
         {options.map((lexiconEntry) => {
           return <SearchRow lexiconEntry={lexiconEntry} key={lexiconEntry.key} currentValue={value} setValue={setValue} />

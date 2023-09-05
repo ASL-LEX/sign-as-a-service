@@ -5,16 +5,33 @@ import { FormControl, TextField, Autocomplete } from '@mui/material';
 export interface DropDownProps {
   setValue: Dispatch<SetStateAction<Lexicon | null>>;
   options: Lexicon[];
+  width: number
 };
 
-export const DropDown: FC<DropDownProps> = ({ setValue, options }) => {
+const InputView: FC<{ params: any }> = ({ params }) => {
+  if (params.inputProps) {
+    if (params.inputProps.style) {
+      params.inputProps.style.textAlign = 'center';
+    } else {
+      params.inputProps.style = { textAlign: 'center' };
+    }
+  } else {
+    params.inputProps = { style: { textAlign: 'center' }};
+  }
+
+  return (
+    <TextField label='Lexicon' {...params }/>
+  );
+};
+
+export const DropDown: FC<DropDownProps> = ({ setValue, options, width }) => {
   return (
     <FormControl>
       <Autocomplete
-        sx={{ width: 300 }}
+        sx={{ width }}
         options={options}
         getOptionLabel={(lexicon) => lexicon.name}
-        renderInput={(params) => <TextField {...params} label='Lexicon' />}
+        renderInput={(params) => <InputView params={params} />}
         onChange={(_event: any, newValue: Lexicon | null) => setValue(newValue)}
         isOptionEqualToValue={(option, value) => option._id == value._id}
       />

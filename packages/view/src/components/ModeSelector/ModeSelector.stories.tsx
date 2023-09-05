@@ -17,7 +17,8 @@ export const Primary: Story = (args: any) => {
 
   const options: ModeSelectorProps = {
     lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {}},
-    setSearchResults: setSearchResults
+    setSearchResults: setSearchResults,
+    width: 500
   };
 
   return (

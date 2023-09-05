@@ -17,7 +17,8 @@ export const Primary: Story = (_args: any) => {
 
   const options: SearchProps = {
     value,
-    setValue
+    setValue,
+    width: 500
   };
 
   return (

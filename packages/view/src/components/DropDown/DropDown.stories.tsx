@@ -20,7 +20,7 @@ export const Primary: Story = (args: any) => {
   ];
 
   return (
-    <DropDown value={value} setValue={setValue} options={options} {...args} />
+    <DropDown value={value} setValue={setValue} options={options} width={500} {...args} />
   );
 };
 

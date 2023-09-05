@@ -9,9 +9,10 @@ import { SearchResults } from '../SearchResults/SearchResults.component';
 export interface SearchProps {
   value: LexiconEntry | null;
   setValue: Dispatch<SetStateAction<LexiconEntry | null>>;
+  width: number;
 }
 
-export const Search: FC<SearchProps> = ({ value, setValue }) => {
+export const Search: FC<SearchProps> = ({ value, setValue, width }) => {
   // Currently selected lexicon
   const [lexicon, setLexicon] = useState<Lexicon | null>(null);
 
@@ -31,9 +32,9 @@ export const Search: FC<SearchProps> = ({ value, setValue }) => {
 
   return (
     <Stack>
-      <DropDown setValue={setLexicon} options={lexicons} />
-      {lexicon && <ModeSelector lexicon={lexicon} setSearchResults={setSearchResults} />}
-      {lexicon && searchResults.length > 0 && <SearchResults options={searchResults} value={value} setValue={setValue} />}
+      <DropDown setValue={setLexicon} options={lexicons} width={width} />
+      {lexicon && <ModeSelector lexicon={lexicon} setSearchResults={setSearchResults} width={width} />}
+      {lexicon && searchResults.length > 0 && <SearchResults options={searchResults} value={value} setValue={setValue} width={width} />}
     </Stack>
   );
 };

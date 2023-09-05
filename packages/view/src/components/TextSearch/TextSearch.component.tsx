@@ -6,9 +6,10 @@ import { useLexiconSearchLazyQuery } from '../../graphql/lexicon/lexicon';
 export interface TextSearchProps {
   lexicon: Lexicon;
   setSearchResults: Dispatch<SetStateAction<LexiconEntry[]>>;
+  width: number;
 };
 
-export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults }) => {
+export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults, width }) => {
   const [query, setQuery] = useState<string>('');
   const [lexiconEntryQuery] = useLexiconSearchLazyQuery();
 
@@ -33,7 +34,12 @@ export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults }) =
 
   return (
     <Box>
-      <TextField label='Lexicon Search' value={query} onChange={(event) => setQuery(event.target.value)} />
+      <TextField
+        label='Lexicon Search'
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        sx={{ width }}
+        inputProps={{ style: { textAlign: 'center'}}}/>
     </Box>
   );
 };

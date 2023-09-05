@@ -17,7 +17,8 @@ export const Primary: Story = (_args: any) => {
 
   const options: TextSearchProps = {
     lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {}},
-    setSearchResults
+    setSearchResults,
+    width: 500
   };
 
   return (
