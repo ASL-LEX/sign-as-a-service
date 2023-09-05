@@ -23,7 +23,6 @@ export class AslLexTranslator extends LexEntryTranslator {
 
       const lexAddEntry: LexiconAddEntry = {
         key: row['Code'],
-        lexicon: lexicon,
         primary: primary,
         video: `https://signlab2.s3.amazonaws.com/videos/${row['Code']}.webm`,
         associates: translations,
