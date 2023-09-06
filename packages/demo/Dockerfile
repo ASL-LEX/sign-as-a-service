@@ -5,8 +5,10 @@ WORKDIR /app
 COPY . .
 
 ARG VITE_GRAPHQL
+ARG VITE_DEFAULT_LEX
 
 ENV VITE_GRAPHQL ${VITE_GRAPHQL}
+ENV VITE_DEFAULT_LEX ${VITE_DEFAULT_LEX}
 
 # Install dependencies and build view + demo
 RUN npm install --workspace=packages/view && \
