@@ -4,7 +4,7 @@ import './App.css';
 import { Search } from '@bu-sail/saas-view';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { useState } from 'react';
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 function App() {
   const [value, setValue] = useState<any>(null);
