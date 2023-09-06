@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run introspection && tsc && vite build",
     "prettier": "prettier -l \"src/**/*.ts(x)\"",
     "prettier:fix": "prettier -wl \"src/**/*.ts(x)\"",
     "preview": "vite preview",
