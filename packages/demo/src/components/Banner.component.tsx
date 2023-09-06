@@ -6,16 +6,12 @@ export const Banner: FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: theme.palette.primary.main, padding: 3, marginBottom: 5, width: '100%' }}>
-      <Grid container direction='row' spacing={5} justifyContent='space-around'>
+      <Grid container direction="row" spacing={5} justifyContent="space-around">
         <Grid item xs={4}>
-          <InfoCard>
-            Text Placeholder
-          </InfoCard>
+          <InfoCard>Text Placeholder</InfoCard>
         </Grid>
         <Grid item xs={4}>
-          <InfoCard>
-            Video Placeholder
-          </InfoCard>
+          <InfoCard>Video Placeholder</InfoCard>
         </Grid>
       </Grid>
     </Box>
