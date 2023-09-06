@@ -15,7 +15,9 @@
   "workspaces": [
     "./packages/lex_service",
     "./packages/lex_cli",
-    "./packages/gateway"
+    "./packages/gateway",
+    "./packages/demo",
+    "./packages/view"
   ],
   "repository": {
     "type": "git",

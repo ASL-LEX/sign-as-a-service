@@ -4,7 +4,7 @@ import './App.css';
 import { Search } from '@bu-sail/saas-view';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { useState } from 'react';
-import { Box } from '@mui/materal';
+import { Box, Stack } from '@mui/material';
 
 function App() {
   const [value, setValue] = useState<any>(null);
@@ -12,10 +12,10 @@ function App() {
   return (
     <ThemeProvider>
       <ApolloProvider client={new ApolloClient({ uri: import.meta.env.VITE_GRAPHQL, cache: new InMemoryCache() })}>
-        <Box>
+        <Stack sx={{ justifyContent: 'center', alignItems: 'center', width: '100%' }} direction='column'>
           <Banner />
-          <Search value={value} setValue={setValue} width={500}/>
-        </Box>
+            <Search value={value} setValue={setValue} width={500}/>
+        </Stack>
       </ApolloProvider>
     </ThemeProvider>
   );

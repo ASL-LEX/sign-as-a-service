@@ -5,7 +5,7 @@ export const Banner: FC = () => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ flexGrow: 1, backgroundColor: theme.palette.primary.main, padding: 3, margin: 5 }}>
+    <Box sx={{ flexGrow: 1, backgroundColor: theme.palette.primary.main, padding: 3, marginBottom: 5, width: '100%' }}>
       <Grid container direction='row' spacing={5} justifyContent='space-around'>
         <Grid item xs={4}>
           <InfoCard>
