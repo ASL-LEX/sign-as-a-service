@@ -1,5 +1,5 @@
 import { Box, Tabs, Tab, Typography } from '@mui/material';
-import { Dispatch, FC, ReactNode, useState, SetStateAction } from 'react';
+import { Dispatch, FC, ReactNode, useState, SetStateAction, useEffect } from 'react';
 import { TextSearch } from '../TextSearch/TextSearch.component';
 import { Lexicon, LexiconEntry } from '../../graphql/graphql';
 
@@ -11,6 +11,11 @@ export interface ModeSelectorProps {
 
 export const ModeSelector: FC<ModeSelectorProps> = ({ lexicon, setSearchResults, width }) => {
   const [mode, setMode] = useState<number>(0);
+
+  // Clear search on search mode change
+  useEffect(() => {
+    setSearchResults([]);
+  }, [mode]);
 
   return (
     <Box sx={{ width }}>
