@@ -14,7 +14,7 @@ function App() {
       <ApolloProvider client={new ApolloClient({ uri: import.meta.env.VITE_GRAPHQL, cache: new InMemoryCache() })}>
         <Stack sx={{ justifyContent: 'center', alignItems: 'center', width: '100%' }} direction='column'>
           <Banner />
-            <Search value={value} setValue={setValue} width={500}/>
+            <Search value={value} setValue={setValue} width={500} defaultLexiconName='ASL-LEX'/>
         </Stack>
       </ApolloProvider>
     </ThemeProvider>

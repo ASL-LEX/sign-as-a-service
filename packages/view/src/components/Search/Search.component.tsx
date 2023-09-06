@@ -10,9 +10,10 @@ export interface SearchProps {
   value: LexiconEntry | null;
   setValue: Dispatch<SetStateAction<LexiconEntry | null>>;
   width: number;
+  defaultLexiconName?: string;
 }
 
-export const Search: FC<SearchProps> = ({ value, setValue, width }) => {
+export const Search: FC<SearchProps> = ({ value, setValue, width, defaultLexiconName }) => {
   // Currently selected lexicon
   const [lexicon, setLexicon] = useState<Lexicon | null>(null);
 
@@ -25,13 +26,18 @@ export const Search: FC<SearchProps> = ({ value, setValue, width }) => {
   useEffect(() => {
     if (data) {
       setLexicons(data.lexFindAll);
+
+      // If a default lexicon is provided, set that to the active lexicon
+      if (defaultLexiconName) {
+        setLexicon(data.lexFindAll.find((lexicon) => lexicon.name == defaultLexiconName) || null);
+      }
     }
   }, [data]);
 
   return (
     <Paper elevation={3} sx={{ width: width + 10, padding: 1 }}>
       <Stack>
-        <DropDown setValue={setLexicon} options={lexicons} width={width} />
+        <DropDown setValue={setLexicon} options={lexicons} width={width} value={lexicon} />
         {lexicon && <ModeSelector lexicon={lexicon} setSearchResults={setSearchResults} width={width} />}
         {lexicon && searchResults.length > 0 && <SearchResults options={searchResults} value={value} setValue={setValue} width={width} />}
       </Stack>

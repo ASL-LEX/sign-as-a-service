@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { DropDown } from './DropDown.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Lexicon } from '../../graphql/graphql';
 
 const meta: Meta<typeof DropDown> = {
@@ -18,6 +18,10 @@ export const Primary: Story = (args: any) => {
     { _id: '1', name: 'ASL-LEX', schema: {}},
     { _id: '2', name: 'LSE-LEX', schema: {}}
   ];
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   return (
     <DropDown value={value} setValue={setValue} options={options} width={500} {...args} />
