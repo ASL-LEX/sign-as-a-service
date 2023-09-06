@@ -6,7 +6,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const meta: Meta<typeof TextSearch> = {
   title: 'TextSearch View',
-  component: TextSearch,
+  component: TextSearch
 };
 
 export default meta;
@@ -16,7 +16,7 @@ export const Primary: Story = (_args: any) => {
   const [_searchResults, setSearchResults] = useState<LexiconEntry[]>([]);
 
   const options: TextSearchProps = {
-    lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {}},
+    lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {} },
     setSearchResults,
     width: 500
   };
@@ -28,6 +28,4 @@ export const Primary: Story = (_args: any) => {
   );
 };
 
-Primary.args = {
-
-};
+Primary.args = {};

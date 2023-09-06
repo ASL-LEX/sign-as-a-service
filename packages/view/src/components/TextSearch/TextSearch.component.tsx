@@ -7,7 +7,7 @@ export interface TextSearchProps {
   lexicon: Lexicon;
   setSearchResults: Dispatch<SetStateAction<LexiconEntry[]>>;
   width: number;
-};
+}
 
 export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults, width }) => {
   const [query, setQuery] = useState<string>('');
@@ -19,7 +19,7 @@ export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults, wid
       return;
     }
 
-    const results = await lexiconEntryQuery({ variables: { lexicon: lexicon._id, search: query }});
+    const results = await lexiconEntryQuery({ variables: { lexicon: lexicon._id, search: query } });
 
     // TODO: Error handling
     if (results.data) {
@@ -34,12 +34,7 @@ export const TextSearch: FC<TextSearchProps> = ({ lexicon, setSearchResults, wid
 
   return (
     <Box>
-      <TextField
-        label='Lexicon Search'
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        sx={{ width }}
-        inputProps={{ style: { textAlign: 'center'}}}/>
+      <TextField label="Lexicon Search" value={query} onChange={(event) => setQuery(event.target.value)} sx={{ width }} inputProps={{ style: { textAlign: 'center' } }} />
     </Box>
   );
 };

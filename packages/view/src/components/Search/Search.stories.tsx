@@ -6,7 +6,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const meta: Meta<typeof Search> = {
   title: 'Search View',
-  component: Search,
+  component: Search
 };
 
 export default meta;
@@ -23,11 +23,9 @@ export const Primary: Story = (_args: any) => {
 
   return (
     <ApolloProvider client={new ApolloClient({ uri: 'https://lex-gateway.sail.codes/graphql', cache: new InMemoryCache() })}>
-      <Search {...options} defaultLexiconName='ASL-LEX' />
+      <Search {...options} defaultLexiconName="ASL-LEX" />
     </ApolloProvider>
   );
 };
 
-Primary.args = {
-
-};
+Primary.args = {};

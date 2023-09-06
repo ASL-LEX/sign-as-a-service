@@ -21,9 +21,9 @@ export const ModeSelector: FC<ModeSelectorProps> = ({ lexicon, setSearchResults,
     <Box sx={{ width }}>
       <Box sx={{ width }}>
         <Tabs value={mode} onChange={(_event, value) => setMode(value)} centered>
-          <Tab label='Text Search' />
-          <Tab label='Live Video' />
-          <Tab label='Upload' />
+          <Tab label="Text Search" />
+          <Tab label="Live Video" />
+          <Tab label="Upload" />
         </Tabs>
       </Box>
 
@@ -31,10 +31,10 @@ export const ModeSelector: FC<ModeSelectorProps> = ({ lexicon, setSearchResults,
         <TextSearch lexicon={lexicon} setSearchResults={setSearchResults} width={width} />
       </TabPanel>
       <TabPanel currentMode={mode} mode={1}>
-        <Typography variant='body1'>Coming Soon!</Typography>
+        <Typography variant="body1">Coming Soon!</Typography>
       </TabPanel>
       <TabPanel currentMode={mode} mode={2}>
-        <Typography variant='body1'>Coming Soon!</Typography>
+        <Typography variant="body1">Coming Soon!</Typography>
       </TabPanel>
     </Box>
   );

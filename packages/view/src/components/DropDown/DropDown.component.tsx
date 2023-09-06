@@ -6,8 +6,8 @@ export interface DropDownProps {
   value: Lexicon | null;
   setValue: Dispatch<SetStateAction<Lexicon | null>>;
   options: Lexicon[];
-  width: number
-};
+  width: number;
+}
 
 const InputView: FC<{ params: any }> = ({ params }) => {
   if (params.inputProps) {
@@ -17,12 +17,10 @@ const InputView: FC<{ params: any }> = ({ params }) => {
       params.inputProps.style = { textAlign: 'center' };
     }
   } else {
-    params.inputProps = { style: { textAlign: 'center' }};
+    params.inputProps = { style: { textAlign: 'center' } };
   }
 
-  return (
-    <TextField label='Lexicon' {...params }/>
-  );
+  return <TextField label="Lexicon" {...params} />;
 };
 
 export const DropDown: FC<DropDownProps> = ({ value, setValue, options, width }) => {

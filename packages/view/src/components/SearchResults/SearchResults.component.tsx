@@ -15,7 +15,7 @@ export const SearchResults: FC<SearchResultsProps> = ({ options, value, setValue
     <Paper sx={{ width }} elevation={3}>
       <List sx={{ overflow: 'auto', maxHeight: '500px' }}>
         {options.map((lexiconEntry) => {
-          return <SearchRow lexiconEntry={lexiconEntry} key={lexiconEntry.key} currentValue={value} setValue={setValue} />
+          return <SearchRow lexiconEntry={lexiconEntry} key={lexiconEntry.key} currentValue={value} setValue={setValue} />;
         })}
       </List>
     </Paper>
@@ -44,12 +44,12 @@ const SearchRow: FC<SearchRowProps> = ({ lexiconEntry, currentValue, setValue })
   }, [lexiconEntry, currentValue]);
 
   return (
-    <Grid container alignItems='center' spacing={2} sx={style} onClick={() => setValue(lexiconEntry)}>
+    <Grid container alignItems="center" spacing={2} sx={style} onClick={() => setValue(lexiconEntry)}>
       <Grid item>
-        <iframe src={lexiconEntry.video} allow='autoplay' />
+        <iframe src={lexiconEntry.video} allow="autoplay" />
       </Grid>
       <Grid item>
-        <Typography variant='h4'>{lexiconEntry.primary}</Typography>
+        <Typography variant="h4">{lexiconEntry.primary}</Typography>
       </Grid>
     </Grid>
   );

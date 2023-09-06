@@ -6,7 +6,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const meta: Meta<typeof ModeSelector> = {
   title: 'ModeSelector View',
-  component: ModeSelector,
+  component: ModeSelector
 };
 
 export default meta;
@@ -16,7 +16,7 @@ export const Primary: Story = (args: any) => {
   const [_searchResults, setSearchResults] = useState<LexiconEntry[]>([]);
 
   const options: ModeSelectorProps = {
-    lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {}},
+    lexicon: { _id: '64e4e63ecade2ec090d6765e', name: 'ASL-LEX', schema: {} },
     setSearchResults: setSearchResults,
     width: 500
   };
@@ -28,6 +28,4 @@ export const Primary: Story = (args: any) => {
   );
 };
 
-Primary.args = {
-
-};
+Primary.args = {};

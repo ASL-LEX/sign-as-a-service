@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SearchResults } from './SearchResults.component';
 import { LexiconEntry } from '../../graphql/graphql';
-import {useState} from 'react';
+import { useState } from 'react';
 
 const meta: Meta<typeof SearchResults> = {
   title: 'SearchResults View',
-  component: SearchResults,
+  component: SearchResults
 };
 
 export default meta;
@@ -49,11 +49,7 @@ export const Primary: Story = (args: any) => {
 
   const [value, setValue] = useState<LexiconEntry | null>(null);
 
-  return (
-    <SearchResults options={options} value={value} setValue={setValue} {...args} />
-  );
+  return <SearchResults options={options} value={value} setValue={setValue} {...args} />;
 };
 
-Primary.args = {
-
-};
+Primary.args = {};
