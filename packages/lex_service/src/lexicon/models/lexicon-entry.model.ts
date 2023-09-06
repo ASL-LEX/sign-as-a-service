@@ -16,12 +16,12 @@ export class LexiconEntry {
   primary: string;
 
   @Prop()
-  @Field()
-  lexicon: string;
-
-  @Prop()
   @Field(() => String, { description: 'Link to the video that represents the entry' })
   video: string;
+
+  @Prop()
+  @Field()
+  lexicon: string;
 
   @Prop({ index: true })
   @Field(() => [String], { description: 'Keywords that are similar to search accross' })

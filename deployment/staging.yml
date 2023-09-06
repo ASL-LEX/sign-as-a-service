@@ -22,6 +22,12 @@ services:
       - 4009:3002
     env_file:
       - ../stack.env
+  demo:
+    container_name: lex-demo
+    image: hicsail/saas-demo:latest
+    restart: always
+    ports:
+      - 4010:80
 
 volumes:
   lex-mongo:
