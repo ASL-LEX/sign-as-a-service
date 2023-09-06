@@ -15,7 +15,7 @@ RUN npm install --workspace=packages/view && \
     npm run build --workspace=packages/view
 
 # Now install dependencies and build the demo
-RUN npm install --workspace=packages/demo && \
+RUN npm install && \
     npm run build --workspace=packages/demo
 
 ## NGINX Server
