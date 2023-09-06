@@ -42,7 +42,7 @@ jobs:
     name: Build Code
     defaults:
       run:
-        working-directory: packages/middleware
+        working-directory: packages/view
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
