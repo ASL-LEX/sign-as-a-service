@@ -10,10 +10,12 @@ ARG VITE_DEFAULT_LEX
 ENV VITE_GRAPHQL ${VITE_GRAPHQL}
 ENV VITE_DEFAULT_LEX ${VITE_DEFAULT_LEX}
 
-# Install dependencies and build view + demo
+# First install and setup view
 RUN npm install --workspace=packages/view && \
-    npm install --workspace=packages/demo
-RUN npm run build --workspace=packages/view && \
+    npm run build --workspace=packages/view
+
+# Now install dependencies and build the demo
+RUN npm install --workspace=packages/demo && \
     npm run build --workspace=packages/demo
 
 ## NGINX Server
