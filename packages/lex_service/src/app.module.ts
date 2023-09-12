@@ -5,6 +5,7 @@ import { LexiconModule } from './lexicon/lexicon.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService]
     }),
-    LexiconModule
+    LexiconModule,
+    AuthModule
   ]
 })
 export class AppModule {}

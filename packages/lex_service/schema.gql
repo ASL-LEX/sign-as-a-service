@@ -21,10 +21,18 @@ scalar JSON
 
 """Single entry within a whole lexicon """
 type LexiconEntry {
+  """Unique user assigned identifier for the entry within the lexicon"""
+  key: String!
+
+  """Primary way to search for entries in the lexicon"""
+  primary: String!
   lexicon: String!
 
   """Link to the video that represents the entry"""
   video: String!
+
+  """Keywords that are similar to search accross"""
+  associates: [String!]!
 
   """Fields stored on the entry"""
   fields: JSON!
@@ -32,11 +40,16 @@ type LexiconEntry {
 
 type Query {
   lexFindAll: [Lexicon!]!
+  lexiconSearch(lexicon: String!, search: String!): [LexiconEntry!]!
+  lexiconByKey(lexicon: String!, key: String!): LexiconEntry!
 }
 
 type Mutation {
   lexiconCreate(lexicon: LexiconCreate!): Lexicon!
   lexiconAddEntry(entry: LexiconAddEntry!): LexiconEntry!
+
+  """Remove all entries from a given lexicon"""
+  lexiconClearEntries(lexicon: String!): Boolean!
 }
 
 input LexiconCreate {
@@ -48,10 +61,18 @@ input LexiconCreate {
 }
 
 input LexiconAddEntry {
+  """Unique user assigned identifier for the entry within the lexicon"""
+  key: String!
+
+  """Primary way to search for entries in the lexicon"""
+  primary: String!
   lexicon: String!
 
   """Link to the video that represents the entry"""
   video: String!
+
+  """Keywords that are similar to search accross"""
+  associates: [String!]!
 
   """Fields stored on the entry"""
   fields: JSON!

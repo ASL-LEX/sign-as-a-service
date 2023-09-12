@@ -1,0 +1,13 @@
+{
+  "name": "ASL-LEX",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "english": {
+        "type": "string"
+      }
+    },
+    "required": ["english"],
+    "additionalProperties": false
+  }
+}
