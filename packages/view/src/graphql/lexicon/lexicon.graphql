@@ -1,0 +1,18 @@
+query lexFindAll {
+  lexFindAll {
+    _id,
+    name,
+    schema
+  }
+}
+
+query lexiconSearch($lexicon: String!, $search: String!) {
+  lexiconSearch(lexicon: $lexicon, search: $search) {
+    key,
+    primary,
+    video,
+    associates,
+    fields,
+    lexicon
+  }
+}

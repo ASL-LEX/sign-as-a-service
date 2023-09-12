@@ -1,0 +1,21 @@
+mutation lexiconCreate($lexicon: LexiconCreate!) {
+  lexiconCreate(lexicon: $lexicon) {
+    _id,
+    name,
+    schema
+  }
+}
+
+mutation lexiconAddEntry($entry: LexiconAddEntry!) {
+  lexiconAddEntry(entry: $entry) {
+    key,
+    primary,
+    lexicon,
+    video,
+    fields
+  }
+}
+
+mutation lexiconClearEntries($lexicon: String!) {
+  lexiconClearEntries(lexicon: $lexicon)
+}

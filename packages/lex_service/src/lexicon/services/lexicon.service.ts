@@ -3,13 +3,22 @@ import { Model } from 'mongoose';
 import { Lexicon, LexiconDocument } from '../models/lexicon.model';
 import { LexiconCreate } from '../dtos/lexicon.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { LexiconEntryService } from './lexicon-entry.service';
 
 @Injectable()
 export class LexiconService {
-  constructor(@InjectModel(Lexicon.name) private readonly lexiconModel: Model<LexiconDocument>) {}
+  constructor(
+    @InjectModel(Lexicon.name) private readonly lexiconModel: Model<LexiconDocument>,
+    private readonly lexiconEntryService: LexiconEntryService
+  ) {}
 
-  create(lexiconInput: LexiconCreate): Promise<Lexicon> {
-    return this.lexiconModel.create(lexiconInput);
+  async create(lexiconInput: LexiconCreate): Promise<Lexicon> {
+    const lexicon = await this.lexiconModel.create(lexiconInput);
+
+    // Create the cooresponding collection for the Lexicon entries
+    await this.lexiconEntryService.createCollection(lexicon);
+
+    return lexicon;
   }
 
   findAll(): Promise<Lexicon[]> {

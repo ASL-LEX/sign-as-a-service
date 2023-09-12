@@ -13,7 +13,11 @@
     "test": "npm run test --workspaces --if-present"
   },
   "workspaces": [
-    "./packages/lex_service"
+    "./packages/lex_service",
+    "./packages/lex_cli",
+    "./packages/gateway",
+    "./packages/demo",
+    "./packages/view"
   ],
   "repository": {
     "type": "git",
