@@ -9,16 +9,15 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
 
 # Set work directory in the container
-WORKDIR /app
+WORKDIR /sign
 
 # Install dependencies
-COPY requirements.txt /app/
-COPY app/sign_recognizer.ckpt /app/
+COPY requirements.txt /sign/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the current directory contents into the container
-COPY ./app /app
+COPY . /sign/
 
 # Run the command to start Uvicorn
 CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]

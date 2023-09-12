@@ -2,7 +2,10 @@ version: '3.8'
 services:
   web:
     build: .
-    command: uvicorn app.server:app --host 0.0.0.0 --port 8000
+    environment:
+      PYTHONPATH: "/app/islr"
+    working_dir: /app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     volumes:
       - .:/app
     ports:
