@@ -38,9 +38,10 @@ def frame_indices_tranform_test(video_length, sample_duration, clip_no=0):
 
 def read_images(folder: str, transform: torchvision.transforms.Compose, clip_no: int) -> torch.Tensor:
     images = []
-    index_list = frame_indices_tranform_test(len(os.listdir(folder_path)), 32, clip_no)
+    index_list = frame_indices_tranform_test(len(os.listdir(folder)), 32, clip_no)
     for i in index_list:
         image = Image.open(os.path.join(folder_path, '{:04d}.jpg').format(i))
+        image = image.crop((16, 16, 240, 240))
         images.append(transform(image))
 
     # Convert the images fro a 3D CNN
@@ -88,6 +89,7 @@ def main():
     images = images.reshape((1, *images.size()))
     print(images.size())
 
+    model.eval()
     with torch.no_grad():
         images = images.to(device)
 
