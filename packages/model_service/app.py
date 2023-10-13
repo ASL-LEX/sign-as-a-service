@@ -51,6 +51,7 @@ def read_images(folder: str, transform: torchvision.transforms.Compose, clip_no:
 
 def main():
     # PyTorch setup
+    os.environ['CUDA_VISIBLE_DEVICES']='0,1,2,3'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Load model
@@ -64,7 +65,10 @@ def main():
         new_state_dict[name] = v
     model.load_state_dict(new_state_dict)
     model = model.to(device)
-
+    # Run the model parallelly
+    if torch.cuda.device_count() > 1:
+        print('Using {} GPUs'.format(torch.cuda.device_count()))
+        model = torch.nn.DataParallel(model)
 
     # Make data transformer
     transform = torchvision.transforms.Compose([
@@ -82,18 +86,21 @@ def main():
     images = torch.stack(images, dim=0)
 
     images = images.reshape((1, *images.size()))
-    images = images.to(device)
+    print(images.size())
 
-    outputs_clips = []
-    for i_clip in range(images.size(1)):
-        inputs = images[:,i_clip,:,:]
-        print(inputs.size())
-        outputs_clips.append(model(inputs))
-        # if isinstance(outputs, list):
-        #     outputs = outputs[0]
-    outputs = torch.mean(torch.stack(outputs_clips, dim=0), dim=0)
-    prediction = torch.max(outputs, 1)[1]
-    print(prediction)
+    with torch.no_grad():
+        images = images.to(device)
+
+        outputs_clips = []
+        for i_clip in range(images.size(1)):
+            inputs = images[:,i_clip,:,:]
+            print(inputs.size())
+            outputs_clips.append(model(inputs))
+            # if isinstance(outputs, list):
+            #     outputs = outputs[0]
+        outputs = torch.mean(torch.stack(outputs_clips, dim=0), dim=0)
+        prediction = torch.max(outputs, 1)[1]
+        print(prediction)
 
 
 
