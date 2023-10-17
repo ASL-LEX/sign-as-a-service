@@ -1,7 +1,6 @@
 import torch
 import torchvision
 
-
 def convert_relu_to_swish(model):
     for child_name, child in model.named_children():
         if isinstance(child, torch.nn.ReLU):
