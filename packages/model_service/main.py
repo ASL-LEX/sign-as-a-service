@@ -1,10 +1,15 @@
 from collections import OrderedDict
 from recognition.model import r2plus1d_18
+from recognition.schema import schema
 import torch
 import torchvision
 import numpy as np
 import os
-from PIL import Image, ImageOps
+from PIL import Image
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from strawberry.fastapi import GraphQLRouter
 
 
 # TODO: Have these options be configurable
@@ -50,7 +55,7 @@ def read_images(folder: str, transform: torchvision.transforms.Compose, clip_no:
     return images
 
 
-def main():
+def test_model():
     # PyTorch setup
     os.environ['CUDA_VISIBLE_DEVICES']='0,1,2,3'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -106,6 +111,12 @@ def main():
 
 
 
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware, allow_headers=["*"], allow_origins=["*"], allow_methods=["*"]
+)
 
-if __name__ == '__main__':
-    main()
+
+graphql_app = GraphQLRouter(schema)
+
+app.include_router(graphql_app, prefix='/graphql')
