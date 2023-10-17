@@ -2,7 +2,6 @@ import strawberry
 from strawberry.file_uploads import Upload
 import typing
 import cv2
-import tempfile
 import numpy as np
 
 from recognition.predict import predict
@@ -55,10 +54,8 @@ class Query:
         while ret:
             image = crop(frame, xy_center, xy_radius)
             image = cv2.resize(image, (256, 256))
-            print(image)
             index += 1
             location = './images/frame_{}.jpg'.format(index)
-            print(location)
             cv2.imwrite(location, image)
             ret, frame = video.read()
 

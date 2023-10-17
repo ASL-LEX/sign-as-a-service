@@ -1,3 +1,4 @@
+import typing
 import torchvision
 import torch
 import numpy as np
@@ -12,6 +13,33 @@ folder_path = '/home/cbolles/devel/temp/saas/CVPR21Chal-SLR/data/test_frames/gir
 checkpoint_file = '/home/cbolles/devel/temp/saas/final_models_finetuned/rgb_final_finetuned.pth'
 num_frames = 32
 test_clips = 5
+
+# PyTorch setup
+os.environ['CUDA_VISIBLE_DEVICES']='0,1,2,3'
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# Load model
+model = r2plus1d_18(pretrained=True, num_classes=226)
+
+# Restore model from checkpoint
+checkpoint = torch.load(checkpoint_file)
+new_state_dict = OrderedDict()
+for k, v in checkpoint.items():
+    name = k[7:]
+    new_state_dict[name] = v
+model.load_state_dict(new_state_dict)
+model = model.to(device)
+# Run the model parallelly
+if torch.cuda.device_count() > 1:
+    print('Using {} GPUs'.format(torch.cuda.device_count()))
+    model = torch.nn.DataParallel(model)
+
+# Make data transformer
+transform = torchvision.transforms.Compose([
+    torchvision.transforms.Resize([image_size, image_size]),
+    torchvision.transforms.ToTensor(),
+    torchvision.transforms.Normalize(mean=[0.5], std=[0.5])
+])
 
 
 def frame_indices_tranform_test(video_length, sample_duration, clip_no=0):
@@ -49,34 +77,7 @@ def read_images(folder: str, transform: torchvision.transforms.Compose, clip_no:
     return images
 
 
-def predict(folder):
-    # PyTorch setup
-    os.environ['CUDA_VISIBLE_DEVICES']='0,1,2,3'
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-    # Load model
-    model = r2plus1d_18(pretrained=True, num_classes=226)
-
-    # Restore model from checkpoint
-    checkpoint = torch.load(checkpoint_file)
-    new_state_dict = OrderedDict()
-    for k, v in checkpoint.items():
-        name = k[7:]
-        new_state_dict[name] = v
-    model.load_state_dict(new_state_dict)
-    model = model.to(device)
-    # Run the model parallelly
-    if torch.cuda.device_count() > 1:
-        print('Using {} GPUs'.format(torch.cuda.device_count()))
-        model = torch.nn.DataParallel(model)
-
-    # Make data transformer
-    transform = torchvision.transforms.Compose([
-        torchvision.transforms.Resize([image_size, image_size]),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize(mean=[0.5], std=[0.5])
-    ])
-
+def predict(folder) -> typing.List[int]:
     # Read in images
 
     # TODO: Understand why this is called multiple times
@@ -84,9 +85,7 @@ def predict(folder):
     for i in range(0, test_clips):
         images.append(read_images(folder, transform, i))
     images = torch.stack(images, dim=0)
-
     images = images.reshape((1, *images.size()))
-    print(images.size())
 
     model.eval()
     with torch.no_grad():
@@ -95,11 +94,8 @@ def predict(folder):
         outputs_clips = []
         for i_clip in range(images.size(1)):
             inputs = images[:,i_clip,:,:]
-            print(inputs.size())
             outputs_clips.append(model(inputs))
-            # if isinstance(outputs, list):
-            #     outputs = outputs[0]
         outputs = torch.mean(torch.stack(outputs_clips, dim=0), dim=0)
-        prediction = torch.max(outputs, 1)[1]
-    return prediction
+        prediction = torch.topk(outputs, 5)[1]
+    return prediction.tolist()
 
