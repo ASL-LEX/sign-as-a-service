@@ -81,7 +81,7 @@ def read_images(folder: str, transform: torchvision.transforms.Compose, clip_no:
     return images
 
 
-def predict(folder) -> typing.List[int]:
+def predict(folder: str, lexicon: str) -> typing.List[int]:
     # Read in images
 
     # TODO: Understand why this is called multiple times

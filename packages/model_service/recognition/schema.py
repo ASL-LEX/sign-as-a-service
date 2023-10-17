@@ -28,9 +28,17 @@ def crop(image, center, radius, size=512):
     return image
 
 
+@strawberry.federation.type(keys=['key', 'lexicon'])
+class LexiconEntry:
+    key: str
+    lexicon: str
+
+
 @strawberry.type
 class RecognitionResult:
-    label: str
+    entry: LexiconEntry
+    confidence: float
+
 
 
 @strawberry.type
@@ -59,10 +67,12 @@ class Query:
             cv2.imwrite(location, image)
             ret, frame = video.read()
 
-        print(predict('./images/'))
-
-        return [ RecognitionResult(label='cat'), RecognitionResult(label='dog')]
+        print(predict('./images/', lexicon))
+        results = []
+        for label in predict('./images', lexicon):
+            results.append(RecognitionResult(entry=LexiconEntry(key=label, lexicon=lexicon), confidence=0.9))
+        return results
 
 
 # Create the schema
-schema = strawberry.Schema(query=Query)
+schema = strawberry.federation.Schema(query=Query, enable_federation_2=True)
