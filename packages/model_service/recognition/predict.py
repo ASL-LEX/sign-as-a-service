@@ -6,6 +6,10 @@ import os
 from PIL import Image
 from recognition.model import r2plus1d_18
 from collections import OrderedDict
+import json
+
+with open('labels.json', 'r') as labels_file:
+    labels = json.load(labels_file)
 
 
 image_size = 128
@@ -96,6 +100,9 @@ def predict(folder) -> typing.List[int]:
             inputs = images[:,i_clip,:,:]
             outputs_clips.append(model(inputs))
         outputs = torch.mean(torch.stack(outputs_clips, dim=0), dim=0)
-        prediction = torch.topk(outputs, 5)[1]
-    return prediction.tolist()
+        predictions = torch.topk(outputs, 5)[1]
 
+    pred_labels = []
+    for prediction in predictions.tolist()[0]:
+        pred_labels.append(labels[str(prediction)])
+    return pred_labels
