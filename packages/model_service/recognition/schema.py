@@ -28,13 +28,14 @@ def crop(image, center, radius, size=512):
     return image
 
 
-@strawberry.federation.type(keys=['key', 'lexicon'])
+# @strawberry.federation.type(keys=['key', 'lexicon'])
+@strawberry.type
 class LexiconEntry:
     key: str
     lexicon: str
 
 
-@strawberry.type
+@strawberry.federation.type
 class RecognitionResult:
     entry: LexiconEntry
     confidence: float
@@ -44,12 +45,8 @@ class RecognitionResult:
 @strawberry.type
 class Query:
     @strawberry.field
-    async def predict(self, lexicon: str, file: Upload) -> typing.List[RecognitionResult]:
-        # Save the video stream
-        file_content = await file.read()
-        with open('here.webm', 'wb') as video_file:
-            video_file.write(file_content)
-        video = cv2.VideoCapture(video_file.name)
+    async def predict(self, lexicon: str, file: str) -> typing.List[RecognitionResult]:
+        video = cv2.VideoCapture(file)
 
         # Create the video slices
         ret, frame = video.read()

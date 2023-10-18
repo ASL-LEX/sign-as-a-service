@@ -19,7 +19,7 @@ num_frames = 32
 test_clips = 5
 
 # PyTorch setup
-os.environ['CUDA_VISIBLE_DEVICES']='0,1,2,3'
+os.environ['CUDA_VISIBLE_DEVICES']='0'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Load model
