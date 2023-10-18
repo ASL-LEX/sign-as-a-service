@@ -22,7 +22,7 @@ export const Primary: Story = (_args: any) => {
   };
 
   return (
-    <ApolloProvider client={new ApolloClient({ uri: 'https://lex-gateway.sail.codes/graphql', cache: new InMemoryCache() })}>
+    <ApolloProvider client={new ApolloClient({ uri: 'http://localhost:3002/graphql', cache: new InMemoryCache() })}>
       <Search {...options} defaultLexiconName="ASL-LEX" />
     </ApolloProvider>
   );

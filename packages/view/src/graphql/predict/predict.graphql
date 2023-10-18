@@ -1,0 +1,12 @@
+query predict($lexicon: String!, $file: String!) {
+  predict(lexicon: $lexicon, file: $file) {
+    entry {
+      key,
+      primary,
+      video,
+      lexicon,
+      associates,
+      fields
+    }
+  }
+}

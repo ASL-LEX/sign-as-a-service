@@ -2,6 +2,7 @@ import { Box, Tabs, Tab, Typography } from '@mui/material';
 import { Dispatch, FC, ReactNode, useState, SetStateAction, useEffect } from 'react';
 import { TextSearch } from '../TextSearch/TextSearch.component';
 import { Lexicon, LexiconEntry } from '../../graphql/graphql';
+import {VideoUpload} from '../VideoUpload/VideoUpload.component';
 
 export interface ModeSelectorProps {
   lexicon: Lexicon;
@@ -34,7 +35,7 @@ export const ModeSelector: FC<ModeSelectorProps> = ({ lexicon, setSearchResults,
         <Typography variant="body1">Coming Soon!</Typography>
       </TabPanel>
       <TabPanel currentMode={mode} mode={2}>
-        <Typography variant="body1">Coming Soon!</Typography>
+        <VideoUpload lexicon={lexicon} setSearchResults={setSearchResults} width={width} />
       </TabPanel>
     </Box>
   );
