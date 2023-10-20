@@ -51,7 +51,8 @@ class Transform:
             image = self._crop(frame, xy_center, xy_radius)
 
             # Apply transformation pipline
-            images.append(self.transform_pipeline(torch.from_numpy(image.astype('float64'))))
+            image = torch.from_numpy(image.astype('float32'))
+            images.append(self.transform_pipeline(image))
 
             # Grab the next frame
             ret, frame = video.read()
