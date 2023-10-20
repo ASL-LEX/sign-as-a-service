@@ -2,7 +2,7 @@ import { Box, Tabs, Tab, Typography } from '@mui/material';
 import { Dispatch, FC, ReactNode, useState, SetStateAction, useEffect } from 'react';
 import { TextSearch } from '../TextSearch/TextSearch.component';
 import { Lexicon, LexiconEntry } from '../../graphql/graphql';
-import {VideoUpload} from '../VideoUpload/VideoUpload.component';
+import { VideoUpload } from '../VideoUpload/VideoUpload.component';
 
 export interface ModeSelectorProps {
   lexicon: Lexicon;

@@ -20,13 +20,11 @@ export const VideoUpload: FC<VideoUploadProps> = ({ lexicon, setSearchResults, w
     form.append('file', file, 'file.webm');
     await axios.post('http://localhost:8000/upload', form);
 
-
     // Make the prediciton request
     const results = await predictQuery({ variables: { lexicon: lexicon._id, file: 'here.webm' } });
     if (results.data) {
-      setSearchResults(results.data.predict.map(result => result.entry));
+      setSearchResults(results.data.predict.map((result) => result.entry));
     }
-
   };
 
   const handleUploadClick = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,16 +47,21 @@ export const VideoUpload: FC<VideoUploadProps> = ({ lexicon, setSearchResults, w
   };
 
   return (
-    <Box sx={{
-      border: '2px dashed grey',
-      alignItems: 'center',
-      justifyContent: 'center',
-      display: 'flex'
-    }} onDragEnter={(event) => event.preventDefault() } onDragOver={(event) => event.preventDefault()} onDrop={handleDragDrop}>
+    <Box
+      sx={{
+        border: '2px dashed grey',
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
+      }}
+      onDragEnter={(event) => event.preventDefault()}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={handleDragDrop}
+    >
       <Button startIcon={<FileUploadIcon />} component="label">
-        <input hidden type='file' onChange={handleUploadClick} />
+        <input hidden type="file" onChange={handleUploadClick} />
       </Button>
       <Typography>Upload Video Here</Typography>
     </Box>
   );
-}
+};
