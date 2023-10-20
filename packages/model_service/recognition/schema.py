@@ -1,13 +1,11 @@
 import strawberry
-from strawberry.file_uploads import Upload
 import typing
 import cv2
 import numpy as np
 
 from recognition.predict import predict
 
-
-def crop(image, center, radius, size=512):
+def crop(image: np.ndarray, center: np.ndarray, radius: np.ndarray) -> np.ndarray:
     scale = 1.3
     radius_crop = (radius * scale).astype(np.int32)
     center_crop = (center).astype(np.int32)
@@ -28,7 +26,7 @@ def crop(image, center, radius, size=512):
     return image
 
 
-# @strawberry.federation.type(keys=['key', 'lexicon'])
+
 @strawberry.type
 class LexiconEntry:
     key: str
@@ -39,7 +37,6 @@ class LexiconEntry:
 class RecognitionResult:
     entry: LexiconEntry
     confidence: float
-
 
 
 @strawberry.type
