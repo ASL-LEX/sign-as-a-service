@@ -19,15 +19,12 @@ transform = Transform(128)
 @app.post('/upload')
 async def upload_file(file: UploadFile):
     async with aiofiles.open('here.webm', 'wb') as output_file:
-        print('here')
         # Store the file in an intermediate location
         content = await file.read()
         await output_file.write(content)
-        print('1')
 
         # Process the video into a tensor
         transform.apply(Path('./here.webm'), Path('here.pt'))
-        print('there')
     return 'success'
 
 

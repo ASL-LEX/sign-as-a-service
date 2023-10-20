@@ -106,3 +106,31 @@ def predict(folder: str, lexicon: str) -> typing.List[int]:
     for prediction in predictions.tolist()[0]:
         pred_labels.append(labels[str(prediction)])
     return pred_labels
+
+# torch.Size([512, 32, 128, 128])
+# torch.Size([1, 5, 3, 32, 128, 128])
+
+def predict_a(folder: str, lexicon: str) -> typing.List[str]:
+    model_predictions = []
+
+    with torch.no_grad():
+        for section_path in os.listdir('./sections'):
+            # Load section from file system
+            section = torch.load(os.path.join('./sections', section_path)).to(device)
+
+            # Generate prediction across section
+            model_predictions.append(model(section))
+
+            # Free memory
+            del section
+            torch.cuda.empty_cache()
+
+        average_predictions = torch.mean(torch.stack(model_predictions, dim=0), dim=0)
+        top_predictions = torch.topk(average_predictions, 5)[1]
+
+    prediction_labels = []
+    for prediction in top_predictions.tolist()[0]:
+        prediction_labels.append(labels[str(prediction)])
+
+    return prediction_labels
+

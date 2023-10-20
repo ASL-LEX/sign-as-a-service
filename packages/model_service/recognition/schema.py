@@ -3,7 +3,7 @@ import typing
 import cv2
 import numpy as np
 
-from recognition.predict import predict
+from recognition.predict import predict, predict_a
 
 def crop(image: np.ndarray, center: np.ndarray, radius: np.ndarray) -> np.ndarray:
     scale = 1.3
@@ -61,9 +61,8 @@ class Query:
             cv2.imwrite(location, image)
             ret, frame = video.read()
 
-        print(predict('./images/', lexicon))
         results = []
-        for label in predict('./images', lexicon):
+        for label in predict_a('./images', lexicon):
             results.append(RecognitionResult(entry=LexiconEntry(key=label, lexicon=lexicon), confidence=0.9))
         return results
 
