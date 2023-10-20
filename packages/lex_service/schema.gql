@@ -26,10 +26,10 @@ type LexiconEntry {
 
   """Primary way to search for entries in the lexicon"""
   primary: String!
-  lexicon: String!
 
   """Link to the video that represents the entry"""
   video: String!
+  lexicon: String!
 
   """Keywords that are similar to search accross"""
   associates: [String!]!
@@ -66,10 +66,10 @@ input LexiconAddEntry {
 
   """Primary way to search for entries in the lexicon"""
   primary: String!
-  lexicon: String!
 
   """Link to the video that represents the entry"""
   video: String!
+  lexicon: String!
 
   """Keywords that are similar to search accross"""
   associates: [String!]!
