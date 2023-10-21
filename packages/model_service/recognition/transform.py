@@ -1,4 +1,5 @@
 from pathlib import Path
+from PIL import Image
 import torchvision
 import torch
 import cv2
@@ -9,7 +10,6 @@ from typing import List
 class Transform:
     def __init__(self, image_size: int, sample_duration=32, test_clips=5) -> None:
         self.transform_pipeline = torchvision.transforms.Compose([
-            torchvision.transforms.ToPILImage(),
             torchvision.transforms.Resize([image_size, image_size]),
             torchvision.transforms.ToTensor(),
             torchvision.transforms.Normalize(mean=[0.5], std=[0.5])
@@ -69,10 +69,11 @@ class Transform:
 
         # Convert the images fro a 3D CNN
         section = torch.stack(section, dim=0)
-        section = section.permute(1, 0, 2, 3)[None, :, :, :, :]
+        section = section.permute(1, 0, 2, 3)
+        section = section.reshape((1, *section.size()))
         torch.save(section, './sections/section_{}.pt'.format(clip_no))
 
-    def apply(self, video_path: Path, output_path: Path) -> None:
+    def apply(self, video_path: Path) -> None:
         # Open the video for slicing
         video = cv2.VideoCapture(video_path.as_posix())
 
@@ -80,7 +81,7 @@ class Transform:
 
         # Relic of original cropping logic, in the future the cropping logic
         # can be modified
-        xy_max = np.array([frame.shape[0], frame.shape[1]])
+        xy_max = np.array([frame.shape[1], frame.shape[0]])
         xy_min = np.array([0, 0])
         xy_center = (xy_max + xy_min) / 2 - 20
         xy_radius = (xy_max - xy_center).max(axis=0)
@@ -90,6 +91,10 @@ class Transform:
         while ret:
             # Crop the image and resize
             image = self._crop(frame, xy_center, xy_radius)
+            image = cv2.resize(image, (256, 256))
+
+            image = Image.fromarray(image)
+            image.crop((16, 16, 240, 240))
 
             # Apply transformation pipline
             images.append(self.transform_pipeline(image))
@@ -100,14 +105,3 @@ class Transform:
         # Produce the test set
         for i in range(0, self.test_clips):
             self.save_section(images, i)
-
-
-        # Stack the images for the 3D CNN
-        images = torch.stack(images, dim=0)
-        images = images.reshape((1, *images.size()))
-
-        # Store the results in the output
-        with open(output_path, 'wb') as output:
-            torch.save(images, output)
-
-

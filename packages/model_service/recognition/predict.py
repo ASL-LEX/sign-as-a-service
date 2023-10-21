@@ -13,7 +13,6 @@ with open('labels.json', 'r') as labels_file:
 
 
 image_size = 128
-folder_path = '/home/cbolles/devel/temp/saas/CVPR21Chal-SLR/data/test_frames/girl_respo/'
 checkpoint_file = '/home/cbolles/devel/temp/saas/final_models_finetuned/rgb_final_finetuned.pth'
 num_frames = 32
 test_clips = 5
@@ -71,7 +70,7 @@ def read_images(folder: str, transform: torchvision.transforms.Compose, clip_no:
     images = []
     index_list = frame_indices_tranform_test(len(os.listdir(folder)), 32, clip_no)
     for i in index_list:
-        image = Image.open(os.path.join(folder_path, '{:04d}.jpg').format(i))
+        image = Image.open(os.path.join(folder, 'frame_{}.jpg').format(i))
         image = image.crop((16, 16, 240, 240))
         images.append(transform(image))
 
@@ -113,20 +112,34 @@ def predict(folder: str, lexicon: str) -> typing.List[int]:
 def predict_a(folder: str, lexicon: str) -> typing.List[str]:
     model_predictions = []
 
+    """
+    images = []
+    for section_path in os.listdir('./sections'):
+        images.append(torch.load(os.path.join('./sections', section_path)))
+    images = torch.stack(images, dim=0)
+    images = images.reshape((1, *images.size()))
+    print(images.shape)
+    images = images.to(device)
+    """
+
+    model.eval()
     with torch.no_grad():
         for section_path in os.listdir('./sections'):
+        # for i_clip in range(images.size(1)):
             # Load section from file system
             section = torch.load(os.path.join('./sections', section_path)).to(device)
 
             # Generate prediction across section
             model_predictions.append(model(section))
+            # model_predictions.append(model(images[:,i_clip,:,:]))
+            # print(model_predictions)
 
             # Free memory
             del section
             torch.cuda.empty_cache()
 
-        average_predictions = torch.mean(torch.stack(model_predictions, dim=0), dim=0)
-        top_predictions = torch.topk(average_predictions, 5)[1]
+    average_predictions = torch.mean(torch.stack(model_predictions, dim=0), dim=0)
+    top_predictions = torch.topk(average_predictions, 5)[1]
 
     prediction_labels = []
     for prediction in top_predictions.tolist()[0]:

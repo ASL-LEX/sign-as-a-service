@@ -24,7 +24,7 @@ async def upload_file(file: UploadFile):
         await output_file.write(content)
 
         # Process the video into a tensor
-        transform.apply(Path('./here.webm'), Path('here.pt'))
+        transform.apply(Path('./here.webm'))
     return 'success'
 
 
