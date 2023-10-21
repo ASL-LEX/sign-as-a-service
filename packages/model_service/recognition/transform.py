@@ -16,7 +16,7 @@ class Transform:
         ])
 
         self.sample_duration = sample_duration
-        self.test_clips = 5
+        self.test_clips = test_clips
 
     def frame_indices_tranform_test(self, video_length: int, clip_no: int):
         """

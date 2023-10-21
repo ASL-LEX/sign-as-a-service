@@ -3,7 +3,7 @@ import typing
 import cv2
 import numpy as np
 
-from recognition.predict import predict, predict_a
+from recognition.predict import predict
 
 def crop(image: np.ndarray, center: np.ndarray, radius: np.ndarray) -> np.ndarray:
     scale = 1.3
@@ -43,26 +43,8 @@ class RecognitionResult:
 class Query:
     @strawberry.field
     async def predict(self, lexicon: str, file: str) -> typing.List[RecognitionResult]:
-        video = cv2.VideoCapture(file)
-
-        # Create the video slices
-        ret, frame = video.read()
-        xy_max = np.array([640, 480])
-        xy_min = np.array([0, 0])
-        xy_center = (xy_max + xy_min) / 2 - 20
-        xy_radius = (xy_max - xy_center).max(axis=0)
-        index = 0
-
-        while ret:
-            image = crop(frame, xy_center, xy_radius)
-            image = cv2.resize(image, (256, 256))
-            index += 1
-            location = './images/frame_{}.jpg'.format(index)
-            cv2.imwrite(location, image)
-            ret, frame = video.read()
-
         results = []
-        for label in predict_a('./images', lexicon):
+        for label in predict():
             results.append(RecognitionResult(entry=LexiconEntry(key=label, lexicon=lexicon), confidence=0.9))
         return results
 
