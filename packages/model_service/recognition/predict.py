@@ -25,7 +25,9 @@ new_state_dict = OrderedDict()
 for k, v in checkpoint.items():
     name = k[7:]
     new_state_dict[name] = v
+
 model.load_state_dict(new_state_dict)
+torch.save(model.state_dict(), 'new_state.pth')
 model = model.to(device)
 # Run the model parallelly
 if torch.cuda.device_count() > 1:

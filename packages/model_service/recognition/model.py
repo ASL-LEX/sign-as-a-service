@@ -16,7 +16,7 @@ class r2plus1d_18(torch.nn.Module):
 
     https://github.com/jackyjsy/CVPR21Chal-SLR/blob/main/Conv3D/models/Conv3D.py
     """
-    def __init__(self, pretrained=True, num_classes=500, dropout_p=0.5):
+    def __init__(self, pretrained=True, num_classes=226, dropout_p=0.5):
         super(r2plus1d_18, self).__init__()
 
         self.pretrained = pretrained

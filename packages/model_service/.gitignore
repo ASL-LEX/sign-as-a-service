@@ -1,5 +1,9 @@
 __pycache__/
+
+# Generated intermediate files
 here.webm
 images/
 here.pt
 sections/
+new_state.pth
+chal.mar
