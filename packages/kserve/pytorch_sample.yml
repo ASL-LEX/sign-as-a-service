@@ -13,7 +13,7 @@ spec:
           nvidia.com/gpu: "0"
   transformer:
     containers:
-      - image: hicsail/kserve-video-transformer:v0.0.2
+      - image: hicsail/kserve-video-transformer:v0.0.3
         name: kserve-container
         command:
           - "python"

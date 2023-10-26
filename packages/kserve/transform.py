@@ -98,8 +98,6 @@ class ImageTransformer(Model):
 
             ret, frame = video.read()
 
-        # TODO: Not needed for other models
-        images = images[17:49]
         section = torch.stack(images, dim=0)
         section = section.permute(1, 0, 2, 3)
         # section = section.reshape((1, *section.size())).numpy()
