@@ -11,7 +11,7 @@ export interface VideoUploadProps {
   width: number;
 }
 
-export const VideoUpload: FC<VideoUploadProps> = ({ lexicon, setSearchResults, width }) => {
+export const VideoUpload: FC<VideoUploadProps> = ({ lexicon, setSearchResults }) => {
   const [predictQuery] = usePredictLazyQuery();
 
   const handleUpload = async (file: File) => {

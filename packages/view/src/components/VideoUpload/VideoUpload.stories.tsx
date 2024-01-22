@@ -12,7 +12,7 @@ const meta: Meta<typeof VideoUpload> = {
 export default meta;
 type Story = StoryObj<typeof VideoUpload>;
 
-export const Primary: Story = (args: any) => {
+export const Primary: Story = (_args: any) => {
   const [_searchResults, setSearchResults] = useState<LexiconEntry[]>([]);
 
   const options: VideoUploadProps = {
