@@ -34,7 +34,6 @@ import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
           supergraphSdl: new IntrospectAndCompose({
             subgraphs: [
               { name: 'lex', url: configService.getOrThrow('lex.uri') },
-              { name: 'model', url: configService.getOrThrow('model.uri') }
             ],
           })
         }
