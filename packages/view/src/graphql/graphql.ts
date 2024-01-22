@@ -93,7 +93,6 @@ export type Query = {
   lexFindAll: Array<Lexicon>;
   lexiconByKey: LexiconEntry;
   lexiconSearch: Array<LexiconEntry>;
-  predict: Array<RecognitionResult>;
 };
 
 
@@ -106,16 +105,4 @@ export type QueryLexiconByKeyArgs = {
 export type QueryLexiconSearchArgs = {
   lexicon: Scalars['String']['input'];
   search: Scalars['String']['input'];
-};
-
-
-export type QueryPredictArgs = {
-  file: Scalars['String']['input'];
-  lexicon: Scalars['String']['input'];
-};
-
-export type RecognitionResult = {
-  __typename?: 'RecognitionResult';
-  confidence: Scalars['Float']['output'];
-  entry: LexiconEntry;
 };
