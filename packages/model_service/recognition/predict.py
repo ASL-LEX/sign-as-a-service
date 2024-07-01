@@ -7,6 +7,9 @@ from PIL import Image
 from recognition.model import r2plus1d_18
 from collections import OrderedDict
 import json
+import torch.onnx
+import json
+
 
 with open('labels.json', 'r') as labels_file:
     labels = json.load(labels_file)
@@ -44,6 +47,12 @@ transform = torchvision.transforms.Compose([
     torchvision.transforms.ToTensor(),
     torchvision.transforms.Normalize(mean=[0.5], std=[0.5])
 ])
+
+# Export the model
+x = torch.randn(1, 3, 32, 128, 128, requires_grad=True)
+# x.permute(1, 0, 2, 3)
+x = x.to(device)
+torch.onnx.export(model, x, "model.onnx", export_params=True, input_names=['input'], output_names=['output'])
 
 
 def frame_indices_tranform_test(video_length, sample_duration, clip_no=0):
@@ -91,12 +100,28 @@ def predict(folder: str, lexicon: str) -> typing.List[int]:
     images = torch.stack(images, dim=0)
     images = images.reshape((1, *images.size()))
 
+    sample_tensor = images[:,0,:,:]
+    result = {
+        'inputs': [
+            {
+                'name': 'asl-lex',
+                'shape': list(sample_tensor.shape),
+                'datatype': 'FP32',
+                'data': images.numpy().tolist()
+            }
+        ]
+    }
+
+    with open('request.json', 'w') as output:
+        json.dump(result, output)
+
     model.eval()
     with torch.no_grad():
         images = images.to(device)
 
         outputs_clips = []
         for i_clip in range(images.size(1)):
+            print(images[:,i_clip,:,:].shape)
             inputs = images[:,i_clip,:,:]
             outputs_clips.append(model(inputs))
         outputs = torch.mean(torch.stack(outputs_clips, dim=0), dim=0)
