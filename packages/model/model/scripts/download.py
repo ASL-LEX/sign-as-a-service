@@ -19,6 +19,14 @@ class CSVData:
     gcp_location: str
     label: str
 
+@dataclass
+class DownloadedData:
+    """
+    Represents the data after the video has been download from GCP
+    """
+    path: str
+    label: str
+
 
 def read_csv(csv_location: Path) -> list[CSVData]:
     """
@@ -46,6 +54,17 @@ def filter_data(csv_data: list[CSVData]) -> list[CSVData]:
     return list(filter(lambda row: regex_express.search(row.label) is not None, csv_data))
 
 
+def download_data(csv_data: list[CSVData], video_folder: Path) -> list[DownloadedData]:
+    """
+    Download the data from the GCP location to local storage, the resulting
+    absolute path will be recorded
+    """
+    return []
+
+
+def save_csv(download_data: list[DownloadedData], csv_location: Path) -> None:
+    pass
+
 
 def main():
     arg_parser = ArgumentParser(description=info)
@@ -61,14 +80,19 @@ def main():
 
     args = arg_parser.parse_args()
 
+    output_directory = Path(args.output)
+
     # Read in the data unfiltered
-    unfiltered_data = read_csv(args.csv)
+    unfiltered_data = read_csv(Path(args.csv))
 
     # Filter the data
     filtered_data = filter_data(unfiltered_data)
 
-    for row in filtered_data:
-        print(row.label)
+    # Download the data locally
+    downloaded_data = download_data(filtered_data, output_directory / 'videos')
+
+    # Store the CSV containing the label and video information
+    save_csv(downloaded_data, output_directory / 'labels.csv')
 
 
 if __name__ == '__main__':
