@@ -107,7 +107,12 @@ def download_data(csv_data: list[CSVData], video_folder: Path, bucket_name: str)
 
 
 def save_csv(download_data: list[DownloadedData], csv_location: Path) -> None:
-    pass
+    with open(csv_location, 'w') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=['label','path'])
+        writer.writeheader()
+
+        for row in download_data:
+            writer.writerow({ 'label': row.label, 'path': row.path })
 
 
 def main():
