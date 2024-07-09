@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 from google.cloud import storage
 import os
+import progressbar
 
 
 info = '''
@@ -116,17 +117,22 @@ def download_data(csv_data: list[CSVData], video_folder: Path, bucket_name: str)
     video_folder.mkdir(parents=True, exist_ok=True)
 
     # Iterate over the files and download each one
-    for row in csv_data:
-        # Determine where to save the file
-        file_name = row.gcp_location.replace('/', '_')
-        file_location = base_path / file_name
+    print('Downloading videos...')
+    with progressbar.ProgressBar(max_value=len(csv_data)) as bar:
+        for index, row in enumerate(csv_data):
+            # Determine where to save the file
+            file_name = row.gcp_location.replace('/', '_')
+            file_location = base_path / file_name
 
-        # Download the file to the specified location
-        blob = bucket.blob(row.gcp_location)
-        blob.download_to_filename(file_location)
+            # Download the file to the specified location
+            blob = bucket.blob(row.gcp_location)
+            blob.download_to_filename(file_location)
 
-        # Keep track of the file location
-        results.append(DownloadedData(path=str(file_location), label=row.label))
+            # Keep track of the file location
+            results.append(DownloadedData(path=str(file_location), label=row.label))
+
+            bar.update(index)
+        bar.finish()
 
     return results
 
