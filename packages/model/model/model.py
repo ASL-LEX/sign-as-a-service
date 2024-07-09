@@ -24,6 +24,9 @@ class SignModel(torch.nn.Module):
         self.vit.num_patches = (img_size // patch_size) * (img_size // patch_size)
         self.vit.head = None
 
+        # Freeze the VIT model
+        self.vit.requires_grad = False
+
         # Setup linear classifier layer
         # TODO: Pull out hardcoded config values. These are from reading
         # the SVT sample code
