@@ -25,7 +25,10 @@ class SignModel(torch.nn.Module):
         self.vit.head = None
 
         # Setup linear classifier layer
-        self.linear = torch.nn.Linear(embed_dim, num_classes)
+        # TODO: Pull out hardcoded config values. These are from reading
+        # the SVT sample code
+        dim = embed_dim * (4 + int(False))
+        self.linear = torch.nn.Linear(dim, num_classes)
 
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
