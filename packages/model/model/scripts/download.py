@@ -30,6 +30,20 @@ class DownloadedData:
     label: str
 
 
+def get_mapping(mapping_location: Path) -> dict[str, str]:
+    """
+    Read in the mapping and keep track of the ASL-LEX code to numeric
+    ID.
+    """
+    results = dict()
+
+    with open(mapping_location, 'r') as csv_file:
+        csv_data = csv.DictReader(csv_file)
+        for row in csv_data:
+            results[row['Code']] = row['ID']
+    return results
+
+
 def read_csv(csv_location: Path) -> list[CSVData]:
     """
     Reads in the CSV data and produces a list of CSVData.
@@ -69,6 +83,17 @@ def filter_data(csv_data: list[CSVData]) -> list[CSVData]:
 
     # Apply the regex matching to each row
     return list(filter(lambda row: regex_express.search(row.label) is not None, csv_data))
+
+
+def convert_labels(data: list[CSVData], mapping: dict[str, str]) -> list[CSVData]:
+    """
+    Convert the labels from ASL-LEX codes to IDs
+    """
+    results = []
+
+    for row in data:
+        results.append(CSVData(row.gcp_location, mapping[row.label]))
+    return results
 
 
 def download_data(csv_data: list[CSVData], video_folder: Path, bucket_name: str) -> list[DownloadedData]:
@@ -120,6 +145,9 @@ def main():
     arg_parser.add_argument('--csv',
                             required=True,
                             help='CSV of labeled ASL-LEX data')
+    arg_parser.add_argument('--mapping',
+                            required=True,
+                            help='Mapping from ID to ASL-LEX code')
     arg_parser.add_argument('--output',
                             required=True,
                             help='Folder location to store dataset artifacts')
@@ -131,6 +159,9 @@ def main():
 
     output_directory = Path(args.output)
 
+    # Get in the mapping between ASL-LEX code to ID
+    mapping = get_mapping(Path(args.mapping))
+
     # Read in the data unfiltered
     unfiltered_data = read_csv(Path(args.csv))
     print('Found {} unfiltered rows'.format(len(unfiltered_data)))
@@ -139,8 +170,11 @@ def main():
     filtered_data = filter_data(unfiltered_data)
     print('Found {} filtered rows'.format(len(filtered_data)))
 
+    # Convert the label from an ASL-LEX code to a numeric ID
+    converted_data = convert_labels(filtered_data, mapping)
+
     # Download the data locally
-    downloaded_data = download_data(filtered_data, output_directory / 'videos', args.bucket)
+    downloaded_data = download_data(converted_data, output_directory / 'videos', args.bucket)
 
     # Store the CSV containing the label and video information
     save_csv(downloaded_data, output_directory / 'labels.csv')
