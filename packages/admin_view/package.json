@@ -13,8 +13,10 @@
     "introspection": "graphql-codegen --config graphql-codegen.yml"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@apollo/client": "^3.8.3",
+    "@mui/material": "^5.14.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
