@@ -17,7 +17,8 @@
     "./packages/lex_cli",
     "./packages/gateway",
     "./packages/demo",
-    "./packages/view"
+    "./packages/view",
+    "./packages/admin_view"
   ],
   "repository": {
     "type": "git",
