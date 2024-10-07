@@ -13,10 +13,10 @@ export const App: React.FC = () => {
   return (
     <ApolloProvider client={apolloClient}>
       <ThemeProvider>
-        <Grid container justifyContent='center'>
-          <Typography variant='h1'>Hello World</Typography>
+        <Grid container justifyContent="center">
+          <Typography variant="h1">Hello World</Typography>
         </Grid>
       </ThemeProvider>
     </ApolloProvider>
   );
-}
+};
