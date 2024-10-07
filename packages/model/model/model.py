@@ -4,6 +4,7 @@ from svt.models.timesformer import VisionTransformer, partial
 
 class SignModel(torch.nn.Module):
     def __init__(self, num_classes=255, img_size=224, patch_size=16, embed_dim=768):
+        super().__init__()
         # Setup the vision transformer
         self.vit = VisionTransformer(
             img_size=img_size,

@@ -13,11 +13,10 @@ def one_time_load(checkpoint: dict[str, object]) -> dict[str, object]:
     naming convention.
     """
     renamed = dict()
-    renamed['model'] = dict()
 
     for key, value in checkpoint.items():
         if key.startswith('backbone.'):
-            renamed['model'][key.replace('backbone', 'vit')] = value
+            renamed[key.replace('backbone', 'vit')] = value
     return renamed
 
 
@@ -56,14 +55,14 @@ def main():
     # Load in a checkpoint file
     checkpoint = torch.load(args.checkpoint)
     checkpoint = one_time_load(checkpoint)
-    model.load_state_dict(checkpoint)
+    model.load_state_dict(checkpoint, strict=False)
 
     # TODO: Determine device to run on
 
     # Setup optimizer
     optimizer = torch.optim.SGD(
         model.linear.parameters(),
-        60,  # TODO: Determine this value
+        0.001 * 128 * 1 / 256,  # TODO: Have value as config
         momentum=0.9,
         weight_decay=0
     )
@@ -78,10 +77,10 @@ def main():
     if args.checkpoint:
         checkpoint = torch.load(args.checkpoint)
 
-        model.load_state_dict(checkpoint['model'])
-        optimizer.load_state_dict(checkpoint['optimizer'])
-        start_epoch = checkpoint['epoch']
-        loss = checkpoint['loss']
+        # model.load_state_dict(checkpoint['model'])
+        # optimizer.load_state_dict(checkpoint['optimizer'])
+        # start_epoch = checkpoint['epoch']
+        # loss = checkpoint['loss']
 
     output_directory = Path(args.output_folder)
 
@@ -136,7 +135,6 @@ def test(dataloader: DataLoader, model: torch.nn.Module, loss_fn: torch.nn.Modul
     test_loss /= num_batches
     correct /= num_test_elements
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-
 
 
 if __name__ == '__main__':
