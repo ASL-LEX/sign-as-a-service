@@ -1,6 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import { ThemeProvider } from './context/ThemeProvider.context';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
+import LexiconTable from './components/LexiconTable.tsx';
 
 export const App: React.FC = () => {
   // Link for HTTP requests from client to backend GraphQL server
@@ -16,6 +17,7 @@ export const App: React.FC = () => {
         <Grid container justifyContent="center">
           <Typography variant="h1">Hello World</Typography>
         </Grid>
+        <LexiconTable />
       </ThemeProvider>
     </ApolloProvider>
   );

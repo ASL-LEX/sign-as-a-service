@@ -41,6 +41,13 @@ export class LexiconEntryResolver {
     return true;
   }
 
+  @Query(() => [LexiconEntry], { description: 'Fetch all entries for a given lexicon' })
+  async lexiconAllEntries(
+    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon
+  ): Promise<LexiconEntry[]> {
+    return this.lexiconEntryService.getAllEntries(lexicon);
+  }
+
   @ResolveReference()
   async resolveReference(reference: { __typename: string; key: string; lexicon: string }): Promise<LexiconEntry> {
     try {

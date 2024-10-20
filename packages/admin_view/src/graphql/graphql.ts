@@ -96,6 +96,8 @@ export type Query = {
   _entities: Array<Maybe<_Entity>>;
   _service: _Service;
   lexFindAll: Array<Lexicon>;
+  /** Fetch all entries for a given lexicon */
+  lexiconAllEntries: Array<LexiconEntry>;
   lexiconByKey: LexiconEntry;
   lexiconSearch: Array<LexiconEntry>;
 };
@@ -103,6 +105,11 @@ export type Query = {
 
 export type Query_EntitiesArgs = {
   representations: Array<Scalars['_Any']['input']>;
+};
+
+
+export type QueryLexiconAllEntriesArgs = {
+  lexicon: Scalars['String']['input'];
 };
 
 

@@ -5,3 +5,13 @@ query lexFindAll {
     schema
   }
 }
+
+query getAllLexEntries($lexicon: String!) {
+  lexiconAllEntries(lexicon: $lexicon) {
+    key,
+    primary,
+    video,
+    associates,
+    fields
+  }
+}

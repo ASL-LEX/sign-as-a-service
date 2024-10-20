@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="843d03d0-347b-4a5f-993e-81cb72e840b1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/admin_view/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/admin_view/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/admin_view/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/admin_view/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/admin_view/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/admin_view/src/graphql/graphql.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/admin_view/src/graphql/graphql.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/admin_view/src/graphql/lexicon/lexicon.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/packages/admin_view/src/graphql/lexicon/lexicon.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/admin_view/src/graphql/lexicon/lexicon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/admin_view/src/graphql/lexicon/lexicon.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/lex_service/schema.gql" beforeDir="false" afterPath="$PROJECT_DIR$/packages/lex_service/schema.gql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/lex_service/src/lexicon/resolvers/lexicon-entry.resolver.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/lex_service/src/lexicon/resolvers/lexicon-entry.resolver.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/lex_service/src/lexicon/services/lexicon-entry.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/lex_service/src/lexicon/services/lexicon-entry.service.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2nAN1th0PqtC9WfmwcXIBRBDaTO" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;lexicon-table&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/hrp/Documents/BU/Fall2024/DS519/sign-as-a-service&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/hrp/Documents/BU/Fall2024/DS519/sign-as-a-service/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/hrp/Documents/BU/Fall2024/DS519/sign-as-a-service/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/packages/admin_view/src/components/CreateLexEntry.tsx" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="843d03d0-347b-4a5f-993e-81cb72e840b1" name="Changes" comment="" />
+      <created>1728411708467</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1728411708467</updated>
+      <workItem from="1728411709504" duration="8895000" />
+      <workItem from="1728426306893" duration="16590000" />
+      <workItem from="1729099358785" duration="4515000" />
+      <workItem from="1729211076477" duration="5785000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
