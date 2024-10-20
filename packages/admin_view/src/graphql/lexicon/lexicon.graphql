@@ -1,15 +1,25 @@
 query lexFindAll {
   lexFindAll {
-    _id,
-    name,
+    _id
+    name
     schema
+  }
+}
+
+query getAllLexEntries($lexicon: String!) {
+  lexiconAllEntries(lexicon: $lexicon) {
+    key
+    primary
+    video
+    associates
+    fields
   }
 }
 
 mutation lexCreate($lexicon: LexiconCreate!) {
   lexiconCreate(lexicon: $lexicon) {
-    _id,
-    name,
+    _id
+    name
     schema
   }
 }

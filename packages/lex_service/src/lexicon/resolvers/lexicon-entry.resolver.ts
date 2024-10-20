@@ -42,6 +42,13 @@ export class LexiconEntryResolver {
     return true;
   }
 
+  @Query(() => [LexiconEntry], { description: 'Fetch all entries for a given lexicon' })
+  async lexiconAllEntries(
+    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon
+  ): Promise<LexiconEntry[]> {
+    return this.lexiconEntryService.getAllEntries(lexicon);
+  }
+
   @Mutation(() => Boolean, { description: 'Delete a lexicon entry by key' })
   @UseGuards(AuthGuard)  // Protect the delete mutation with authentication
   async lexiconDeleteEntry(
