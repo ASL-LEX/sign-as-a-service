@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Connection, Model } from 'mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { LexiconEntry, LexiconEntrySchema } from '../models/lexicon-entry.model';
-import { LexiconAddEntry } from '../dtos/lexicon-entry.dto';
+import { LexiconAddEntry, LexiconUpdateEntry } from '../dtos/lexicon-entry.dto';
 import { Lexicon } from '../models/lexicon.model';
 
 @Injectable()
@@ -68,6 +68,16 @@ export class LexiconEntryService {
       });
 
     return [...primarySearchResults, ...associatesResults];
+  }
+
+  async lexiconUpdateEntry({ _id, ...rest }: LexiconUpdateEntry, lexicon: Lexicon): Promise<LexiconEntry> {
+    const updatedEntry = await this.getModel(lexicon).findByIdAndUpdate(
+      _id,
+      { $set: rest },
+      { new: true, useFindAndModify: false }
+    );
+    if (!updatedEntry) throw new NotFoundException(`No lexicon entry with _id ${_id} was found`);
+    return updatedEntry;
   }
 
   private getModel(lexicon: Lexicon | string): Model<LexiconEntry> {

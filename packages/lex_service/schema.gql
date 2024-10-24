@@ -50,6 +50,7 @@ type Mutation {
 
   """Remove all entries from a given lexicon"""
   lexiconClearEntries(lexicon: String!): Boolean!
+  lexiconUpdateEntry(lexiconEntry: LexiconUpdateEntry!): LexiconEntry!
 }
 
 input LexiconCreate {
@@ -76,4 +77,23 @@ input LexiconAddEntry {
 
   """Fields stored on the entry"""
   fields: JSON!
+}
+
+input LexiconUpdateEntry {
+  """Unique user assigned identifier for the entry within the lexicon"""
+  key: String
+
+  """Primary way to search for entries in the lexicon"""
+  primary: String
+
+  """Link to the video that represents the entry"""
+  video: String
+  lexicon: String!
+
+  """Keywords that are similar to search accross"""
+  associates: [String!]
+
+  """Fields stored on the entry"""
+  fields: JSON
+  _id: String!
 }

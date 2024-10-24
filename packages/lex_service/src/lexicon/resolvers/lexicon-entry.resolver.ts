@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Query, ResolveReference } from '@nestjs/graphql';
-import { LexiconAddEntry } from '../dtos/lexicon-entry.dto';
+import { LexiconAddEntry, LexiconUpdateEntry } from '../dtos/lexicon-entry.dto';
 import { LexiconEntry } from '../models/lexicon-entry.model';
 import { LexiconAddEntryPipe } from '../pipes/lexicon-add-entry.pipe';
 import { LexiconPipe } from '../pipes/lexicon.pipe';
@@ -39,6 +39,13 @@ export class LexiconEntryResolver {
   async lexiconClearEntries(@Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon): Promise<boolean> {
     await this.lexiconEntryService.clearEntries(lexicon);
     return true;
+  }
+
+  @Mutation(() => LexiconEntry)
+  @UseGuards(AuthGuard)
+  async lexiconUpdateEntry(@Args('lexiconEntry') lexiconEntry: LexiconUpdateEntry): Promise<LexiconEntry> {
+    const lexicon = await this.lexiconPipe.transform(lexiconEntry.lexicon);
+    return this.lexiconEntryService.lexiconUpdateEntry(lexiconEntry, lexicon);
   }
 
   @ResolveReference()
