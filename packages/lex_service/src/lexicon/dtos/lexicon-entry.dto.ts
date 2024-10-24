@@ -10,7 +10,7 @@ export class LexiconAddEntry extends OmitType(LexiconEntry, [] as const, InputTy
 @InputType()
 export class LexiconUpdateEntry extends OmitType(PartialType(LexiconEntry), [] as const, InputType) {
   @Field()
-  _id: string;
+  findByKey: string;
 
   @Field()
   lexicon: string;

@@ -95,5 +95,5 @@ input LexiconUpdateEntry {
 
   """Fields stored on the entry"""
   fields: JSON
-  _id: String!
+  findByKey: String!
 }

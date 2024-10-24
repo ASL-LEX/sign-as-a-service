@@ -70,13 +70,13 @@ export class LexiconEntryService {
     return [...primarySearchResults, ...associatesResults];
   }
 
-  async lexiconUpdateEntry({ _id, ...rest }: LexiconUpdateEntry, lexicon: Lexicon): Promise<LexiconEntry> {
-    const updatedEntry = await this.getModel(lexicon).findByIdAndUpdate(
-      _id,
+  async lexiconUpdateEntry({ findByKey, ...rest }: LexiconUpdateEntry, lexicon: Lexicon): Promise<LexiconEntry> {
+    const updatedEntry = await this.getModel(lexicon).findOneAndUpdate(
+      { key: findByKey },
       { $set: rest },
       { new: true, useFindAndModify: false }
     );
-    if (!updatedEntry) throw new NotFoundException(`No lexicon entry with _id ${_id} was found`);
+    if (!updatedEntry) throw new BadRequestException('Error updating lexicon entry');
     return updatedEntry;
   }
 
