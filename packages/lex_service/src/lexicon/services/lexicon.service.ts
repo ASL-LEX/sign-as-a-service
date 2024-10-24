@@ -21,6 +21,18 @@ export class LexiconService {
     return lexicon;
   }
 
+  async update(id: string, updateData: Partial<Lexicon>): Promise<Lexicon | null> {
+    // Filter out undefined fields from updateData
+    const updateFields = Object.fromEntries(
+      Object.entries(updateData).filter(([_, value]) => value !== undefined)
+    );
+  
+    // Perform the update using Mongoose's findByIdAndUpdate
+    const updatedLexicon = await this.lexiconModel.findByIdAndUpdate(id, updateFields, { new: true });
+    
+    return updatedLexicon;
+  }
+
   findAll(): Promise<Lexicon[]> {
     return this.lexiconModel.find({});
   }
