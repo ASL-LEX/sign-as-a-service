@@ -16,7 +16,6 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "lib": ["es2019", "dom"]
+    "noFallthroughCasesInSwitch": true
   }
 }
