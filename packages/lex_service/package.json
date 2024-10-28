@@ -25,7 +25,7 @@
     "@apollo/server": "^4.7.5",
     "@apollo/subgraph": "^2.4.8",
     "@nestjs/apollo": "^12.0.7",
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/graphql": "^12.0.7",
@@ -35,6 +35,7 @@
     "graphql": "^16.7.1",
     "graphql-type-json": "^0.3.2",
     "mongoose": "^7.3.1",
+    "nestjs-firebase": "^10.5.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
