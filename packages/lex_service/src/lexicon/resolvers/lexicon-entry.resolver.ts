@@ -52,7 +52,7 @@ export class LexiconEntryResolver {
       if (result) {
         return result;
       }
-    } catch (e: any) {}
+    } catch (e) {}
     throw new BadRequestException(
       `Could not find lexicon entry with key ${reference.key} on lexicon ${reference.lexicon}`
     );

@@ -20,16 +20,14 @@ export class LexiconResolver {
   @Mutation(() => Lexicon)
   @UseGuards(AuthGuard)
   async lexiconUpdate(
-  @Args('id') id: string,
-  @Args('name', { nullable: true }) name?: string,
-  @Args('schema', { nullable: true }) schema?: JSONSchema,
+    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon,  
   ): Promise<Lexicon> {
-  const updatedLexicon = await this.lexiconService.update(id, { name, schema });
-  if (!updatedLexicon) {
-    throw new Error(`Lexicon with id ${id} not found`);
+    const updatedLexicon = await this.lexiconService.update(lexicon);  
+    if (!updatedLexicon) {
+      throw new Error(`Lexicon not found`);
+    }
+    return updatedLexicon;
   }
-  return updatedLexicon;
-}
 
   @Query(() => [Lexicon])
   async lexFindAll(): Promise<Lexicon[]> {
