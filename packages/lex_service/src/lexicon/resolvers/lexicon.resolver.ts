@@ -6,6 +6,7 @@ import { LexiconService } from '../services/lexicon.service';
 import { AuthGuard } from '../../auth/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { Schema as JSONSchema } from 'ajv';
+import { LexiconPipe } from '../pipes/lexicon.pipe';
 
 @Resolver(() => Lexicon)
 export class LexiconResolver {
