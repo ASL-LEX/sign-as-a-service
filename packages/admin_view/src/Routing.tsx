@@ -10,14 +10,14 @@ import { useAuthContext } from './context/use-auth-context.tsx';
 // const LoginPage = lazy(() => import('./pages/AdminSignInPage'));
 
 const AuthenticatedRoute = ({ children }: { children: ReactNode }) => {
-  const { token } = useAuthContext();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
+    if (!user) {
       navigate('/login');
     }
-  }, [navigate, token]);
+  }, [navigate, user]);
 
   return <>{children}</>;
 };

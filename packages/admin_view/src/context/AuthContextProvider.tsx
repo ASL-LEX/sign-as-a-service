@@ -4,7 +4,6 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User 
 import { AuthContext } from './auth-context';
 
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -14,8 +13,6 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   // Firebase stores the auth state in localstorage by default
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      const jwt = user ? await user.getIdToken() : null;
-      setToken(jwt);
       setUser(user);
       setLoading(false);
     });
@@ -25,9 +22,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const login = useCallback(
     async (email: string, password: string) => {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      const jwt = await user.getIdToken();
       setUser(user);
-      setToken(jwt);
     },
     [auth]
   );
@@ -36,7 +31,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     await signOut(auth);
   }, [auth]);
 
-  return !loading && <AuthContext.Provider value={{ token, user, login, logout }}>{children}</AuthContext.Provider>;
+  return !loading && <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContextProvider;

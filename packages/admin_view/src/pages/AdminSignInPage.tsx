@@ -17,15 +17,10 @@ const AdminSignInPage = () => {
       setSnackbarOpen(true);
       return;
     }
-    try {
-      await login(email, password);
-      console.log(email, password);
-      navigate('/authenticated');
-    } catch (error) {
-      setSnackbarOpen(true);
-      console.error(error);
-      return;
-    }
+
+    login(email, password)
+      .then(() => navigate('/authenticated'))
+      .catch(() => setSnackbarOpen(true));
   };
 
   return (
