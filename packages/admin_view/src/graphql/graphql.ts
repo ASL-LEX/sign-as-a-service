@@ -68,28 +68,12 @@ export type LexiconEntry = {
   video: Scalars['String']['output'];
 };
 
-export type LexiconUpdateEntry = {
-  /** Keywords that are similar to search accross */
-  associates?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Fields stored on the entry */
-  fields?: InputMaybe<Scalars['JSON']['input']>;
-  findByKey: Scalars['String']['input'];
-  /** Unique user assigned identifier for the entry within the lexicon */
-  key?: InputMaybe<Scalars['String']['input']>;
-  lexicon: Scalars['String']['input'];
-  /** Primary way to search for entries in the lexicon */
-  primary?: InputMaybe<Scalars['String']['input']>;
-  /** Link to the video that represents the entry */
-  video?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   lexiconAddEntry: LexiconEntry;
   /** Remove all entries from a given lexicon */
   lexiconClearEntries: Scalars['Boolean']['output'];
   lexiconCreate: Lexicon;
-  lexiconUpdateEntry: LexiconEntry;
 };
 
 
@@ -105,11 +89,6 @@ export type MutationLexiconClearEntriesArgs = {
 
 export type MutationLexiconCreateArgs = {
   lexicon: LexiconCreate;
-};
-
-
-export type MutationLexiconUpdateEntryArgs = {
-  lexiconEntry: LexiconUpdateEntry;
 };
 
 export type Query = {
