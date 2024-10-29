@@ -1,22 +1,22 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
+import { ReactNode } from 'react';
+import { ApolloClient, ApolloProvider, concat, createHttpLink, InMemoryCache } from '@apollo/client';
 import { useAuthContext } from './use-auth-context.tsx';
+import { setContext } from '@apollo/client/link/context';
 
 const ApolloProviderWrapper = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string>('');
   const { user } = useAuthContext();
 
-  useEffect(() => {
-    user?.getIdToken().then(setToken).catch(console.error);
-  }, [user]);
-
   const httpLink = createHttpLink({
-    uri: import.meta.env.VITE_GRAPHQL_ENDPOINT,
-    headers: { authorization: `Bearer ${token}` }
+    uri: import.meta.env.VITE_GRAPHQL_ENDPOINT
   });
+
+  const authLink = setContext(async (_, { headers }) => ({
+    headers: { ...headers, authorization: user ? `Bearer ${await user.getIdToken()}` : '' }
+  }));
+
   const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
-    link: httpLink
+    link: concat(authLink, httpLink)
   });
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 };
