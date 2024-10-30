@@ -17,19 +17,16 @@ import {
   GridEventListener,
   GridRowId,
   GridRowEditStopReasons,
-  GridSlots,
+  GridSlots
 } from '@mui/x-data-grid';
-import{randomId} from '@mui/x-data-grid-generator';
-import { useGetAllLexEntriesQuery } from '../graphql/lexicon/lexicon.ts';
-import { LexiconEntry } from '../graphql/graphql.ts';
-
-
+import { randomId } from '@mui/x-data-grid-generator';
+import { GetAllLexEntriesQuery, useGetAllLexEntriesQuery } from '../graphql/lexicon/lexicon.ts';
+import { useEffect, useMemo } from 'react';
+import { TextField } from '@mui/material';
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
+  setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
 }
 
 function EditToolbar(props: EditToolbarProps) {
@@ -38,12 +35,12 @@ function EditToolbar(props: EditToolbarProps) {
   const handleClick = () => {
     const id = randomId();
     setRows((oldRows) => [
-      ...oldRows,
-      { id, primary: '', associates: '', fields: '', key:'', video:'', isNew: true },
+      { id, primary: '', associates: '', fields: '', key: '', video: '', isNew: true },
+      ...oldRows
     ]);
     setRowModesModel((oldModel) => ({
-      ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'key' },
+      ...oldModel
     }));
   };
 
@@ -56,95 +53,119 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
-type LexiconEntriesStatus = LexiconEntry &{
-    isNew?: boolean;
-}
-//CRUD operation doesn't work, need feedback
+type LexiconEntriesStatus = GetAllLexEntriesQuery['lexiconAllEntries'][number] & {
+  isNew: boolean;
+  id: string;
+};
+
 export default function FullFeaturedCrudGrid() {
-    const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
-    
-    
-    const { data } = useGetAllLexEntriesQuery({ variables: { lexicon: '64b15233e535bc69dc95b92f' } });
-    const lexiconEntries = data?.lexiconAllEntries || []; 
-    
-    //currently, rows are empty
-    const [rows, setRows] = React.useState<LexiconEntriesStatus[]>(lexiconEntries as LexiconEntriesStatus[]);
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
+  const { data } = useGetAllLexEntriesQuery({ variables: { lexicon: '64b15233e535bc69dc95b92f' } });
+  const lexiconEntries = useMemo(
+    (): LexiconEntriesStatus[] =>
+      data?.lexiconAllEntries.slice(0, 10).map((entry) => ({ ...entry, id: entry.key, isNew: false })) || [],
+    [data]
+  );
 
-    const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
+  //currently, rows are empty
+  const [rows, setRows] = React.useState<LexiconEntriesStatus[]>(lexiconEntries);
+
+  useEffect(() => {
+    setRows(lexiconEntries);
+  }, [lexiconEntries]);
+
+  useEffect(() => {
+    console.log(rows);
+  }, [rows]);
+
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
 
-    const handleEditClick = (id: GridRowId) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    };
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
 
-    const handleSaveClick = (id: GridRowId) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    };
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
 
-    const handleDeleteClick = (id: GridRowId) => () => {
-        setRows(rows.filter((row) => row.id !== id));
-    };
+  const handleDeleteClick = (id: GridRowId) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
 
-    const handleCancelClick = (id: GridRowId) => () => {
-        setRowModesModel({
-        ...rowModesModel,
-        [id]: { mode: GridRowModes.View, ignoreModifications: true },
-        });
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true }
+    });
 
-        const editedRow = rows.find((row) => row.id === id);
-        if (editedRow!.isNew) {
-        setRows(rows.filter((row) => row.id !== id));
-        }
-    };
+    const editedRow = rows.find((row) => row.key === id);
+    if (editedRow!.isNew) {
+      setRows(rows.filter((row) => row.key !== id));
+    }
+  };
 
-    const processRowUpdate = (newRow: LexiconEntriesStatus) => {
-        const updatedRow = { ...newRow, isNew: false };
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        return updatedRow;
-    };
+  const processRowUpdate = (newRow: LexiconEntriesStatus) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.key === newRow.key ? updatedRow : row)));
+    return updatedRow;
+  };
 
-    const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-        setRowModesModel(newRowModesModel);
-    };
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
 
-    const columns: GridColDef<LexiconEntriesStatus>[] = [
+  const columns: GridColDef<LexiconEntriesStatus>[] = [
     {
-        field: 'primary',
-        headerName: 'Primary',
-        width: 200,
-        headerAlign: 'center',
-      },
-      {
-        field: 'associates',
-        headerName: 'Associates',
-        width: 200,
-        headerAlign: 'center',
-      },
-      {
-        field: 'fields',
-        headerName: 'Fields',
-        width: 200,
-        headerAlign: 'center',
-    
-      },
-      {
-        field: 'key',
-        headerName: 'Key',
-        width: 200,
-        headerAlign: 'center',
-    
-      },
-      {
-        field: 'video',
-        headerName: 'Video',
-        width: 200,
-        headerAlign: 'center',
-    
-      },
+      field: 'primary',
+      headerName: 'Primary',
+      width: 200,
+      headerAlign: 'center',
+      editable: true
+    },
+    {
+      field: 'associates',
+      headerName: 'Associates',
+      width: 200,
+      headerAlign: 'center',
+      editable: true
+    },
+    {
+      field: 'fields',
+      headerName: 'Fields',
+      width: 200,
+      headerAlign: 'center',
+      editable: true,
+      renderCell: ({ row }) => JSON.stringify(row.fields),
+      renderEditCell: (params) => (
+        <TextField
+          value={JSON.stringify(params.row.fields)}
+          onChange={(e) => {
+            const updatedValue = JSON.parse(e.target.value);
+            params.api.setEditCellValue({ id: params.id, field: params.field, value: updatedValue });
+          }}
+          variant="standard"
+        />
+      )
+    },
+    {
+      field: 'key',
+      headerName: 'Key',
+      width: 200,
+      headerAlign: 'center',
+      editable: true
+    },
+    {
+      field: 'video',
+      headerName: 'Video',
+      width: 200,
+      headerAlign: 'center',
+      editable: true
+    },
     {
       field: 'actions',
       type: 'actions',
@@ -160,7 +181,7 @@ export default function FullFeaturedCrudGrid() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: 'primary.main',
+                color: 'primary.main'
               }}
               onClick={handleSaveClick(id)}
             />,
@@ -170,7 +191,7 @@ export default function FullFeaturedCrudGrid() {
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
-            />,
+            />
           ];
         }
 
@@ -182,15 +203,10 @@ export default function FullFeaturedCrudGrid() {
             onClick={handleEditClick(id)}
             color="inherit"
           />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
+          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />
         ];
-      },
-    },
+      }
+    }
   ];
 
   return (
@@ -199,11 +215,11 @@ export default function FullFeaturedCrudGrid() {
         height: 500,
         width: '100%',
         '& .actions': {
-          color: 'text.secondary',
+          color: 'text.secondary'
         },
         '& .textPrimary': {
-          color: 'text.primary',
-        },
+          color: 'text.primary'
+        }
       }}
     >
       <DataGrid
@@ -215,10 +231,10 @@ export default function FullFeaturedCrudGrid() {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         slots={{
-          toolbar: EditToolbar as GridSlots['toolbar'],
+          toolbar: EditToolbar as GridSlots['toolbar']
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel }
         }}
       />
     </Box>
