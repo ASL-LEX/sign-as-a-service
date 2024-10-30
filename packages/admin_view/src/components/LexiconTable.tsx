@@ -1,32 +1,9 @@
 import { GetAllLexEntriesQuery, useGetAllLexEntriesQuery } from '../graphql/lexicon/lexicon.ts';
 import { DataGrid, GridColDef,DataGridProps } from '@mui/x-data-grid';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Stack, Button } from '@mui/material';
 import { alpha, createTheme, styled } from '@mui/material/styles';
 
-const theme = createTheme({
-  palette:{
-    primary:{
-      light: '#757ce8', 
-      main: '#3f50b5', 
-      dark: '#002884',   
-    }
-  }
-})
-const StyledDataGrid = styled(DataGrid)<DataGridProps>(({ theme }) => ({
-  '&.MuiDataGrid-root': {
-    backgroundColor: alpha(theme.palette.primary.light, 0.3),
-  },
-  //don't know why this is not applied
-  '.MuiDataGrid-columnHeaders': {
-    backgroundColor: alpha(theme.palette.primary.dark, .8),
-    fontWeight: 'bold',
-
-  },
-  '.MuiDataGrid-cell': {
-    backgroundColor: alpha(theme.palette.primary.light, 0.5),
-  },
-}));
 
 
 const tableColumns: GridColDef<GetAllLexEntriesQuery['lexiconAllEntries'][number]>[] = [
@@ -35,7 +12,6 @@ const tableColumns: GridColDef<GetAllLexEntriesQuery['lexiconAllEntries'][number
     headerName: 'Primary',
     width: 200,
     headerAlign: 'center',
-    headerClassName: 'boldHeader'
   },
   {
     field: 'associates',
@@ -105,14 +81,16 @@ const LexiconTable = () => {
       </Stack>
 
       <div style={{display:'flex', flexDirection: 'column', width: '100%'}}>
-        <StyledDataGrid
-          columns={tableColumns} 
-          rows={lexiconEntries.slice(0, nRows)} 
-          getRowId={({ key }) => key}    
-        />
+      <DataGrid
+        columns={tableColumns} 
+        rows={lexiconEntries} 
+        getRowId={({ key }) => key}    
+      />
       </div>
     </Box>
   );
 };
 
 export default LexiconTable;
+
+

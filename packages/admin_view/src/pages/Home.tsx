@@ -1,7 +1,7 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import CreateLex from '../components/CreateLex.tsx';
 import { useAuthContext } from '../context/use-auth-context.tsx';
-import LexiconTable from '../components/LexiconTable.tsx';
+import LexiconTableTemp from '../components/LexiconTableTemp.tsx';
 
 const Home = () => {
   const { logout } = useAuthContext();
@@ -12,7 +12,7 @@ const Home = () => {
           <Typography fontWeight="600">Create Lexicon</Typography>
           <CreateLex />
           <Button onClick={() => logout()}>Logout</Button>
-          <LexiconTable />
+          <LexiconTableTemp />
         </Stack>
       </Stack>
     </Grid>
