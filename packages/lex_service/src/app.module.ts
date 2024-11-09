@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
+import { FirebaseModule } from 'nestjs-firebase';
 
 @Module({
   imports: [
@@ -24,6 +25,17 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         uri: configService.getOrThrow('database.host')
+      }),
+      inject: [ConfigService]
+    }),
+    FirebaseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        googleApplicationCredential: {
+          clientEmail: configService.getOrThrow('GCP_CLIENT_EMAIL'),
+          projectId: configService.getOrThrow('GCP_PROJECT_ID'),
+          privateKey: configService.getOrThrow('GCP_PRIVATE_KEY')
+        }
       }),
       inject: [ConfigService]
     }),
