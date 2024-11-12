@@ -1,16 +1,16 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { LexiconCreate } from '../dtos/lexicon.dto';
+import { LexiconCreate, LexiconUpdate } from '../dtos/lexicon.dto';
 import { Lexicon } from '../models/lexicon.model';
 import { LexiconCreatePipe } from '../pipes/lexicon-create.pipe';
 import { LexiconService } from '../services/lexicon.service';
 import { AuthGuard } from '../../auth/auth.guard';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, NotFoundException } from '@nestjs/common';
 import { Schema as JSONSchema } from 'ajv';
 import { LexiconPipe } from '../pipes/lexicon.pipe';
 
 @Resolver(() => Lexicon)
 export class LexiconResolver {
-  constructor(private readonly lexiconService: LexiconService) {}
+  constructor(private readonly lexiconService: LexiconService, private lexiconPipe: LexiconPipe) {}
 
   @Mutation(() => Lexicon)
   @UseGuards(AuthGuard)
@@ -21,11 +21,12 @@ export class LexiconResolver {
   @Mutation(() => Lexicon)
   @UseGuards(AuthGuard)
   async lexiconUpdate(
-    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon,  
+    @Args('updateData', { type: () => LexiconUpdate }) updateData: LexiconUpdate // Optional update data
   ): Promise<Lexicon> {
-    const updatedLexicon = await this.lexiconService.update(lexicon);  
+    await this.lexiconPipe.transform(updateData._id);
+    const updatedLexicon = await this.lexiconService.update(updateData);
     if (!updatedLexicon) {
-      throw new Error(`Lexicon not found`);
+      throw new NotFoundException(`Lexicon not found`);
     }
     return updatedLexicon;
   }

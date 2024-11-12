@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Lexicon, LexiconDocument } from '../models/lexicon.model';
-import { LexiconCreate } from '../dtos/lexicon.dto';
+import { LexiconCreate, LexiconUpdate } from '../dtos/lexicon.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { LexiconEntryService } from './lexicon-entry.service';
 
@@ -21,11 +21,11 @@ export class LexiconService {
     return lexicon;
   }
 
-  async update(lexiconData: Lexicon): Promise<Lexicon | null> {
+  async update(lexiconData: LexiconUpdate): Promise<Lexicon | null> {
     const { _id, ...rest } = lexiconData;
-  
+
     const updatedLexicon = await this.lexiconModel.findByIdAndUpdate(_id, rest, { new: true });
-    
+
     return updatedLexicon;
   }
 
