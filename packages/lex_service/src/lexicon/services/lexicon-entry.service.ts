@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Connection, Model } from 'mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { LexiconEntry, LexiconEntrySchema } from '../models/lexicon-entry.model';
@@ -76,7 +76,7 @@ export class LexiconEntryService {
       { $set: rest },
       { new: true, useFindAndModify: false }
     );
-    if (!updatedEntry) throw new BadRequestException('Error updating lexicon entry');
+    if (!updatedEntry) throw new InternalServerErrorException('Error updating lexicon entry');
     return updatedEntry;
   }
 
