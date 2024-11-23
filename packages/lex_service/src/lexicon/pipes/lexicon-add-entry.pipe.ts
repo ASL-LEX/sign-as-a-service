@@ -2,7 +2,6 @@ import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { LexiconAddEntry } from '../dtos/lexicon-entry.dto';
 import { LexiconService } from '../services/lexicon.service';
 import { LexiconEntryService } from '../services/lexicon-entry.service';
-import { validateLexEntrySchema } from '../utils/validate-lex-entry.util';
 
 @Injectable()
 export class LexiconAddEntryPipe implements PipeTransform<LexiconAddEntry, Promise<LexiconAddEntry>> {
@@ -22,7 +21,7 @@ export class LexiconAddEntryPipe implements PipeTransform<LexiconAddEntry, Promi
       throw new BadRequestException(`Lexicon entry with key ${lexiconAddEntry.key} already exists`);
     }
 
-    validateLexEntrySchema(lexicon, lexiconAddEntry);
+    this.lexiconEntryService.validateLexEntrySchema(lexicon, lexiconAddEntry.fields);
 
     return lexiconAddEntry;
   }
