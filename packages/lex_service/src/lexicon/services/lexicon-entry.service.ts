@@ -30,6 +30,11 @@ export class LexiconEntryService {
     await this.getModel(lexicon).deleteMany({});
   }
 
+  async deleteByKey(lexicon: Lexicon, key: string): Promise<boolean> {
+    const result = await this.getModel(lexicon).deleteOne({ key });
+    return result.deletedCount > 0;
+  }
+
   async searchByAssociated(lexicon: Lexicon, search: string): Promise<LexiconEntry[]> {
     const regexPattern = new RegExp(`^${search}$`, 'i');
 
