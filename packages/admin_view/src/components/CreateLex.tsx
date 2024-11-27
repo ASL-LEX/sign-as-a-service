@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Button, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useLexCreateMutation } from '../graphql/lexicon/lexicon.ts';
+import { useSnackbar } from 'notistack';
 
 // Eventually going to let the user input this
 const DEFAULT_LEX_SCHEMA = {
@@ -12,14 +13,8 @@ const DEFAULT_LEX_SCHEMA = {
 
 const CreateLex = () => {
   const [name, setName] = useState<string>();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [createLex, { loading, error, data }] = useLexCreateMutation();
-
-  useEffect(() => {
-    if (data || error) {
-      setSnackbarOpen(true);
-    }
-  }, [data, error]);
+  const [createLex, { loading }] = useLexCreateMutation();
+  const { enqueueSnackbar } = useSnackbar();
 
   return (
     <Stack>
@@ -28,23 +23,35 @@ const CreateLex = () => {
         disabled={!name || loading}
         onClick={() => {
           if (name) {
-            createLex({ variables: { lexicon: { name, schema: DEFAULT_LEX_SCHEMA } } }).then(() => setName(''));
+            createLex({ variables: { lexicon: { name, schema: DEFAULT_LEX_SCHEMA } } })
+              .then(({ data, errors }) => {
+                setName('');
+                if (data) {
+                  enqueueSnackbar('Lexicon created', {
+                    variant: 'success',
+                    autoHideDuration: 3000
+                  });
+                  return;
+                }
+                if (errors)
+                  errors.map(({ message }) =>
+                    enqueueSnackbar(message, {
+                      variant: 'error',
+                      autoHideDuration: 3000
+                    })
+                  );
+              })
+              .catch(() =>
+                enqueueSnackbar('Error creating lexicon', {
+                  variant: 'error',
+                  autoHideDuration: 3000
+                })
+              );
           }
         }}
       >
         <Typography>Submit</Typography>
       </Button>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        message={error ? 'Error creating lexicon' : `Created lexicon ${name}`}
-        ContentProps={{
-          sx: {
-            backgroundColor: error ? 'red' : 'green'
-          }
-        }}
-      />
     </Stack>
   );
 };

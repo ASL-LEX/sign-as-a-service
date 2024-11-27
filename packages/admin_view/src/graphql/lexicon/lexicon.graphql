@@ -23,3 +23,27 @@ mutation lexCreate($lexicon: LexiconCreate!) {
     schema
   }
 }
+
+mutation lexUpdateEntry($lexEntry: LexiconUpdateEntry!) {
+  lexiconUpdateEntry(lexiconEntry: $lexEntry) {
+    key
+    primary
+    video
+    associates
+    fields
+  }
+}
+
+mutation lexCreateEntry($lexEntry: LexiconAddEntry!) {
+  lexiconAddEntry(entry: $lexEntry) {
+    key
+    primary
+    video
+    associates
+    fields
+  }
+}
+
+mutation lexDeleteEntry($lexicon: String!, $key: String!) {
+  lexiconDeleteEntry(lexicon: $lexicon, key: $key)
+}

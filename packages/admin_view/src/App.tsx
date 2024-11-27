@@ -3,6 +3,9 @@ import Routing from './Routing.tsx';
 import ApolloProviderWrapper from './context/ApolloProviderWrapper.tsx';
 import AuthContextProvider from './context/AuthContextProvider.tsx';
 import { BrowserRouter } from 'react-router-dom';
+import { Container } from '@mui/material';
+import NavBar from './components/NavBar.tsx';
+import { SnackbarProvider } from 'notistack';
 
 export const App: React.FC = () => {
   return (
@@ -10,7 +13,16 @@ export const App: React.FC = () => {
       <AuthContextProvider>
         <ApolloProviderWrapper>
           <ThemeProvider>
-            <Routing />
+            <SnackbarProvider>
+              <NavBar />
+              <Container
+                sx={{
+                  paddingX: 2
+                }}
+              >
+                <Routing />
+              </Container>
+            </SnackbarProvider>
           </ThemeProvider>
         </ApolloProviderWrapper>
       </AuthContextProvider>

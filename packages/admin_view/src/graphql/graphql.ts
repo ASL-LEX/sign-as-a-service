@@ -89,6 +89,8 @@ export type Mutation = {
   /** Remove all entries from a given lexicon */
   lexiconClearEntries: Scalars['Boolean']['output'];
   lexiconCreate: Lexicon;
+  /** Delete a lexicon entry by key */
+  lexiconDeleteEntry: Scalars['Boolean']['output'];
   lexiconUpdateEntry: LexiconEntry;
 };
 
@@ -105,6 +107,12 @@ export type MutationLexiconClearEntriesArgs = {
 
 export type MutationLexiconCreateArgs = {
   lexicon: LexiconCreate;
+};
+
+
+export type MutationLexiconDeleteEntryArgs = {
+  key: Scalars['String']['input'];
+  lexicon: Scalars['String']['input'];
 };
 
 
