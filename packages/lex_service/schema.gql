@@ -46,6 +46,7 @@ type Query {
 
 type Mutation {
   lexiconCreate(lexicon: LexiconCreate!): Lexicon!
+  lexiconUpdate(updateData: LexiconUpdate!): Lexicon!
   lexiconAddEntry(entry: LexiconAddEntry!): LexiconEntry!
 
   """Remove all entries from a given lexicon"""
@@ -59,6 +60,16 @@ input LexiconCreate {
 
   """Format each entry in the Lexicon is expected to follow"""
   schema: JSON!
+}
+
+input LexiconUpdate {
+  _id: String!
+
+  """The name of the Lexicon"""
+  name: String
+
+  """Format each entry in the Lexicon is expected to follow"""
+  schema: JSON
 }
 
 input LexiconAddEntry {

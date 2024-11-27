@@ -42,6 +42,19 @@ export class LexiconEntryResolver {
     return true;
   }
 
+  @Mutation(() => Boolean, { description: 'Delete a lexicon entry by key' })
+  @UseGuards(AuthGuard)  // Protect the delete mutation with authentication
+  async lexiconDeleteEntry(
+    @Args('lexicon', { type: () => String }, LexiconPipe) lexicon: Lexicon,
+    @Args('key', { type: () => String }) key: string
+  ): Promise<boolean> {
+    const deleted = await this.lexiconEntryService.deleteByKey(lexicon, key);
+    if (!deleted) {
+      throw new BadRequestException(`Entry with key "${key}" not found in lexicon "${lexicon._id}"`);
+    }
+    return true;
+  }
+
   @Mutation(() => LexiconEntry)
   @UseGuards(AuthGuard)
   async lexiconUpdateEntry(
@@ -62,7 +75,7 @@ export class LexiconEntryResolver {
       if (result) {
         return result;
       }
-    } catch (e: any) {}
+    } catch (e) {}
     throw new BadRequestException(
       `Could not find lexicon entry with key ${reference.key} on lexicon ${reference.lexicon}`
     );

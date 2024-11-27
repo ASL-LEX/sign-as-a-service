@@ -43,6 +43,11 @@ export class LexiconEntryService {
       }
       throw new BadRequestException(message);
     }
+
+  async deleteByKey(lexicon: Lexicon, key: string): Promise<boolean> {
+    const result = await this.getModel(lexicon).deleteOne({ key });
+    return result.deletedCount > 0;
+
   }
 
   async searchByAssociated(lexicon: Lexicon, search: string): Promise<LexiconEntry[]> {
