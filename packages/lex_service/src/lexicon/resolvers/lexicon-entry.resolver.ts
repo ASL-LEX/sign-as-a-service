@@ -7,6 +7,7 @@ import { LexiconEntryService } from '../services/lexicon-entry.service';
 import { Lexicon } from '../models/lexicon.model';
 import { BadRequestException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../../auth/auth.guard';
+import { LexiconUpdateEntryPipe } from '../pipes/lex-update-entry.pipe';
 
 @Resolver(() => LexiconEntry)
 export class LexiconEntryResolver {
@@ -56,7 +57,9 @@ export class LexiconEntryResolver {
 
   @Mutation(() => LexiconEntry)
   @UseGuards(AuthGuard)
-  async lexiconUpdateEntry(@Args('lexiconEntry') lexiconEntry: LexiconUpdateEntry): Promise<LexiconEntry> {
+  async lexiconUpdateEntry(
+    @Args('lexiconEntry', LexiconUpdateEntryPipe) lexiconEntry: LexiconUpdateEntry
+  ): Promise<LexiconEntry> {
     const lexicon = await this.lexiconPipe.transform(lexiconEntry.lexicon);
     return this.lexiconEntryService.lexiconUpdateEntry(lexiconEntry, lexicon);
   }

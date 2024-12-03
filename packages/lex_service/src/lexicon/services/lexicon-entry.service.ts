@@ -1,9 +1,10 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Connection, Model } from 'mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { LexiconEntry, LexiconEntrySchema } from '../models/lexicon-entry.model';
 import { LexiconAddEntry, LexiconUpdateEntry } from '../dtos/lexicon-entry.dto';
 import { Lexicon } from '../models/lexicon.model';
+import Ajv from 'ajv';
 
 @Injectable()
 export class LexiconEntryService {
@@ -28,6 +29,20 @@ export class LexiconEntryService {
 
   async clearEntries(lexicon: Lexicon): Promise<void> {
     await this.getModel(lexicon).deleteMany({});
+  }
+
+  validateLexEntrySchema(lexicon: Lexicon, fields: LexiconEntry['fields']): void {
+    // Validate the fields of the lexicon against the provided schema
+    const validate = new Ajv().compile(lexicon.schema);
+    if (!validate(fields)) {
+      let message = 'Fields of entry are invalid';
+      if (validate.errors) {
+        for (const error of validate.errors) {
+          message += `\n${error.message}`;
+        }
+      }
+      throw new BadRequestException(message);
+    }
   }
 
   async deleteByKey(lexicon: Lexicon, key: string): Promise<boolean> {
@@ -81,7 +96,7 @@ export class LexiconEntryService {
       { $set: rest },
       { new: true, useFindAndModify: false }
     );
-    if (!updatedEntry) throw new BadRequestException('Error updating lexicon entry');
+    if (!updatedEntry) throw new InternalServerErrorException('Error updating lexicon entry');
     return updatedEntry;
   }
 
