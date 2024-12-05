@@ -89,6 +89,8 @@ export type Mutation = {
   /** Remove all entries from a given lexicon */
   lexiconClearEntries: Scalars['Boolean']['output'];
   lexiconCreate: Lexicon;
+  /** Delete a lexicon entry by key */
+  lexiconDeleteEntry: Scalars['Boolean']['output'];
   lexiconUpdateEntry: LexiconEntry;
 };
 
@@ -108,6 +110,12 @@ export type MutationLexiconCreateArgs = {
 };
 
 
+export type MutationLexiconDeleteEntryArgs = {
+  key: Scalars['String']['input'];
+  lexicon: Scalars['String']['input'];
+};
+
+
 export type MutationLexiconUpdateEntryArgs = {
   lexiconEntry: LexiconUpdateEntry;
 };
@@ -117,6 +125,8 @@ export type Query = {
   _entities: Array<Maybe<_Entity>>;
   _service: _Service;
   lexFindAll: Array<Lexicon>;
+  /** Fetch all entries for a given lexicon */
+  lexiconAllEntries: Array<LexiconEntry>;
   lexiconByKey: LexiconEntry;
   lexiconSearch: Array<LexiconEntry>;
 };
@@ -124,6 +134,11 @@ export type Query = {
 
 export type Query_EntitiesArgs = {
   representations: Array<Scalars['_Any']['input']>;
+};
+
+
+export type QueryLexiconAllEntriesArgs = {
+  lexicon: Scalars['String']['input'];
 };
 
 

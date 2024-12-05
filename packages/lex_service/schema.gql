@@ -42,6 +42,9 @@ type Query {
   lexFindAll: [Lexicon!]!
   lexiconSearch(lexicon: String!, search: String!): [LexiconEntry!]!
   lexiconByKey(lexicon: String!, key: String!): LexiconEntry!
+
+  """Fetch all entries for a given lexicon"""
+  lexiconAllEntries(lexicon: String!): [LexiconEntry!]!
 }
 
 type Mutation {
@@ -51,6 +54,9 @@ type Mutation {
 
   """Remove all entries from a given lexicon"""
   lexiconClearEntries(lexicon: String!): Boolean!
+
+  """Delete a lexicon entry by key"""
+  lexiconDeleteEntry(lexicon: String!, key: String!): Boolean!
   lexiconUpdateEntry(lexiconEntry: LexiconUpdateEntry!): LexiconEntry!
 }
 

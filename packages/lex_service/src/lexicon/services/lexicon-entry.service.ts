@@ -100,6 +100,10 @@ export class LexiconEntryService {
     return updatedEntry;
   }
 
+  async getAllEntries(lexicon: Lexicon): Promise<LexiconEntry[]> {
+    return this.getModel(lexicon).find({});
+  }
+
   private getModel(lexicon: Lexicon | string): Model<LexiconEntry> {
     const lexiconID = typeof lexicon == 'string' ? lexicon : lexicon._id;
     return this.connection.model(LexiconEntry.name, LexiconEntrySchema, `lexiconentry_${lexiconID}`);

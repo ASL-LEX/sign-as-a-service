@@ -1,15 +1,49 @@
 query lexFindAll {
   lexFindAll {
-    _id,
-    name,
+    _id
+    name
     schema
+  }
+}
+
+query getAllLexEntries($lexicon: String!) {
+  lexiconAllEntries(lexicon: $lexicon) {
+    key
+    primary
+    video
+    associates
+    fields
   }
 }
 
 mutation lexCreate($lexicon: LexiconCreate!) {
   lexiconCreate(lexicon: $lexicon) {
-    _id,
-    name,
+    _id
+    name
     schema
   }
+}
+
+mutation lexUpdateEntry($lexEntry: LexiconUpdateEntry!) {
+  lexiconUpdateEntry(lexiconEntry: $lexEntry) {
+    key
+    primary
+    video
+    associates
+    fields
+  }
+}
+
+mutation lexCreateEntry($lexEntry: LexiconAddEntry!) {
+  lexiconAddEntry(entry: $lexEntry) {
+    key
+    primary
+    video
+    associates
+    fields
+  }
+}
+
+mutation lexDeleteEntry($lexicon: String!, $key: String!) {
+  lexiconDeleteEntry(lexicon: $lexicon, key: $key)
 }
