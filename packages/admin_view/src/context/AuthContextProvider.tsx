@@ -7,7 +7,10 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const app = initializeApp({ apiKey: import.meta.env.VITE_GCP_API_KEY });
+  const app = initializeApp({
+    apiKey: import.meta.env.VITE_GCP_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN
+  });
   const auth = getAuth(app);
 
   // Firebase stores the auth state in localstorage by default
