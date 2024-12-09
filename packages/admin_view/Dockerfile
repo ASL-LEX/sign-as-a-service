@@ -13,7 +13,7 @@ ENV VITE_GCP_API_KEY=${VITE_GCP_API_KEY}
 ENV VITE_AUTH_DOMAIN=${VITE_AUTH_DOMAIN}
 
 # Now install dependencies and build the demo
-RUN npm install --omit dev && \
+RUN npm install && \
     npm run build
 
 ## NGINX Server
