@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.3",
-    "@bu-sail/saas-view": "^0.0.2",
+    "@bu-sail/saas-view": "^0.0.3",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.14.8",
