@@ -90,7 +90,7 @@ jobs:
           cache-from: type=gha,scope=lex
           cache-to: type=gha,mode=max,scope=lex
           build-args: |
-            VITE_GRAPHQL=${{ secrets.VITE_GRAPHQL }}
+            VITE_GRAPHQL_ENDPOINT=${{ secrets.VITE_GRAPHQL }}
             VITE_GCP_API_KEY=${{ secrets.VITE_GCP_API_KEY_STAGING }}
             VITE_AUTH_DOMAIN=${{ secrets.VITE_AUTH_DOMAIN_STAGING }}
 

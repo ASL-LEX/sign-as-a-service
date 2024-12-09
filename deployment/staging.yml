@@ -14,6 +14,8 @@ services:
     restart: "always"
     volumes:
       - lex-mongo:/data/db
+    env_file:
+      - ../stack.env
   gateway:
     container_name: lex-gateway
     image: hicsail/lex-gateway:main
@@ -30,7 +32,7 @@ services:
       - 4010:80
   admin:
     container_name: lex-admin-view
-    image: hicsail/lex-admin-view
+    image: hicsail/lex-admin-view:main
     restart: always
     ports:
       - 4011:80
