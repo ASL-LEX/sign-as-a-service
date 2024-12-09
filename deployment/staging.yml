@@ -28,6 +28,12 @@ services:
     restart: always
     ports:
       - 4010:80
+  admin:
+    container_name: lex-admin-view
+    image: hicsail/lex-admin-view
+    restart: always
+    ports:
+      - 4011:80
 
 volumes:
   lex-mongo:
