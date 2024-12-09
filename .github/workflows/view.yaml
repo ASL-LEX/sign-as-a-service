@@ -47,6 +47,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Clean Up
+        run: rm ../../package.json
+
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
@@ -71,11 +74,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Clean Up
+        run: rm ../../package.json
+
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: 20
 
       - name: NPM Install
         run: npm install
