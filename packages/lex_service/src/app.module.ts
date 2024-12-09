@@ -32,9 +32,9 @@ import { FirebaseModule } from 'nestjs-firebase';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         googleApplicationCredential: {
-          clientEmail: configService.getOrThrow('GCP_CLIENT_EMAIL'),
-          projectId: configService.getOrThrow('GCP_PROJECT_ID'),
-          privateKey: configService.getOrThrow('GCP_PRIVATE_KEY')
+          clientEmail: configService.getOrThrow('gcp.clientEmail'),
+          projectId: configService.getOrThrow('gcp.projectId'),
+          privateKey: configService.getOrThrow('gcp.privateKey')
         }
       }),
       inject: [ConfigService]

@@ -4,5 +4,10 @@ export default () => ({
   },
   auth: {
     token: process.env.AUTH_TOKEN
+  },
+  gcp: {
+    clientEmail: process.env.GCP_CLIENT_EMAIL,
+    projectId: process.env.GCP_PROJECT_ID,
+    privateKey: process.env.GCP_PRIVATE_KEY
   }
 });
