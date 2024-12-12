@@ -15,7 +15,7 @@ const NAVBAR_DATA = [
 ];
 const HIDE_NAVBAR_PAGES = ['/login'];
 
-function ResponsiveAppBar() {
+const NavBar = () => {
   const navigateTo = useNavigate();
   const location = useLocation();
   const { logout } = useAuthContext();
@@ -48,5 +48,5 @@ function ResponsiveAppBar() {
       </Container>
     )
   );
-}
-export default ResponsiveAppBar;
+};
+export default NavBar;

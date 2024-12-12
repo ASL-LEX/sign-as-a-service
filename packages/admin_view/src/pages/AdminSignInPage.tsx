@@ -1,4 +1,4 @@
-import { Box, Button, Snackbar, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/use-auth-context.tsx';
@@ -6,7 +6,6 @@ import { useSnackbar } from 'notistack';
 
 // TODO Just a placeholder
 const AdminSignInPage = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
 
@@ -46,6 +45,7 @@ const AdminSignInPage = () => {
           type="email"
           variant="outlined"
           margin="normal"
+          data-testid="email-input"
           fullWidth
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -54,6 +54,7 @@ const AdminSignInPage = () => {
           type="password"
           variant="outlined"
           margin="normal"
+          data-testid="password-input"
           fullWidth
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -62,18 +63,13 @@ const AdminSignInPage = () => {
           color="primary"
           disabled={!email || !password}
           fullWidth
+          data-testid="login-button"
           style={{ marginTop: '16px' }}
           onClick={() => signIn()}
         >
           Login
         </Button>
       </Box>
-      <Snackbar
-        message="Error logging in"
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-      />
     </>
   );
 };
