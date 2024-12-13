@@ -30,5 +30,9 @@
     "url": "https://github.com/ASL-LEX/sign-as-a-service/issues"
   },
   "homepage": "https://github.com/ASL-LEX/sign-as-a-service#readme",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "vite": "^5.4.8",
+    "@vitejs/plugin-react-swc": "^3.5.0"
+  }
 }
