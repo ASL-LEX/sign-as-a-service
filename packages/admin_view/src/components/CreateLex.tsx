@@ -12,7 +12,7 @@ const DEFAULT_LEX_SCHEMA = {
 };
 
 const CreateLex = () => {
-  const [name, setName] = useState<string>();
+  const [name, setName] = useState<string>('');
   const [createLex, { loading }] = useLexCreateMutation();
   const { enqueueSnackbar } = useSnackbar();
 

@@ -11,8 +11,10 @@ const CreateLexPage = () => {
         flexDirection: 'column'
       }}
     >
-      <Typography variant="h6">Create Lexicon</Typography>
-      <CreateLex />
+      <Typography variant="h6" data-testid="create-lex-title">
+        Create Lexicon
+      </Typography>
+      <CreateLex data-testid="create-lex" />
     </Box>
   );
 };

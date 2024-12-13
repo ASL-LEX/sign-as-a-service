@@ -89,6 +89,7 @@ const MultiInput = ({ defaultValue, onChange }: { defaultValue: string[]; onChan
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Associates"
+        data-testid="lex-table-associates-edit"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -126,8 +127,10 @@ const ConfirmDeleteModal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onConfirm}>Delete</Button>
-        <Button onClick={onClose} autoFocus>
+        <Button onClick={onConfirm} data-testid="lex-table-delete-modal-delete-button">
+          Delete
+        </Button>
+        <Button onClick={onClose} autoFocus data-testid="lex-table-delete-modal-cancel-button">
           Cancel
         </Button>
       </DialogActions>
@@ -323,7 +326,6 @@ const LexiconTable = ({ lexiconId, loading: fetching }: { lexiconId: string | un
           <MultiInput
             defaultValue={params.row.associates}
             onChange={(value) => {
-              console.log(value);
               params.api.setEditCellValue({ id: params.id, field: params.field, value });
             }}
           />
@@ -347,6 +349,7 @@ const LexiconTable = ({ lexiconId, loading: fetching }: { lexiconId: string | un
             params.api.setEditCellValue({ id: params.id, field: params.field, value: updatedValue });
           }}
           variant="standard"
+          data-testid="lex-table-fields-edit"
         />
       )
     },
@@ -367,7 +370,13 @@ const LexiconTable = ({ lexiconId, loading: fetching }: { lexiconId: string | un
       disableColumnMenu: true,
       headerAlign: 'center',
       editable: true,
-      renderCell: ({ row }) => <iframe style={{ height: '125px', aspectRatio: '1.25' }} src={`${row.video}`} />
+      renderCell: ({ row }) => (
+        <iframe
+          data-testid="lex-table-video-cell"
+          style={{ height: '125px', aspectRatio: '1.25' }}
+          src={`${row.video}`}
+        />
+      )
     },
     {
       field: 'actions',
@@ -384,6 +393,7 @@ const LexiconTable = ({ lexiconId, loading: fetching }: { lexiconId: string | un
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
+              data-testid="lex-table-save-button"
               sx={{
                 color: 'primary.main'
               }}
@@ -391,6 +401,7 @@ const LexiconTable = ({ lexiconId, loading: fetching }: { lexiconId: string | un
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
+              data-testid="lex-table-cancel-button"
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -422,8 +433,10 @@ const LexiconTable = ({ lexiconId, loading: fetching }: { lexiconId: string | un
     <>
       <DataGrid
         rows={rows}
+        data-testid="lex-table"
         columns={columns}
         getRowHeight={() => 'auto'}
+        onProcessRowUpdateError={() => {}}
         pageSizeOptions={[10, 15, 25]}
         initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
         editMode="row"
