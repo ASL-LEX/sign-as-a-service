@@ -19,11 +19,14 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: Check for Linting Errors
+    defaults:
+      run:
+        working-directory: packages/demo
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
+        # with:
+        #   ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
@@ -38,19 +41,19 @@ jobs:
         shell: bash
 
       - name: Check for Linting Issues
-        run: npm run prettier --workspace=packages/demo
+        run: npm run prettier
 
   test:
     runs-on: ubuntu-latest
     name: Run UI Tests
     defaults:
       run:
-        working-directory: packages/admin_view
+        working-directory: packages/demo
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
+        # with:
+        #   ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
@@ -70,6 +73,9 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     name: Docker Build (and Deploy)
+    defaults:
+      run:
+        working-directory: packages/demo
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
