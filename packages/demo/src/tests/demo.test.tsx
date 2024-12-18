@@ -28,8 +28,6 @@ describe('Banner Component', () => {
       </ThemeProvider>
     );
 
-    screen.debug(undefined, Infinity);
-
     const infoCards = screen.getAllByTestId('infocard');
     expect(infoCards).toHaveLength(2);
     expect(infoCards[0]).toHaveTextContent('Text Placeholder');
