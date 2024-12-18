@@ -47,9 +47,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Clean Up
-        run: rm ../../package.json
-
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
@@ -73,9 +70,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Clean Up
-        run: rm ../../package.json
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
