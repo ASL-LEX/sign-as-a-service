@@ -20,7 +20,7 @@ export const Banner: FC = () => {
 
 const InfoCard: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <Paper sx={{ minWidth: 250, minHeight: 250, padding: 1 }} elevation={3}>
+    <Paper data-testid="infocard" sx={{ minWidth: 250, minHeight: 250, padding: 1 }} elevation={3}>
       {children}
     </Paper>
   );

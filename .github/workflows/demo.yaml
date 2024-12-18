@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'packages/demo/**'
+      - "packages/demo/**"
     branches:
       - main
     tags:
       - "v*.*.*"
   pull_request:
     paths:
-      - 'packages/demo/**'
+      - "packages/demo/**"
     branches:
       - main
 
@@ -19,6 +19,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: Check for Linting Errors
+    defaults:
+      run:
+        working-directory: packages/demo
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -38,11 +41,41 @@ jobs:
         shell: bash
 
       - name: Check for Linting Issues
-        run: npm run prettier --workspace=packages/demo
+        run: npm run prettier
+
+  test:
+    runs-on: ubuntu-latest
+    name: Run UI Tests
+    defaults:
+      run:
+        working-directory: packages/demo
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Clean Up
+        run: rm ../../package.json
+
+      - name: NPM Install
+        run: npm install --only=dev
+        shell: bash
+
+      - name: Run UI Tests
+        run: npm run test
 
   docker-build:
     runs-on: ubuntu-latest
     name: Docker Build (and Deploy)
+    defaults:
+      run:
+        working-directory: packages/demo
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
