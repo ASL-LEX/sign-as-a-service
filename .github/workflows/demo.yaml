@@ -84,8 +84,7 @@ jobs:
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: packages/demo/Dockerfile
+          context: packages/demo/
           push: ${{ github.event_name != 'pull_request' }}
           tags: hicsail/saas-demo:latest
           build-args: |
