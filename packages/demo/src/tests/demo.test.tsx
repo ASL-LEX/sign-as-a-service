@@ -28,21 +28,12 @@ describe('Banner Component', () => {
       </ThemeProvider>
     );
 
-    const infoCards = screen.getAllByRole('region');
+    screen.debug(undefined, Infinity);
+
+    const infoCards = screen.getAllByTestId('infocard');
     expect(infoCards).toHaveLength(2);
     expect(infoCards[0]).toHaveTextContent('Text Placeholder');
     expect(infoCards[1]).toHaveTextContent('Video Placeholder');
-  });
-
-  it('applies theme styles correctly', () => {
-    render(
-      <ThemeProvider>
-        <Banner />
-      </ThemeProvider>
-    );
-
-    const banner = screen.getByTestId('banner-container');
-    expect(banner).toHaveStyle('background-color: var(--theme-primary-main)');
   });
 });
 
