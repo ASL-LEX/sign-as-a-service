@@ -91,3 +91,7 @@ By contributing, you help improve the platform and advance sign language researc
 
 ### Deployment
 Deployment is hosted on an OpenStack virtual machine in the New England Research Cloud (NERC). A Portainer instance facilitates the management of Docker containers comprising the deployment. Updates to the deployment are seamlessly automated via GitHub Actions.
+
+
+### Current Issue
+- client approved the UI design for WIX but it has yet to be implemented
