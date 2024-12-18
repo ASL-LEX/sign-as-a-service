@@ -88,3 +88,6 @@ We welcome contributions to Sign as a Service. To get involved:
   - Submit a pull request with a clear description of changes.
 
 By contributing, you help improve the platform and advance sign language research. Thank you for supporting Sign as a Service!
+
+### Deployment
+Deployment is hosted on an OpenStack virtual machine in the New England Research Cloud (NERC). A Portainer instance facilitates the management of Docker containers comprising the deployment. Updates to the deployment are seamlessly automated via GitHub Actions.
