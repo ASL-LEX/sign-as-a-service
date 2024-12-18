@@ -9,7 +9,7 @@ With Sign as a Service, users can search through a comprehensive sign language l
 ### Accessing the Sign as a Service Web Interface
 
 - **Early-Stage Demo:** Currently accessible at [lex-demo.sail.codes](https://lex-demo.sail.codes/).
-- **Administrator Portal:** Researchers can manage lexicons through an admin portal at [ADMIN PORTAL PLACEHOLDER]() (link to be updated).
+- **Administrator Portal:** Researchers can manage lexicons through an admin portal at [(link to be updated)]().
 
 ### Architecture
 
@@ -49,13 +49,15 @@ Backend Services:
    git clone https://github.com/ASL-LEX/sign-as-a-service.git
    cd sign-as-a-service
    ```
-2. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Start the Backend:**
-   - Add a `.env` file in `packages/lex_service` based on `.env.sample`.
-   - Ensure you have Google Cloud Platform credentials, as `lex_service` uses GCP Identities for authentication.
+
+2. **Start the Backend:**
+   - Navigate into `packages/lex_service` and install dependencies:
+     ```bash
+     cd packages/lex_service
+     npm install
+     ```
+   - Add a `.env` file in `packages/lex_service` based on `.env.sample` and populate it with the necessary environment variables.
+   - You will need to set up Google Cloud Platform credentials, as `lex_service` uses the GCP Identity platform for authentication. Please refer to the [GCP Identity Platform Docs](https://cloud.google.com/identity-platform/docs/)
    - Start a local MongoDB instance using Docker:
      ```bash
      docker run -d --name saas-mongo -p 27017:27017 -v saas-mongo-data:/data/db mongo
@@ -64,9 +66,14 @@ Backend Services:
      ```bash
      npm run start:dev
      ```
-4. **Start the Frontend:**
-   - Choose the desired frontend package (`admin_view`, `demo`, or `view`).
-   - For `admin_view` and `demo`, add a `.env` file based on `.env.sample` within the selected package.
+
+3. **Start the Frontend:**
+   - Navigate into the desired frontend package (`admin_view`, `demo`, or `view`) and install dependencies:
+     ```bash
+     cd packages/<frontend_package>
+     npm install
+     ```
+   - For `admin_view` and `demo`, add a `.env` file based on `.env.sample` within the selected package and populate it with the necessary environment variables.
    - The `view` package does not require a `.env` file, as its components will use the Apollo Client from the application in which they are used. If you would like to develop `view` locally, update the `schema` field in the `graphql-codegen.yml` file to point to the URI of the local backend.
    - Start the frontend:
      ```bash
