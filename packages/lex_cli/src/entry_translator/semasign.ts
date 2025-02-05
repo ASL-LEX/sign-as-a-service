@@ -23,7 +23,7 @@ export class SemasignTranslator extends LexEntryTranslator {
         key: row['Index'],
         primary: primary,
         lexicon: lexicon,
-        video: `https://signlab2.s3.amazonaws.com/semasign-sample/${row['Filename']}.webm`,
+        video: `https://signlab2.s3.amazonaws.com/semasign-sample/${row['Filename']}`,
         associates: translations,
         fields: {}
       };

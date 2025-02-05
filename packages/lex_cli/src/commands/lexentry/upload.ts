@@ -54,7 +54,7 @@ export default class UploadLexiconEntries extends Command {
 
     // Make request to upload each entry
     for (const entry of entries) {
-      // await sdk.lexiconAddEntry({ entry });
+      await sdk.lexiconAddEntry({ entry });
       console.log(entry);
     }
 

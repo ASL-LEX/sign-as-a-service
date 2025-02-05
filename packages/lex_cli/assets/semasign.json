@@ -1,0 +1,13 @@
+{
+  "name": "SemaSign-sample",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "english": {
+        "type": "string"
+      }
+    },
+    "required": [],
+    "additionalProperties": false
+  }
+}
