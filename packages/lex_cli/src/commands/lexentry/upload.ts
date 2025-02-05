@@ -1,12 +1,14 @@
 import { Args, Command } from '@oclif/core';
 import { GraphQLClient } from 'graphql-request';
 import { AslLexTranslator } from '../../entry_translator/asllex';
+import { SemasignTranslator } from '../../entry_translator/semasign';
 import { getSdk } from '../../graphql/graphql';
 import { sharedFlags } from '../../shared';
 
 export default class UploadLexiconEntries extends Command {
   static LEXICON_TYPES = {
-    'asl-lex': AslLexTranslator
+    'asl-lex': AslLexTranslator,
+    'semasign': SemasignTranslator
   };
 
   static description = 'Upload list of Lexicon entries from a file';
@@ -52,7 +54,8 @@ export default class UploadLexiconEntries extends Command {
 
     // Make request to upload each entry
     for (const entry of entries) {
-      await sdk.lexiconAddEntry({ entry });
+      // await sdk.lexiconAddEntry({ entry });
+      console.log(entry);
     }
 
     console.log('success');
