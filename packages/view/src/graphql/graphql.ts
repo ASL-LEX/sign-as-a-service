@@ -65,6 +65,14 @@ export type LexiconEntry = {
   video: Scalars['String']['output'];
 };
 
+export type LexiconUpdate = {
+  _id: Scalars['String']['input'];
+  /** The name of the Lexicon */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Format each entry in the Lexicon is expected to follow */
+  schema?: InputMaybe<Scalars['JSON']['input']>;
+};
+
 export type LexiconUpdateEntry = {
   /** Keywords that are similar to search accross */
   associates?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -86,6 +94,9 @@ export type Mutation = {
   /** Remove all entries from a given lexicon */
   lexiconClearEntries: Scalars['Boolean']['output'];
   lexiconCreate: Lexicon;
+  /** Delete a lexicon entry by key */
+  lexiconDeleteEntry: Scalars['Boolean']['output'];
+  lexiconUpdate: Lexicon;
   lexiconUpdateEntry: LexiconEntry;
 };
 
@@ -105,6 +116,17 @@ export type MutationLexiconCreateArgs = {
 };
 
 
+export type MutationLexiconDeleteEntryArgs = {
+  key: Scalars['String']['input'];
+  lexicon: Scalars['String']['input'];
+};
+
+
+export type MutationLexiconUpdateArgs = {
+  updateData: LexiconUpdate;
+};
+
+
 export type MutationLexiconUpdateEntryArgs = {
   lexiconEntry: LexiconUpdateEntry;
 };
@@ -112,8 +134,15 @@ export type MutationLexiconUpdateEntryArgs = {
 export type Query = {
   __typename?: 'Query';
   lexFindAll: Array<Lexicon>;
+  /** Fetch all entries for a given lexicon */
+  lexiconAllEntries: Array<LexiconEntry>;
   lexiconByKey: LexiconEntry;
   lexiconSearch: Array<LexiconEntry>;
+};
+
+
+export type QueryLexiconAllEntriesArgs = {
+  lexicon: Scalars['String']['input'];
 };
 
 
